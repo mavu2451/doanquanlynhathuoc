@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVienController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhapThuocController">
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #458DEC;" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
@@ -224,7 +224,7 @@
                         <TableView fx:id="table" editable="true" prefHeight="645.0" prefWidth="924.0">
                           <columns>
                               <TableColumn fx:id="maNV" prefWidth="52.0" text="STT" />
-                            <TableColumn fx:id="hoTen" prefWidth="145.0" text="Họ tên nhân viên" />
+                            <TableColumn fx:id="hoTen" prefWidth="145.0" text="Tên thuốc" />
                             <TableColumn fx:id="gioiTinh" prefWidth="78.0" text="Giới tính" />
                               <TableColumn fx:id="ngaySinh" prefWidth="79.0" text="Ngày sinh" />
                               <TableColumn fx:id="cmnd" prefWidth="105.0" text="CMND/CCCD" />
@@ -238,7 +238,7 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <Label layoutX="414.0" layoutY="78.0" text="THÊM NHÂN VIÊN">
+            <Label layoutX="414.0" layoutY="78.0" text="NHẬP THUỐC">
                <font>
                   <Font size="24.0" />
                </font>
@@ -343,6 +343,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button layoutX="735.0" layoutY="83.0" mnemonicParsing="false" onAction="#themThuoc" text="THÊM THUỐC" />
          </children>
       </AnchorPane>
    </center>

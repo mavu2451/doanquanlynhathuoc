@@ -25,11 +25,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVienController">
    <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1E51A4;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #458DEC;" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="756.0" prefWidth="199.0">
+            <VBox alignment="TOP_CENTER" prefHeight="756.0" prefWidth="199.0" styleClass="tab">
                <children>
-                  <HBox prefHeight="38.0" prefWidth="199.0" spacing="5.0">
+                  <HBox alignment="TOP_CENTER" prefHeight="38.0" prefWidth="199.0" spacing="5.0">
                      <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -48,12 +48,15 @@
                                  </light>
                               </Lighting>
                            </effect>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </ImageView>
-                        <Label text="Trang chủ" textFill="WHITE">
+                        <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#trangChu" prefHeight="44.0" prefWidth="131.0" style="-fx-background-color: transparent;" text="Trang chủ" textFill="WHITE">
                            <font>
-                              <Font size="22.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
-                        </Label>
+                        </Button>
                      </children>
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -189,15 +192,15 @@
                                  </light>
                               </Lighting>
                            </effect>
-                        </ImageView>
-                        <Label text="Nhân viên" textFill="WHITE">
-                           <font>
-                              <Font size="22.0" />
-                           </font>
                            <HBox.margin>
-                              <Insets />
+                              <Insets top="5.0" />
                            </HBox.margin>
-                        </Label>
+                        </ImageView>
+                        <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="44.0" prefWidth="131.0" style="-fx-background-color: transparent;" text="Nhân viên" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Button>
                      </children>
                      <padding>
                         <Insets left="10.0" />
@@ -344,6 +347,6 @@
       </AnchorPane>
    </center>
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1600.0" style="-fx-background-color: #1E51A4;" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="70.0" prefWidth="1600.0" style="-fx-background-color: #458DEC;" BorderPane.alignment="CENTER" />
    </top>
 </BorderPane>

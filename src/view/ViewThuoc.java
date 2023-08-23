@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ViewTrangChu  extends Application {
+public class ViewThuoc  extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 //		try {
@@ -18,7 +18,7 @@ public class ViewTrangChu  extends Application {
 //		} catch(Exception e) {
 //			e.printStackTrace();
 //		}
-				Parent root = FXMLLoader.load(getClass().getResource("TrangChu.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("NhapThuoc.fxml"));
 				primaryStage.setScene(new Scene(root));
 				primaryStage.setResizable(false);
 				primaryStage.show();

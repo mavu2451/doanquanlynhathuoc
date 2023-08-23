@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DangNhapController">
    <right>
       <AnchorPane prefHeight="400.0" prefWidth="376.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="140.0" layoutY="273.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Gửi" />
+            <Button layoutX="221.0" layoutY="271.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Gửi" />
             <TextField layoutX="115.0" layoutY="220.0" prefHeight="25.0" prefWidth="204.0" />
             <Label layoutX="28.0" layoutY="224.0" prefHeight="17.0" prefWidth="75.0" text="Nhập email" />
             <Label layoutX="21.0" layoutY="313.0" text="Lưu ý: Thông tin tài khoản mật khẩu sẽ gửi về mail bạn đã nhập" textFill="RED" />
@@ -20,6 +20,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
+            <Button layoutX="115.0" layoutY="271.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="100.0" text="Trở lại" />
          </children>
       </AnchorPane>
    </right>

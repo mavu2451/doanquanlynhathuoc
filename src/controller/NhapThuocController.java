@@ -50,7 +50,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class NhanVienController implements Initializable{
+public class NhapThuocController implements Initializable{
 	@FXML
 	private ImageView imageView;
 	private Image image;
@@ -272,6 +272,14 @@ public class NhanVienController implements Initializable{
 			}
 		});
 	}
+	public void themThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThemThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+	}
 	public void reload() {
 		list = getAllNV();
 		// TODO Auto-generated method stub
@@ -372,7 +380,7 @@ public class NhanVienController implements Initializable{
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/TrangChuQL.fxml"));
+        loader.setLocation(getClass().getResource("/view/TrangChu.fxml"));
         Parent sampleParent = loader.load();
         TrangChuController nv = loader.getController();
         Scene scene = new Scene(sampleParent);
@@ -447,6 +455,7 @@ public class NhanVienController implements Initializable{
 			e.printStackTrace();
 		}
 		
+
 	}
 	@FXML
 	private void searchByName() {
