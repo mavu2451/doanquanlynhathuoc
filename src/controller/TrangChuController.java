@@ -49,13 +49,23 @@ public class TrangChuController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
-	public void nhapThuoc(ActionEvent e) throws IOException {
+	public void thuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) smb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/NhapThuoc.fxml"));
+        loader.setLocation(getClass().getResource("/view/Thuoc.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
+       
+	}
+	public void loaiThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) smb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/LoaiThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

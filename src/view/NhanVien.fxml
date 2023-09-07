@@ -6,8 +6,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -85,14 +87,16 @@
                               </Lighting>
                            </effect>
                         </ImageView>
-                        <Label text="Quản lý thuốc" textFill="WHITE">
+                        <SplitMenuButton fx:id="smb" alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="39.0" prefWidth="154.0" style="-fx-background-color: transparent;" text="Quản lý thuốc" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#thuoc" text="Thông tin thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#loaiThuoc" text="Loại thuốc" />
+                              <MenuItem mnemonicParsing="false" text="Thuốc sắp hết hạn" />
+                           </items>
                            <font>
-                              <Font size="22.0" />
+                              <Font size="16.0" />
                            </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
+                        </SplitMenuButton>
                      </children>
                      <padding>
                         <Insets left="10.0" />

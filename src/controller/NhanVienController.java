@@ -37,6 +37,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -59,6 +60,8 @@ public class NhanVienController implements Initializable{
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
+	@FXML
+	private SplitMenuButton smb;
 	@FXML
 	private TextField txtHoTen, txtCMND, txtSDT, txtEmail, txtTimKiem;
 	@FXML
@@ -112,6 +115,43 @@ public class NhanVienController implements Initializable{
 			cbVaiTro.getItems().addAll(vt);
 			cbTrangThai.getItems().addAll(tt);		
 
+	}
+	public void themThuoc(ActionEvent e) throws IOException {
+//		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThemThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+        stage.show();
+	}
+	public void Thuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/Thuoc.fxml"));
+        Parent sampleParent = loader.load();
+//        ThuocController nv = loader.getController();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+	}
+
+	public void thuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) smb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/Thuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void loaiThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) smb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/LoaiThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
 	}
 	public void add(ActionEvent e) {
 		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,hinhAnh) values (?,?,?,?,?,?,?,?,?,?)";

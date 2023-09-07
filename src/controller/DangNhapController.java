@@ -62,6 +62,7 @@ public class DangNhapController{
 			ps.setString(2, matKhau);
 //			ps.setString(3, trangThai);
 			rs = ps.executeQuery();
+
 			if(rs.next()) {
 				thanhCong();
 				Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();

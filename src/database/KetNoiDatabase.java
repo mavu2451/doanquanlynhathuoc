@@ -8,7 +8,7 @@ public class KetNoiDatabase {
 		Connection conn = null;
 		String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 		String link = "localhost:1433";
-		String db = "QuanLyHieuThuoc";
+		String db = "QuanLyThuocTest";
 		String user = "sa";
 		String password = "password";
 		String url = "jdbc:sqlserver://"+link+";databaseName="+db+";user="+user+";password="+password+";trustServerCertificate=true";

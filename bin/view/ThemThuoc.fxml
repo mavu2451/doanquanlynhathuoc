@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -21,31 +20,31 @@
             </Label>
             <Label layoutX="65.0" layoutY="74.0" text="Mã thuốc" />
             <Label layoutX="421.0" layoutY="74.0" text="Tên thuốc" />
-            <ComboBox layoutX="157.0" layoutY="121.0" prefWidth="150.0" />
-            <Label layoutX="41.0" layoutY="125.0" text="Loại sản phẩm" />
+            <Label layoutX="63.0" layoutY="125.0" text="Loại thuốc" />
             <Label layoutX="400.0" layoutY="125.0" text="Nhà cung cấp" />
-            <ComboBox layoutX="506.0" layoutY="121.0" prefWidth="150.0" />
             <Label layoutX="61.0" layoutY="175.0" text="Đơn vị tính" />
-            <Label layoutX="80.0" layoutY="222.0" text="Giá bán" />
+            <Label layoutX="70.0" layoutY="222.0" text="Giá nhập" />
             <Label layoutX="399.0" layoutY="175.0" text="Nước sản xuất" />
-            <ComboBox layoutX="506.0" layoutY="171.0" prefWidth="150.0" />
-            <Label layoutX="43.0" layoutY="265.0" text="Ngày sản xuất" />
-            <Label layoutX="403.0" layoutY="222.0" text="Hạn sử dụng" />
-            <Label layoutX="19.0" layoutY="319.0" text="Quy cách đóng gói" />
-            <Label layoutX="421.0" layoutY="265.0" text="Trạng thái" />
-            <ComboBox layoutX="506.0" layoutY="261.0" prefWidth="150.0" />
+            <ComboBox fx:id="cbbNSX" layoutX="506.0" layoutY="171.0" prefWidth="150.0" promptText="Chọn nước sản xuất..." />
+            <Label layoutX="62.0" layoutY="319.0" text="Cách dùng" />
+            <Label layoutX="421.0" layoutY="273.0" text="Trạng thái" />
+            <ComboBox fx:id="cbbTrangThai" layoutX="506.0" layoutY="269.0" prefWidth="150.0" promptText="Chọn trạng thái..." />
             <Label layoutX="40.0" layoutY="368.0" text="Thông tin lưu ý" />
-            <TextArea layoutX="157.0" layoutY="368.0" prefHeight="130.0" prefWidth="507.0" />
-            <TextField layoutX="158.0" layoutY="70.0" />
-            <TextField layoutX="507.0" layoutY="70.0" />
-            <TextField layoutX="158.0" layoutY="171.0" />
-            <TextField layoutX="158.0" layoutY="218.0" />
-            <DatePicker layoutX="159.0" layoutY="261.0" prefHeight="25.0" prefWidth="146.0" />
-            <DatePicker layoutX="508.0" layoutY="218.0" prefHeight="25.0" prefWidth="146.0" />
-            <TextField layoutX="158.0" layoutY="315.0" />
-            <Button layoutX="225.0" layoutY="542.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Thêm" />
+            <TextArea fx:id="txtThongTin" layoutX="157.0" layoutY="368.0" prefHeight="130.0" prefWidth="507.0" />
+            <TextField fx:id="txtMaThuoc" layoutX="158.0" layoutY="70.0" />
+            <TextField fx:id="txtTenThuoc" layoutX="507.0" layoutY="70.0" />
+            <TextField fx:id="txtDonViTinh" layoutX="158.0" layoutY="171.0" />
+            <TextField fx:id="txtGiaNhap" layoutX="158.0" layoutY="218.0" />
+            <TextField fx:id="txtCachDung" layoutX="158.0" layoutY="315.0" />
+            <Button layoutX="225.0" layoutY="542.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="76.0" text="Thêm" />
             <Button layoutX="350.0" layoutY="542.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Xoá trắng" />
-            <Button layoutX="475.0" layoutY="542.0" mnemonicParsing="false" onAction="#quayLai" prefHeight="25.0" prefWidth="76.0" text="Quay lại" />
+            <Button layoutX="475.0" layoutY="542.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Quay lại" />
+            <TextField fx:id="txtGiaBan" layoutX="507.0" layoutY="218.0" />
+            <Label layoutX="437.0" layoutY="222.0" text="Giá bán" />
+            <Label layoutX="19.0" layoutY="273.0" text="Quy cách đóng gói" />
+            <TextField fx:id="txtQuyCach" layoutX="158.0" layoutY="269.0" />
+            <ComboBox fx:id="cbbLoaiThuoc" layoutX="158.0" layoutY="121.0" prefWidth="150.0" promptText="Chọn loại thuốc..." />
+            <ComboBox fx:id="cbbNCC" layoutX="507.0" layoutY="121.0" prefWidth="150.0" promptText="Chọn nhà cung cấp..." />
          </children>
       </AnchorPane>
    </center>

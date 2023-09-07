@@ -18,9 +18,9 @@ public class ViewThuoc  extends Application {
 //		} catch(Exception e) {
 //			e.printStackTrace();
 //		}
-				Parent root = FXMLLoader.load(getClass().getResource("NhapThuoc.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("Thuoc.fxml"));
 				primaryStage.setScene(new Scene(root));
-				primaryStage.setResizable(false);
+				primaryStage.setResizable(true);
 				primaryStage.show();
 	}
 	
