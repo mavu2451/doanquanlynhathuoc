@@ -38,9 +38,9 @@ public class LoaiThuocController implements Initializable {
 	@FXML
 	TableView<LoaiThuoc> table;
 	@FXML
-	private TableColumn<LoaiThuoc, Integer> maLoaiSP;
+	private TableColumn<LoaiThuoc, Integer> maLoaiThuoc;
 	@FXML
-	private TableColumn<LoaiThuoc, String> loaiSP;
+	private TableColumn<LoaiThuoc, String> loaiThuoc;
 	@FXML
 	private ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
 	@Override
@@ -86,8 +86,8 @@ public void nhanVien(ActionEvent e) throws IOException {
     stage.setScene(scene);
 }
 	public void cell() {
-		maLoaiSP.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiSP"));
-		loaiSP.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiSP"));
+		maLoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiThuoc"));
+		loaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiThuoc"));
 	}
 	public void themThuoc(ActionEvent e) throws IOException {
 //		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -101,15 +101,15 @@ public void nhanVien(ActionEvent e) throws IOException {
 	}
 	public ObservableList<LoaiThuoc> getAllLoaiThuoc(){
 		ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
-		String sql = "select * from LoaiSP";
+		String sql = "select * from loaiThuoc";
 		try {
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
 				LoaiThuoc lt = new LoaiThuoc();
-				lt.setMaLoaiSP(rs.getInt("maLoaiSP"));
-				lt.setLoaiSP(rs.getString("loaiSP"));
+				lt.setMaLoaiThuoc(rs.getInt("maLoaiThuoc"));
+				lt.setLoaiThuoc(rs.getString("loaiThuoc"));
 				loaiThuocList.add(lt);
 			}
 			

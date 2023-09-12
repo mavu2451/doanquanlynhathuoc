@@ -233,8 +233,8 @@
                      <children>
                         <TableView fx:id="table" editable="true" prefHeight="645.0" prefWidth="924.0">
                           <columns>
-                              <TableColumn fx:id="maLoaiSP" prefWidth="299.0" text="Mã loại thuốc" />
-                              <TableColumn fx:id="loaiSP" prefWidth="624.0" text="Loại thuốc" />
+                              <TableColumn fx:id="maLoaiThuoc" prefWidth="299.0" text="Mã loại thuốc" />
+                              <TableColumn fx:id="loaiThuoc" prefWidth="624.0" text="Loại thuốc" />
                           </columns>
                         </TableView>
                      </children>

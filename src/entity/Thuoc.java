@@ -3,8 +3,8 @@ package entity;
 public class Thuoc {
 	private int maThuoc;
 	private String tenThuoc;
-	private LoaiThuoc loaiThuoc;
-	private NhaCungCap ncc;
+	private String loaiThuoc;
+	private String ncc;
 	private String dvt;
 	private int soLuong;
 	private float giaNhap;
@@ -13,7 +13,7 @@ public class Thuoc {
 	private String cachDung;
 	private String thongTin;
 	private String trangThai;
-	public Thuoc(int maThuoc, String tenThuoc, LoaiThuoc loaiThuoc, NhaCungCap ncc, String dvt, int soLuong, float giaNhap,
+	public Thuoc(int maThuoc, String tenThuoc, String loaiThuoc, String ncc, String dvt, int soLuong, float giaNhap,
 			float giaBan, String nsx, String cachDung, String thongTin, String trangThai) {
 		super();
 		this.maThuoc = maThuoc;
@@ -28,6 +28,12 @@ public class Thuoc {
 		this.cachDung = cachDung;
 		this.thongTin = thongTin;
 		this.trangThai = trangThai;
+	}
+	public String getLoaiThuoc() {
+		return loaiThuoc;
+	}
+	public void setLoaiThuoc(String loaiThuoc) {
+		this.loaiThuoc = loaiThuoc;
 	}
 	public Thuoc() {
 		super();
@@ -45,16 +51,11 @@ public class Thuoc {
 	public void setTenThuoc(String tenThuoc) {
 		this.tenThuoc = tenThuoc;
 	}
-	public LoaiThuoc getLoaiThuoc() {
-		return loaiThuoc;
-	}
-	public void setLoaiThuoc(LoaiThuoc loaiThuoc) {
-		this.loaiThuoc = loaiThuoc;
-	}
-	public NhaCungCap getNcc() {
+
+	public String getNcc() {
 		return ncc;
 	}
-	public void setNcc(NhaCungCap ncc) {
+	public void setNcc(String ncc) {
 		this.ncc = ncc;
 	}
 	public String getDvt() {

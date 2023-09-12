@@ -24,11 +24,11 @@ public class XemThongTinLoaiThuoc implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	@FXML
-	private TableColumn<LoaiThuoc, Integer> maLoaiSP;
+	private TableColumn<LoaiThuoc, Integer> maLoaiThuoc;
 	@FXML
-	private TableColumn<LoaiThuoc, String> loaiSP;
+	private TableColumn<LoaiThuoc, String> LoaiThuoc;
 	@FXML
-	private ObservableList<LoaiThuoc> loaiSPList = FXCollections.observableArrayList();
+	private ObservableList<LoaiThuoc> LoaiThuocList = FXCollections.observableArrayList();
 
 	@FXML
 	TableView<LoaiThuoc> table;
@@ -39,33 +39,33 @@ public class XemThongTinLoaiThuoc implements Initializable{
 		reload();
 		}
 	public ObservableList<LoaiThuoc> getAllLoaiThuoc(){
-		ObservableList<LoaiThuoc> loaiSPList = FXCollections.observableArrayList();
-		String query = "select * from LoaiSP";	
+		ObservableList<LoaiThuoc> LoaiThuocList = FXCollections.observableArrayList();
+		String query = "select * from LoaiThuoc";	
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				LoaiThuoc lt = new LoaiThuoc();
-				lt.setMaLoaiSP(rs.getInt("maLoaiSP"));
-				lt.setLoaiSP(rs.getString("loaiSP"));
-				loaiSPList.add(lt);
+				lt.setMaLoaiThuoc(rs.getInt("maLoaiThuoc"));
+				lt.setLoaiThuoc(rs.getString("LoaiThuoc"));
+				LoaiThuocList.add(lt);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				
 			}
-		return loaiSPList;
+		return LoaiThuocList;
 		}
 	
 
 	public void cell() {
-		maLoaiSP.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiSP"));
-		loaiSP.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiSP"));
+		maLoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiThuoc"));
+		LoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("LoaiThuoc"));
 	}
 	public void reload() {
-		loaiSPList = getAllLoaiThuoc();
+		LoaiThuocList = getAllLoaiThuoc();
 		cell();
-		table.setItems(loaiSPList);
+		table.setItems(LoaiThuocList);
 	}
 }

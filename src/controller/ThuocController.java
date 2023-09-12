@@ -155,8 +155,8 @@ public class ThuocController implements Initializable{
 	public ObservableList<Thuoc> getAllThuoc(){
 		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 		String query = "\r\n"
-				+ "select maThuoc, tenThuoc, loaiSP,tenNCC, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
-				+ "from Thuoc t inner join LoaiSP l on t.maLoaiSP = l.maLoaiSP inner join NhaCungCap n on"
+				+ "select maThuoc, tenThuoc, loaiThuoc,tenNCC, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
+				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc inner join NhaCungCap n on"
 				+ " n.maNCC = t.maNCC";
 		
 		try {
@@ -164,11 +164,10 @@ public class ThuocController implements Initializable{
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				Thuoc t = new Thuoc();
-				NhaCungCap ncc = new NhaCungCap();
 				t.setMaThuoc(rs.getInt("maThuoc"));
 				t.setTenThuoc(rs.getString("tenThuoc"));
-//				t.setLoaiThuoc(rs.getString("loaiSP"));
-				t.setNcc(ncc);
+				t.setLoaiThuoc(rs.getString("loaiThuoc"));
+				t.setNcc(rs.getString("tenNCC"));
 				t.setNsx(rs.getString("nuocSanXuat"));
 				t.setDvt(rs.getString("donViTinh"));
 				t.setGiaNhap(rs.getFloat("giaNhap"));

@@ -1,28 +1,32 @@
 package entity;
 
 public class LoaiThuoc {
-	private int maLoaiSP;
-	private String loaiSP;
-	public LoaiThuoc(int maLoaiSP, String loaiSP) {
-		super();
-		this.maLoaiSP = maLoaiSP;
-		this.loaiSP = loaiSP;
-	}
+	private int maLoaiThuoc;
+	private String loaiThuoc;
 	public LoaiThuoc() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public int getMaLoaiSP() {
-		return maLoaiSP;
+	public LoaiThuoc(int maLoaiThuoc, String loaiThuoc) {
+		super();
+		this.maLoaiThuoc = maLoaiThuoc;
+		this.loaiThuoc = loaiThuoc;
 	}
-	public void setMaLoaiSP(int maLoaiSP) {
-		this.maLoaiSP = maLoaiSP;
+	public LoaiThuoc(String loaiThuoc) {
+		super();
+		this.loaiThuoc = loaiThuoc;
 	}
-	public String getLoaiSP() {
-		return loaiSP;
+	public int getMaLoaiThuoc() {
+		return maLoaiThuoc;
 	}
-	public void setLoaiSP(String loaiSP) {
-		this.loaiSP = loaiSP;
+	public void setMaLoaiThuoc(int maLoaiThuoc) {
+		this.maLoaiThuoc = maLoaiThuoc;
 	}
-	
+	public String getLoaiThuoc() {
+		return loaiThuoc;
+	}
+	public void setLoaiThuoc(String loaiThuoc) {
+		this.loaiThuoc = loaiThuoc;
+	}
+
 }
