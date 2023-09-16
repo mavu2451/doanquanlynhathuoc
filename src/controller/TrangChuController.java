@@ -31,7 +31,7 @@ public class TrangChuController implements Initializable{
 	private MenuItem mNhapHang;
 	@FXML
 	private Label lblName;
-	
+	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -67,16 +67,30 @@ public class TrangChuController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void nhapThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) smb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/PhieuNhap.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	//End Navbar
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		String sql = "select tenNV from NhanVien";
+		
+		String sql = "select * from NhanVien";
 		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
+			NhanVien dnc = DangNhapController.getNV();
 			while(rs.next()) {
-				lblName.setText("Xin chào, " + rs.getString("tenNV"));
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

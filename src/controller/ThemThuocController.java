@@ -59,17 +59,17 @@ public class ThemThuocController implements Initializable{
 	}
 	
 	public void add() {
-		String sql = "insert into Thuoc(maThuoc, tenThuoc, maLoaiThuoc, maNCC, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, thongTin) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		int msp = cbbLoaiThuoc.getSelectionModel().getSelectedIndex() + 1;
+		String sql = "insert into Thuoc(maThuoc, tenThuoc, maLoaiThuoc, maNCC, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, thongTin, soLuong) values (?,?,?,?,?,?,?,?,?,?,?,?,0)";
+		int mlt = cbbLoaiThuoc.getSelectionModel().getSelectedIndex() + 1;
 		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
 		float gn = Float.parseFloat(txtGiaNhap.getText());
 		float gb = Float.parseFloat(txtGiaBan.getText());
-		System.out.println(msp);
+		System.out.println(mlt);
 		try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
 			ps.setString(2, txtTenThuoc.getText().toString());
-			ps.setInt(3, msp);
+			ps.setInt(3, mlt);
 			ps.setInt(4, mncc);
 			ps.setString(5, txtDonViTinh.getText().toString());
 			ps.setFloat(6, gn);

@@ -86,7 +86,8 @@
                         <SplitMenuButton fx:id="smb" alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="39.0" prefWidth="154.0" style="-fx-background-color: transparent;" text="Quản lý thuốc" textFill="WHITE">
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#thuoc" text="Thông tin thuốc" />
-                              <MenuItem mnemonicParsing="false" onAction="#loaiThuoc" text="Nhập thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#loaiThuoc" text="Loại thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#nhapThuoc" text="Nhập thuốc" />
                            
                               <MenuItem mnemonicParsing="false" text="Thuốc sắp hết hạn" />
                            </items>
@@ -232,7 +233,7 @@
                         </ImageView>
                         <SplitMenuButton fx:id="smbThongKe" alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="39.0" prefWidth="154.0" style="-fx-background-color: transparent;" text="Thống kê" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false"  text="Thống kê hoá đơn" />
+                              <MenuItem mnemonicParsing="false" text="Thống kê hoá đơn" />
                               <MenuItem mnemonicParsing="false" text="Thống kê doanh thu" />
                            </items>
                            <font>

@@ -49,6 +49,7 @@ public class LoaiThuocController implements Initializable {
 		reload();
 		getAllLoaiThuoc();
 	}
+	
 	public void thuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) smb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();

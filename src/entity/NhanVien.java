@@ -94,5 +94,12 @@ public class NhanVien {
 	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
 	}
+
+	@Override
+	public String toString() {
+		return "NhanVien [maNV=" + maNV + ", hoTen=" + hoTen + ", matKhau=" + matKhau + ", gioiTinh=" + gioiTinh
+				+ ", ngaySinh=" + ngaySinh + ", cmnd=" + cmnd + ", sdt=" + sdt + ", email=" + email + ", vaiTro="
+				+ vaiTro + ", trangThai=" + trangThai + "]";
+	}
 	
 }

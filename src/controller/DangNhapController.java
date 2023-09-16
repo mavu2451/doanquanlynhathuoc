@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -27,7 +28,7 @@ public class DangNhapController{
 	private NhanVienController getNV = new NhanVienController();
 	FXMLLoader loader = new FXMLLoader();
 	PreparedStatement ps;
-	ResultSet rs;
+	static ResultSet rs;
 	@FXML
 	private TextField txtTaiKhoan, txtMatKhau;
 	public void quenMatKhau(ActionEvent e) throws IOException {
@@ -62,9 +63,10 @@ public class DangNhapController{
 			ps.setString(2, matKhau);
 //			ps.setString(3, trangThai);
 			rs = ps.executeQuery();
-
+			
 			if(rs.next()) {
 				thanhCong();
+				getNV();
 				Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
 		        loader.setLocation(getClass().getResource("/view/TrangChuQL.fxml"));
@@ -84,6 +86,17 @@ public class DangNhapController{
 			// TODO: handle exception
 			e2.printStackTrace();
 		}
+	}
+	public static NhanVien getNV() {
+		NhanVien nv = new NhanVien();
+		try {
+			nv.setHoTen(rs.getString("tenNV"));
+			nv.setMaNV(rs.getInt("maNV"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nv;
 	}
 	@FXML
 	private void saiMK() {
