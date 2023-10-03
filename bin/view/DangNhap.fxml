@@ -6,8 +6,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DangNhapController">
    <right>
@@ -19,12 +22,44 @@
             <Label layoutX="46.0" layoutY="282.0" text="Mật khẩu" />
             <Hyperlink layoutX="225.0" layoutY="303.0" onAction="#quenMatKhau" prefHeight="23.0" prefWidth="96.0" text="Quên mật khẩu?" />
             <PasswordField fx:id="txtMatKhau" layoutX="115.0" layoutY="278.0" prefHeight="25.0" prefWidth="205.0" />
-            <Label layoutX="50.0" layoutY="166.0" text="Chức vụ" />
-            <ComboBox layoutX="115.0" layoutY="162.0" prefWidth="150.0" />
+            <Label layoutX="51.0" layoutY="184.0" text="Chức vụ" />
+            <ComboBox fx:id="cbbChucVu" layoutX="113.0" layoutY="180.0" onAction="#loaiChucVu" prefWidth="150.0" promptText="Chọn chức vụ..." />
+            <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="24.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/logo96.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="131.0" layoutY="40.0" text="NHÀ THUỐC">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="131.0" layoutY="67.0" text="THỊNH VƯỢNG">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="149.0" layoutY="144.0" text="Đăng nhập">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </right>
    <left>
-      <AnchorPane prefHeight="400.0" prefWidth="225.0" style="-fx-background-color: #90D1DB;" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="400.0" prefWidth="225.0" style="-fx-background-color: #90D1DB;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="29.0" layoutY="356.0" text="ĐAM MÊ ĐỔI MỚI" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="47.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/thuoc.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
    </left>
 </BorderPane>

@@ -13,7 +13,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
@@ -335,9 +334,6 @@
                <image>
                   <Image url="@../../images/avatar.png" />
                </image>
-               <effect>
-                  <Bloom />
-               </effect>
             </ImageView>
             <Button layoutX="898.0" layoutY="83.0" mnemonicParsing="false" onAction="#reload" text="Tải trang" />
             <PasswordField fx:id="txtMatKhau" layoutX="140.0" layoutY="371.0" prefHeight="25.0" prefWidth="194.0" promptText="Nhập mật khẩu..." />

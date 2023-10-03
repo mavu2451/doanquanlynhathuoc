@@ -37,6 +37,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -52,7 +53,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class PhieuNhapController implements Initializable{
-
+	
 	@FXML
 	private TextField txtMaPN;
 	@FXML
@@ -63,7 +64,9 @@ public class PhieuNhapController implements Initializable{
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
-	ResultSet rs;
+	static ResultSet rs;
+	@FXML
+	Label lblName;
 	@FXML
 	TableView<PhieuNhap> table;
 	@FXML
@@ -80,6 +83,11 @@ public class PhieuNhapController implements Initializable{
 		// TODO Auto-generated method stub
 		getAllPN();
 		reload();
+		NhanVien dnc = DangNhapController.getNV();
+//		try {
+//			while(rs.next()) {
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+
 	}
 	public void themPN(ActionEvent e) {
 //		
@@ -97,40 +105,29 @@ public class PhieuNhapController implements Initializable{
 //		reload();
 		
 	}
-	public int getNV() {
-		NhanVien nv = new NhanVien();
-		String sql = "select tenNV from NhanVien";
-		PreparedStatement ps;
-		try {
-			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				nv.setMaNV(rs.getInt("maNV"));
-				nv.setHoTen(rs.getString("tenNV"));
-				return nv.getMaNV();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return nv.getMaNV();
-	}
+//	public int getNV() {
+//		NhanVien nv = new NhanVien();
+//		String sql = "select tenNV from NhanVien";
+//		PreparedStatement ps;
+//		try {
+//			ps = con.prepareStatement(sql);
+//			ResultSet rs = ps.executeQuery();
+//			while(rs.next()) {
+//				nv.setMaNV(rs.getInt("maNV"));
+//				nv.setHoTen(rs.getString("tenNV"));
+//				return nv.getMaNV();
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return nv.getMaNV();
+//	}
 	public void themTT(ActionEvent e){
 		try {
-			String sql = "select * from NhanVien";
-			PreparedStatement ps;
-			try {
-				ps = con.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery();
-				while(rs.next()) {
-					NhanVien nv = new NhanVien();
-					nv.setMaNV(rs.getInt("maNV"));
-					themPhieuNhap(nv.getMaNV());
-				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			NhanVien dnc = DangNhapController.getNV();
+			themPhieuNhap(dnc.getMaNV());
+			
 //			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 			Stage stage = new Stage();
 			FXMLLoader loader = new FXMLLoader();
@@ -148,6 +145,16 @@ public class PhieuNhapController implements Initializable{
 			e1.printStackTrace();
 			themThatBaiMessage();
 		}
+	}
+	public static PhieuNhap getPN() {
+		PhieuNhap pn = new PhieuNhap();
+		try {
+			pn.setMaPN(rs.getInt("maPN"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pn;
 	}
 	public void themPhieuNhap(int i){
 		try {

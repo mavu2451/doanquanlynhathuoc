@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import database.KetNoiDatabase;
 import entity.LoaiThuoc;
 import entity.NhaCungCap;
+import entity.NhanVien;
 import entity.Thuoc;
 import entity.Thuoc;
 import javafx.collections.FXCollections;
@@ -69,7 +70,17 @@ public class ThuocController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		reload();
-		myName();
+		NhanVien dnc = DangNhapController.getNV();
+//		try {
+//			while(rs.next()) {
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				System.out.println(dnc.getMaNV() + "Xem thuoc");
+				System.out.println(dnc.getHoTen());
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	public void themThuoc(ActionEvent e) throws IOException {
 //		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -138,20 +149,7 @@ public class ThuocController implements Initializable{
 		cachDung.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("cachDung"));
 		trangThai.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("trangThai"));
 	}
-	public void myName() {
-		String sql = "select tenNV from NhanVien";
-		PreparedStatement ps;
-		try {
-			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				lblName.setText("Xin chào, " + rs.getString("tenNV"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	public ObservableList<Thuoc> getAllThuoc(){
 		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 		String query = "\r\n"

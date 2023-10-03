@@ -113,7 +113,48 @@ public class NhanVienController implements Initializable{
 //			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
 			cbGioiTinh.getItems().addAll(gt);
 			cbVaiTro.getItems().addAll(vt);
-			cbTrangThai.getItems().addAll(tt);		
+			cbTrangThai.getItems().addAll(tt);
+			table.setOnMouseClicked(e->{
+				System.out.println("test");
+				InputStream is;
+				
+				try {
+					NhanVien nv = (NhanVien)table.getSelectionModel().getSelectedItem();
+					String query = "select * from NhanVien where maNV = ?";
+					ps = con.prepareStatement(query);
+					ps.setInt(1, nv.getMaNV());
+					rs = ps.executeQuery();
+					while(rs.next()) {
+					is = rs.getBinaryStream("image");
+					if(is==null) {
+						image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+						imageView.setImage(image);
+					}
+					OutputStream os = new FileOutputStream(new File("photo.jpg"));
+					byte[] content = new byte[1024];
+					int size = 0;
+					while((size = is.read(content))!=-1) {
+						os.write(content, 0 ,size);
+					
+					}
+					os.close();
+					is.close();
+					image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+					imageView.setImage(image);
+					
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			});
 
 	}
 	public void themThuoc(ActionEvent e) throws IOException {
@@ -143,7 +184,6 @@ public class NhanVienController implements Initializable{
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
-       
 	}
 	public void loaiThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) smb.getScene().getWindow();
@@ -153,8 +193,9 @@ public class NhanVienController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
+	
 	public void add(ActionEvent e) {
-		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,hinhAnh) values (?,?,?,?,?,?,?,?,?,?)";
+		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,image) values (?,?,?,?,?,?,?,?,?,?)";
 		int id = 1;
 		try {	
 			String gTinh = cbGioiTinh.getValue();
@@ -204,10 +245,11 @@ public class NhanVienController implements Initializable{
 				
 				ps = con.prepareStatement(query);
 				ps.executeUpdate();
+				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} 
 		});
 		
 		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
@@ -416,6 +458,7 @@ public class NhanVienController implements Initializable{
         Parent sampleParent = loader.load();
         TrangChuController nv = loader.getController();
         Scene scene = new Scene(sampleParent);
+        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
         stage.setScene(scene);
 	}
 	@FXML
@@ -454,7 +497,7 @@ public class NhanVienController implements Initializable{
 		});
 	}
 	private void showImage(int maNV) {
-		String sql = "select hinhAnh from NhanVien where maNV = ?";
+		String sql = "select image from NhanVien where maNV = ?";
 		try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, maNV);
@@ -469,7 +512,7 @@ public class NhanVienController implements Initializable{
 				}
 				image = new Image("file:avatar:jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
 				imageView.setImage(image);
-//				if(rs.getBinaryStream("hinhAnh") == null) {
+//				if(rs.getBinaryStream("image") == null) {
 //						is = new FileInputStream("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png");
 //						image = new Image(is,imageView.getFitWidth(),imageView.getFitHeight(),true,true);
 //						imageView.setImage(image);

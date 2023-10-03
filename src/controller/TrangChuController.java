@@ -33,13 +33,21 @@ public class TrangChuController implements Initializable{
 	private Label lblName;
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
-		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/NhanVien.fxml"));
-        Parent sampleParent = loader.load();
-//        NhanVienController nv = loader.getController();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
+		try {
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/NhanVien.fxml"));
+	        Parent sampleParent = loader.load();
+//	        NhanVienController nv = loader.getController();
+	        Scene scene = new Scene(sampleParent);
+	        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+	        stage.setScene(scene);
+			
+		} catch (Exception e2) {
+			// TODO: handle exception
+			e2.printStackTrace();
+		}
+
 	}
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -47,6 +55,7 @@ public class TrangChuController implements Initializable{
         loader.setLocation(getClass().getResource("/view/TrangChuQL.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
+        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
         stage.setScene(scene);
 	}
 	public void thuoc(ActionEvent e) throws IOException {
@@ -87,11 +96,12 @@ public class TrangChuController implements Initializable{
 			ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			NhanVien dnc = DangNhapController.getNV();
-			while(rs.next()) {
+
 				lblName.setText("Xin chào, " + dnc.getHoTen());
+				//Loi
 				System.out.println(dnc.getMaNV());
 				System.out.println(dnc.getHoTen());
-			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

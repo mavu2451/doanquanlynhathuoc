@@ -26,6 +26,8 @@ public class ViewTrangChuQL  extends Application {
 //			e.printStackTrace();
 //		}		
 				Parent root = FXMLLoader.load(getClass().getResource("TrangChuQL.fxml"));
+				Scene scene = new Scene(root);
+				scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				primaryStage.setScene(new Scene(root));
 				primaryStage.setResizable(false);
 				primaryStage.show();

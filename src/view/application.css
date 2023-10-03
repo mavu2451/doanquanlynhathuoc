@@ -1,4 +1,48 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-.tab{
+tab{
 	-fx-background-color: linear-gradient(to top right,#2C71E1,  #458DEC);
 }
+
+.split-menu-button .arrow-button {
+    -fx-background-color: transparent ;
+}
+.split-menu-button .arrow {
+    -fx-background-color: white;
+}
+
+#dtNgay {
+ 	-fx-background-color: linear-gradient(to right, #f857a6 0%, #ff5858  51%);
+ 	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+ 	-fx-background-radius: 15px;
+}
+
+#dtThang{
+    -fx-background-color: linear-gradient(to right, #ffb347 0%, #ffcc33  51%);        
+     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+ 	-fx-background-radius: 15px;
+}
+
+#tongThuoc{
+    -fx-background-color: linear-gradient(to right, #4776E6 0%, #8E54E9  51%);      
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+ 	-fx-background-radius: 15px;
+
+}
+#hbTrangChu:hover{
+	-fx-background-color:#4b7699;
+}
+#thuocHetHan{
+    -fx-background-color: linear-gradient(to right, #606c88 0%, #3f4c6b  51%);       
+     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+ 	-fx-background-radius: 15px;
+}
+#sidebar{
+	-fx-background-color:#517fa4;
+}
+#navi{
+	-fx-background-color:#517fa4;
+}
+         
+
+
+         

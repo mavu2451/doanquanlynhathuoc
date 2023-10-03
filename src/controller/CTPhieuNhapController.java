@@ -71,20 +71,17 @@ public class CTPhieuNhapController implements Initializable{
 		reload();
 		cell();
 		getAllTenThuoc();
-		String sql = "select * from NhanVien";
-		PreparedStatement ps;
-		try {
-			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				rs.getInt("maNV");
-				lblNV.setText(rs.getString("tenNV"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		NhanVien dnc = DangNhapController.getNV();
+//		try {
+//			while(rs.next()) {
+//				lblNV.setText("Xin chào, " + dnc.getHoTen());
+		lblNV.setText(dnc.getHoTen());
+			
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 //	public int setMaPN(PhieuNhap p) {
 //		lblMaPN.setText(String.valueOf(p.getMaPN()));
@@ -102,6 +99,7 @@ public class CTPhieuNhapController implements Initializable{
         stage.setScene(scene);
 	}
 	public void add(ActionEvent e) {
+		
 		String sql = "insert into CTPhieuNhap(maPN, maThuoc) values(?,?)";
 		try {
 //				String maPN = lblMaPN.getText();

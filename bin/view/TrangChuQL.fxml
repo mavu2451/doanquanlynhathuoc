@@ -23,11 +23,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TrangChuController">
    <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #458DEC;" styleClass="tab" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="756.0" prefWidth="199.0" styleClass="tab">
+            <VBox alignment="TOP_CENTER" prefHeight="756.0" prefWidth="199.0" spacing="5.0" styleClass="tab">
                <children>
-                  <HBox alignment="TOP_CENTER" prefHeight="38.0" prefWidth="199.0" spacing="5.0">
+                  <HBox fx:id="hbTrangChu" prefHeight="38.0" prefWidth="199.0" spacing="5.0">
                      <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -56,18 +56,15 @@
                            </font>
                         </Button>
                      </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
                      <padding>
-                        <Insets left="10.0" />
+                        <Insets left="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox prefHeight="38.0" prefWidth="199.0" spacing="5.0">
+                  <AnchorPane>
                      <children>
-                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="52.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../data/icons/dashboard.png" />
+                              <Image url="@../../images/icons/thuoc.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
@@ -83,26 +80,27 @@
                               </Lighting>
                            </effect>
                         </ImageView>
-                        <SplitMenuButton fx:id="smb" alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="39.0" prefWidth="154.0" style="-fx-background-color: transparent;" text="Quản lý thuốc" textFill="WHITE">
+                        <Label text="Quản lý thuốc" textFill="WHITE">
+                           <padding>
+                              <Insets left="60.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <SplitMenuButton fx:id="smb" alignment="CENTER" mnemonicParsing="false" opacity="0.0" popupSide="RIGHT" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: blue;" styleClass="arrow-button" stylesheets="@application.css" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#thuoc" text="Thông tin thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#loaiThuoc" text="Loại thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#nhapThuoc" text="Nhập thuốc" />
-                           
                               <MenuItem mnemonicParsing="false" text="Thuốc sắp hết hạn" />
                            </items>
-                           <font>
-                              <Font size="16.0" />
-                           </font>
                         </SplitMenuButton>
                      </children>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </HBox>
+                  </AnchorPane>
                   <HBox prefHeight="38.0" prefWidth="199.0" spacing="5.0">
                      <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
@@ -125,15 +123,15 @@
                         </ImageView>
                         <Label text="Hoá đơn" textFill="WHITE">
                            <font>
-                              <Font name="Arial" size="22.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                            <HBox.margin>
-                              <Insets />
+                              <Insets left="18.0" />
                            </HBox.margin>
                         </Label>
                      </children>
                      <padding>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets left="10.0" />
                      </padding>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -161,10 +159,10 @@
                         </ImageView>
                         <Label text="Khách hàng" textFill="WHITE">
                            <font>
-                              <Font size="22.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                            <HBox.margin>
-                              <Insets />
+                              <Insets left="16.0" />
                            </HBox.margin>
                         </Label>
                      </children>
@@ -172,7 +170,7 @@
                         <Insets left="10.0" top="10.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
                   <HBox prefHeight="38.0" prefWidth="199.0" spacing="5.0">
@@ -202,16 +200,19 @@
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
                         </Button>
                      </children>
                      <padding>
                         <Insets left="10.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="49.0" prefWidth="189.0">
+                  <HBox prefHeight="38.0" prefWidth="199.0" spacing="5.0">
                      <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -230,26 +231,90 @@
                                  </light>
                               </Lighting>
                            </effect>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </ImageView>
-                        <SplitMenuButton fx:id="smbThongKe" alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="39.0" prefWidth="154.0" style="-fx-background-color: transparent;" text="Thống kê" textFill="WHITE">
+                        <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#nhanVien" prefHeight="44.0" prefWidth="131.0" style="-fx-background-color: transparent;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="49.0" prefWidth="189.0">
+                     <children>
+                        <AnchorPane>
+                           <children>
+                              <ImageView fitHeight="30.0" fitWidth="52.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/icons/thuoc.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <effect>
+                                    <Lighting>
+                                       <bumpInput>
+                                          <Shadow />
+                                       </bumpInput>
+                                       <light>
+                                          <Light.Distant />
+                                       </light>
+                                    </Lighting>
+                                 </effect>
+                              </ImageView>
+                              <Label text="Thống kê" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="60.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <SplitMenuButton fx:id="smbThongKe" alignment="CENTER" mnemonicParsing="false" opacity="0.0" popupSide="RIGHT" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@application.css" text="Thống kê" textFill="WHITE">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Thống kê hoá đơn" />
                               <MenuItem mnemonicParsing="false" text="Thống kê doanh thu" />
                            </items>
                            <font>
-                              <Font size="16.0" />
+                              <Font size="15.0" />
                            </font>
                         </SplitMenuButton>
                      </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
             </VBox>
+            <ImageView fitHeight="131.0" fitWidth="131.0" layoutX="61.0" layoutY="691.0" opacity="0.3" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/medicine.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </left>
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1600.0" style="-fx-background-color: #458DEC;" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="navi" prefHeight="70.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
+            <ImageView fx:id="avatar" fitHeight="41.0" fitWidth="55.0" layoutX="1112.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" style="b: 50%;">
+               <image>
+                  <Image url="@../../images/avatar.png" />
+               </image>
+            </ImageView>
             <Label fx:id="lblName" layoutX="1178.0" layoutY="18.0" text="Label" textFill="WHITE">
                <font>
                   <Font size="24.0" />
@@ -261,6 +326,17 @@
                     </items>
                   </ContextMenu>
                </contextMenu>
+            </Label>
+            <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="16.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/logo48.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="73.0" layoutY="18.0" text="NHÀ THUỐC" textFill="#55ffcc" />
+            <Label layoutX="73.0" layoutY="35.0" text="THỊNH VƯỢNG" textFill="#55ffcc">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
             </Label>
          </children></AnchorPane>
    </top>
@@ -275,17 +351,80 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <Label alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="100.0" layoutY="50.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #FAD156;" text="Doanh thu ngày" />
-            <Label alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="500.0" layoutY="50.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #FAD156;" text="Doanh thu tháng" />
-            <Label alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="900.0" layoutY="50.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #FAD156;" text="Tổng vốn nhập" />
+            <Label fx:id="dtThang" alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="415.0" layoutY="50.0" prefHeight="150.0" prefWidth="250.0" text="Doanh thu tháng" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding></Label>
+            <Label fx:id="tongThuoc" alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="732.0" layoutY="50.0" prefHeight="150.0" prefWidth="250.0" text="Tổng số thuốc bán ra" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding></Label>
             <Label layoutX="500.0" layoutY="215.0" text="TỔNG SỐ HOÁ ĐƠN ĐÃ ĐƯỢC LẬP TỪ NGÀY...">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="300.0" layoutY="75.0" prefHeight="100.0" prefWidth="100.0" text="Label" />
-            <Label layoutX="700.0" layoutY="75.0" prefHeight="100.0" prefWidth="100.0" text="Label" />
-            <Label layoutX="1100.0" layoutY="75.0" prefHeight="100.0" prefWidth="100.0" text="Label" />
+            <Label fx:id="dtNgay" alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="100.0" layoutY="50.0" prefHeight="150.0" prefWidth="250.0" text="Doanh thu ngày" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding></Label>
+            <Label fx:id="thuocHetHan" alignment="TOP_LEFT" contentDisplay="BOTTOM" layoutX="1050.0" layoutY="50.0" prefHeight="150.0" prefWidth="250.0" text="Thuốc sắp hết hạn" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding>
+            </Label>
+            <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="234.0" layoutY="100.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/money.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="142.0" layoutY="124.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="457.0" layoutY="124.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="773.0" layoutY="124.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="1088.0" layoutY="124.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="551.0" layoutY="94.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/allmoney.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="857.0" layoutY="100.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/medicine.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="1175.0" layoutY="101.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/expire-med.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </center>
