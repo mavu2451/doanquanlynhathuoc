@@ -52,7 +52,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class NhanVienController implements Initializable{
+public class TimKiemNhanVienController implements Initializable{
 	@FXML
 	private ImageView imageView;
 	private Image image;
@@ -64,25 +64,9 @@ public class NhanVienController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private TextField txtHoTen, txtCMND, txtSDT, txtEmail, txtTimKiem;
-	@FXML
-	private Button chooseImage;
+	private TextField txtTimKiem;
 	@FXML
 	private AnchorPane ap;
-	@FXML
-	private PasswordField txtMatKhau;
-	
-	private String[] gt = {"Nam","Nữ","Khác"};
-	private String[] vt = {"Nhân viên", "Quản lý"};
-	private String[] tt = {"Đang làm việc", "Nghỉ việc"};
-	@FXML
-	private ComboBox<String> cbGioiTinh;
-	@FXML
-	private ComboBox<String> cbVaiTro;
-	@FXML
-	private ComboBox<String> cbTrangThai;
-	@FXML
-	private DatePicker dpNgaySinh = new DatePicker();
 	@FXML
 	TableView<NhanVien> table;
 	@FXML
@@ -112,9 +96,7 @@ public class NhanVienController implements Initializable{
 			searchByName();
 			setCell();
 //			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
-			cbGioiTinh.getItems().addAll(gt);
-			cbVaiTro.getItems().addAll(vt);
-			cbTrangThai.getItems().addAll(tt);
+
 			table.setOnMouseClicked(e->{
 				System.out.println("test");
 				InputStream is;
@@ -259,45 +241,6 @@ public class NhanVienController implements Initializable{
 	}
 	
 	//End Navbar
-	
-	public void add(ActionEvent e) {
-		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,image) values (?,?,?,?,?,?,?,?,?,?)";
-		int id = 1;
-		try {	
-			String gTinh = cbGioiTinh.getValue();
-			String vTro = cbVaiTro.getValue();
-			String tThai = cbTrangThai.getValue();
-			LocalDate ld = dpNgaySinh.getValue();
-			LocalDate defaultDate = LocalDate.of(2000, 01, 01);
-			Date date = Date.valueOf(ld);
-//			NhanVien nv = new NhanVien();
-			ps = con.prepareStatement(query);
-			ps.setString(1, txtHoTen.getText());
-			ps.setString(2, txtMatKhau.getText());
-			ps.setString(3, gTinh);
-			ps.setDate(4, date);
-			ps.setString(5, txtCMND.getText());
-			ps.setString(6, txtSDT.getText());
-			ps.setString(7, txtEmail.getText());	
-			ps.setString(8, vTro);
-			ps.setString(9, tThai);
-			fis = new FileInputStream(file);
-//			if(fis==null) {
-//				
-//			}
-			ps.setBinaryStream(10, fis, file.length());
-
-			ps.execute();
-			themThanhCongMessage();
-			reload();	
-		}catch (Exception e1) {
-			// TODO: handle exception
-			e1.printStackTrace();
-			themThatBaiMessage();
-		}
-//		reset();
-//		imageView.setImage("");
-	}
 	public void edit() {
 		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
 		hoTen.setOnEditCommit(event -> {
@@ -495,16 +438,7 @@ public class NhanVienController implements Initializable{
 	public void images() {
 		
 	}
-	public void resetField(ActionEvent e) {
-		reset();
-	}
-	public void reset() {
-		txtHoTen.setText("");
-		txtMatKhau.setText("");
-		txtCMND.setText("");
-		txtSDT.setText("");
-		txtEmail.setText("");
-	}
+
 //	@FXML
 //	public void getItem(MouseEvent event) {
 //		int n = table.getSelectionModel().getSelectedIndex();

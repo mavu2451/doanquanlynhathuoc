@@ -17,13 +17,13 @@
       <AnchorPane prefHeight="400.0" prefWidth="376.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="180.0" layoutY="336.0" mnemonicParsing="false" onAction="#dangNhap" text="Đăng nhập" />
-            <TextField fx:id="txtTaiKhoan" layoutX="115.0" layoutY="220.0" prefHeight="25.0" prefWidth="204.0" />
-            <Label layoutX="45.0" layoutY="224.0" text="Tài khoản" />
+            <TextField fx:id="txtTaiKhoan" layoutX="114.0" layoutY="234.0" prefHeight="25.0" prefWidth="204.0" />
+            <Label layoutX="46.0" layoutY="238.0" text="Tài khoản" />
             <Label layoutX="46.0" layoutY="282.0" text="Mật khẩu" />
             <Hyperlink layoutX="225.0" layoutY="303.0" onAction="#quenMatKhau" prefHeight="23.0" prefWidth="96.0" text="Quên mật khẩu?" />
-            <PasswordField fx:id="txtMatKhau" layoutX="115.0" layoutY="278.0" prefHeight="25.0" prefWidth="205.0" />
-            <Label layoutX="51.0" layoutY="184.0" text="Chức vụ" />
-            <ComboBox fx:id="cbbChucVu" layoutX="113.0" layoutY="180.0" onAction="#loaiChucVu" prefWidth="150.0" promptText="Chọn chức vụ..." />
+            <PasswordField fx:id="txtMatKhau" layoutX="113.0" layoutY="278.0" prefHeight="25.0" prefWidth="205.0" />
+            <Label layoutX="51.0" layoutY="192.0" text="Chức vụ" />
+            <ComboBox fx:id="cbbChucVu" layoutX="113.0" layoutY="188.0" onAction="#loaiChucVu" prefWidth="150.0" promptText="Chọn chức vụ..." />
             <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="24.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/icons/logo96.png" />
