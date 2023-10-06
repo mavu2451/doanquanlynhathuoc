@@ -9,7 +9,10 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.LoaiThuoc;
 import entity.NhanVien;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,21 +20,36 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-
-public class TrangChuController implements Initializable{
-	Connection con = KetNoiDatabase.getConnection();
+public class CapNhatLoaiThuocController implements Initializable {
 	@FXML
 	private MenuButton mb;
+	Connection con = KetNoiDatabase.getConnection();
+	PreparedStatement ps;
+	ResultSet rs;
 	@FXML
-	private MenuItem mNhapHang;
+	TableView<LoaiThuoc> table;
 	@FXML
-	private Label lblName;
+	private TableColumn<LoaiThuoc, Integer> maLoaiThuoc;
+	@FXML
+	private TableColumn<LoaiThuoc, String> loaiThuoc;
+	@FXML
+	private ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		reload();
+		getAllLoaiThuoc();
+	}
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
@@ -85,15 +103,6 @@ public class TrangChuController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void capNhatThuoc(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
 	public void loaiThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		
@@ -122,24 +131,6 @@ public class TrangChuController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void thuocTrongKho(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThuocTrongKho.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void capNhatLoaiThuoc(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatLoaiThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
 	public void timThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -160,26 +151,44 @@ public class TrangChuController implements Initializable{
 	}
 	
 	//End Navbar
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
-		String sql = "select * from NhanVien";
-		PreparedStatement ps;
+	
+	public void CTCapNhatLoaiThuoc(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/CTCapNhatLoaiThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+        stage.show();
+       
+	}
+	public void cell() {
+		maLoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiThuoc"));
+		loaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiThuoc"));
+	}
+	public ObservableList<LoaiThuoc> getAllLoaiThuoc(){
+		ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
+		String sql = "select * from loaiThuoc";
 		try {
 			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			NhanVien dnc = DangNhapController.getNV();
-
-				lblName.setText("Xin chào, " + dnc.getHoTen());
-				//Loi
-				System.out.println(dnc.getMaNV());
-				System.out.println(dnc.getHoTen());
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				LoaiThuoc lt = new LoaiThuoc();
+				lt.setMaLoaiThuoc(rs.getInt("maLoaiThuoc"));
+				lt.setLoaiThuoc(rs.getString("loaiThuoc"));
+				loaiThuocList.add(lt);
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return loaiThuocList;
 	}
-	
+	public void reload() {
+		loaiThuocList = getAllLoaiThuoc();
+		cell();
+		table.setItems(loaiThuocList);
+	}
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemLoaiThuocController">
+   <center>
+     <AnchorPane prefHeight="183.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="347.0" layoutY="14.0" text="THÊM LOẠI THUỐC">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="164.0" layoutY="174.0" text="Loại thuốc">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+            <TextField fx:id="txtLoaiThuoc" layoutX="308.0" layoutY="175.0" prefHeight="28.0" prefWidth="454.0" />
+            <Button layoutX="329.0" layoutY="631.0" mnemonicParsing="false" onAction="#add" prefHeight="58.0" prefWidth="242.0" text="Thêm" />
+            <Label layoutX="135.0" layoutY="85.0" text="Mã loại thuốc">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+            <TextField fx:id="txtMaLoaiThuoc" layoutX="307.0" layoutY="86.0" prefHeight="27.0" prefWidth="456.0" />
+            <TextArea layoutX="307.0" layoutY="270.0" prefHeight="334.0" prefWidth="451.0" />
+            <Label layoutX="196.0" layoutY="270.0" text="Mô tả">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
