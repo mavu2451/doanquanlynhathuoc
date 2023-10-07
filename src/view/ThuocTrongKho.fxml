@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ThuocTrongKhoController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThuocTrongKhoController">
   <left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
@@ -387,9 +387,9 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button layoutX="903.0" layoutY="706.0" mnemonicParsing="false" onAction="#reload" prefHeight="64.0" prefWidth="179.0" text="Tải trang" />
+            <Button layoutX="903.0" layoutY="706.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="179.0" text="Tải trang" />
             <Button layoutX="1133.0" layoutY="706.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="207.0" text="Xem thông tin chi tiết" />
-            <Button layoutX="1248.0" layoutY="111.0" mnemonicParsing="false" onAction="#boLocThuoc" prefHeight="22.0" prefWidth="92.0" text="Bộ lọc" />
+            <Button layoutX="1248.0" layoutY="111.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="92.0" text="Bộ lọc" />
          </children>
       </AnchorPane>
    </center>

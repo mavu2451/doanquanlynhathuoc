@@ -159,8 +159,9 @@
                         <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Giỏ hàng" />
-                              <MenuItem mnemonicParsing="false" text="Lập hoá đơn" />
-                              <MenuItem mnemonicParsing="false" text="Tìm kiếm hoá đơn" />
+                              <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
                               <MenuItem mnemonicParsing="false" text="Tạo đơn thuốc mẫu" />
                               <MenuItem mnemonicParsing="false" text="Tìm kiếm đơn thuốc mẫu" />
                               <MenuItem mnemonicParsing="false" text="Cập nhật đơn thuốc mẫu" />
@@ -288,9 +289,9 @@
                         </ImageView>
                         <MenuButton fx:id="mb5" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Thống kê" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Thống kê doanh thu" />
-                              <MenuItem mnemonicParsing="false" text="Thống kê khách hàng" />
-                              <MenuItem mnemonicParsing="false" text="Thống kê hoá đơn" />
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeDoanhThu" text="Thống kê doanh thu" />
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeKhachHang" text="Thống kê khách hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHan" text="Thống kê hoá đơn" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />

@@ -24,7 +24,7 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.stage.Stage;
 
 
-public class TrangChuController implements Initializable{
+public class ThongKeDoanhThuController implements Initializable{
 	Connection con = KetNoiDatabase.getConnection();
 	@FXML
 	private MenuButton mb;
@@ -185,34 +185,6 @@ public class TrangChuController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void thongKeDoanhThu(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeDoanhThu.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void thongKeKhachHang(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeKhachHang.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void thongKeThuocSapHetHan(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHan.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	
 	
 	
 	

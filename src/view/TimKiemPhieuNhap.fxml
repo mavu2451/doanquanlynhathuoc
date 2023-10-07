@@ -39,7 +39,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PhieuNhapController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThuocTrongKhoController">
    <left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
@@ -401,7 +401,7 @@
                </font>
             </Label>
             <Button layoutX="898.0" layoutY="83.0" mnemonicParsing="false" text="Tải trang" />
-            <Button layoutX="99.0" layoutY="415.0" mnemonicParsing="false" onAction="#themTT" prefHeight="64.0" prefWidth="242.0" text="THÊM THÔNG TIN NHẬP" />
+            <Button layoutX="99.0" layoutY="415.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="242.0" text="THÊM THÔNG TIN NHẬP" />
             <Button layoutX="99.0" layoutY="520.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="241.0" text="XEM THÔNG TIN PHIẾU NHẬP" />
          </children>
       </AnchorPane>
