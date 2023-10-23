@@ -2,44 +2,51 @@ package entity;
 
 import java.sql.Date;
 
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class CTPhieuNhap {
+	private int maCTPN;
 	private int maPN;
 	private int maThuoc;
 	private String tenThuoc;
-	private String loaiSP;
 	private String donViTinh;
-	private String nuocSanXuat;
 	private float giaNhap;
 	private float giaBan;
-	private Date ngayNhap;
+	private int sl;
+	private String soLo;
 	private Date hanSuDung;
-	private String quyCachDongGoi;
-	private String nhaCungCap;
 	private String thongTin;
-	public CTPhieuNhap(int maPN, int maThuoc, String tenThuoc, String loaiSP, String donViTinh, String nuocSanXuat,
-			float giaNhap, float giaBan, Date ngayNhap, Date hanSuDung, String quyCachDongGoi, String nhaCungCap,
-			String thongTin) {
+	private float tongGiaNhap;
+	private float tongGiaBan;
+	public CTPhieuNhap(int maCTPN, int maPN, int maThuoc, String tenThuoc, String donViTinh, float giaNhap,
+			float giaBan, int sl, String soLo, Date hanSuDung, String thongTin, float tongGiaNhap,
+			float tongGiaBan) {
 		super();
+		this.maCTPN = maCTPN;
 		this.maPN = maPN;
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
-		this.loaiSP = loaiSP;
 		this.donViTinh = donViTinh;
-		this.nuocSanXuat = nuocSanXuat;
 		this.giaNhap = giaNhap;
 		this.giaBan = giaBan;
-		this.ngayNhap = ngayNhap;
+		this.sl = sl;
+		this.soLo = soLo;
 		this.hanSuDung = hanSuDung;
-		this.quyCachDongGoi = quyCachDongGoi;
-		this.nhaCungCap = nhaCungCap;
 		this.thongTin = thongTin;
+		this.tongGiaNhap = tongGiaNhap;
+		this.tongGiaBan = tongGiaBan;
 	}
-	
 	public CTPhieuNhap() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	public int getMaCTPN() {
+		return maCTPN;
+	}
+	public void setMaCTPN(int maCTPN) {
+		this.maCTPN = maCTPN;
+	}
 	public int getMaPN() {
 		return maPN;
 	}
@@ -58,23 +65,11 @@ public class CTPhieuNhap {
 	public void setTenThuoc(String tenThuoc) {
 		this.tenThuoc = tenThuoc;
 	}
-	public String getLoaiSP() {
-		return loaiSP;
-	}
-	public void setLoaiSP(String loaiSP) {
-		this.loaiSP = loaiSP;
-	}
 	public String getDonViTinh() {
 		return donViTinh;
 	}
 	public void setDonViTinh(String donViTinh) {
 		this.donViTinh = donViTinh;
-	}
-	public String getNuocSanXuat() {
-		return nuocSanXuat;
-	}
-	public void setNuocSanXuat(String nuocSanXuat) {
-		this.nuocSanXuat = nuocSanXuat;
 	}
 	public float getGiaNhap() {
 		return giaNhap;
@@ -88,11 +83,17 @@ public class CTPhieuNhap {
 	public void setGiaBan(float giaBan) {
 		this.giaBan = giaBan;
 	}
-	public Date getNgayNhap() {
-		return ngayNhap;
+	public int getSl() {
+		return sl;
 	}
-	public void setNgayNhap(Date ngayNhap) {
-		this.ngayNhap = ngayNhap;
+	public void setSl(int sl) {
+		this.sl = sl;
+	}
+	public String getSoLo() {
+		return soLo;
+	}
+	public void setSoLo(String soLo) {
+		this.soLo = soLo;
 	}
 	public Date getHanSuDung() {
 		return hanSuDung;
@@ -100,23 +101,25 @@ public class CTPhieuNhap {
 	public void setHanSuDung(Date hanSuDung) {
 		this.hanSuDung = hanSuDung;
 	}
-	public String getQuyCachDongGoi() {
-		return quyCachDongGoi;
-	}
-	public void setQuyCachDongGoi(String quyCachDongGoi) {
-		this.quyCachDongGoi = quyCachDongGoi;
-	}
-	public String getNhaCungCap() {
-		return nhaCungCap;
-	}
-	public void setNhaCungCap(String nhaCungCap) {
-		this.nhaCungCap = nhaCungCap;
-	}
 	public String getThongTin() {
 		return thongTin;
 	}
 	public void setThongTin(String thongTin) {
 		this.thongTin = thongTin;
 	}
+	public float getTongGiaNhap() {
+		return tongGiaNhap;
+	}
+	public void setTongGiaNhap(float tongGiaNhap) {
+		this.tongGiaNhap = tongGiaNhap;
+	}
+	public float getTongGiaBan() {
+		return tongGiaBan;
+	}
+	public void setTongGiaBan(float tongGiaBan) {
+		this.tongGiaBan = tongGiaBan;
+	}
 	
+
+
 }

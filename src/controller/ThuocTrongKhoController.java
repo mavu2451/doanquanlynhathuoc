@@ -3,12 +3,15 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.CTPhieuNhap;
+import entity.Kho;
 import entity.NhanVien;
 import entity.PhieuNhap;
 import javafx.collections.FXCollections;
@@ -50,22 +53,39 @@ public class ThuocTrongKhoController implements Initializable{
 	@FXML
 	Label lblName;
 	@FXML
-	TableView<PhieuNhap> table;
+	TableView<Kho> table;
 	@FXML
-	private TableColumn<PhieuNhap, Integer> maPN;
+	private TableColumn<Kho, String> tenThuoc;
 	@FXML
-	private TableColumn<PhieuNhap, String> hoTen;
+	private TableColumn<Kho, String> donViTinh;
 	@FXML
-	private TableColumn<PhieuNhap, String> ngayNhap;
+	private TableColumn<Kho, Integer> slTonKho;
+	@FXML
+	private TableColumn<Kho, Float> giaNhap;
+	@FXML
+	private TableColumn<Kho, Float> giaBan;
+	@FXML
+	private TableColumn<Kho, String> soLo;
+	@FXML
+	private TableColumn<Kho, Date> hanSuDung;
 
 	
-	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
+	private ObservableList<Kho> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		cell();
+		try {
+			getAllThuocTonKho();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 //		getAllPN();
 //		reload();
 		NhanVien dnc = DangNhapController.getNV();
+		
 //		try {
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
@@ -124,6 +144,15 @@ public class ThuocTrongKhoController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void capNhatThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/CapNhatThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void loaiThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		
@@ -152,6 +181,24 @@ public class ThuocTrongKhoController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void thuocTrongKho(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThuocTrongKho.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void capNhatLoaiThuoc(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/CapNhatLoaiThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void timThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -170,41 +217,178 @@ public class ThuocTrongKhoController implements Initializable{
         stage.setScene(scene);
        
 	}
-	
-	//End Navbar
-	public void themPN(ActionEvent e) {
-//		
-//		String sql = "insert into PhieuNhap(maNV) values (?)";
-//		try {
-////			String maPN = txtMaPN.getText();
-//			ps = con.prepareStatement(sql);
-//			ps.setInt(1, getNV());
-//			System.out.println(getNV());
-//			ps.execute();		
-//
-//		}catch(Exception e1) {
-//			e1.printStackTrace();
-//		}
-//		reload();
-		
+	public void lapHoaDonKhongKeDon(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThemHoaDonKhongTheoDon.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
 	}
-//	public int getNV() {
-//		NhanVien nv = new NhanVien();
-//		String sql = "select tenNV from NhanVien";
-//		PreparedStatement ps;
-//		try {
-//			ps = con.prepareStatement(sql);
-//			ResultSet rs = ps.executeQuery();
-//			while(rs.next()) {
-//				nv.setMaNV(rs.getInt("maNV"));
-//				nv.setHoTen(rs.getString("tenNV"));
-//				return nv.getMaNV();
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return nv.getMaNV();
-//	}
+	public void lapHoaDonKeDon(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThemHoaDonTheoDon.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void timKiemHoaDon(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/TimKiemHoaDon.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void thongKeDoanhThu(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeDoanhThu.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void thongKeKhachHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeKhachHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void thongKeThuocSapHetHan(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHan.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void capNhatNhanVien(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/CapNhatNhanVien.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	  public void gioHang(ActionEvent e) throws IOException {
+	    	Stage stage = (Stage) mb.getScene().getWindow();
+	    	FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/GioHang.fxml"));
+	        Parent sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+	        stage.setScene(scene);
+		}
+	     public void themKhachHang(ActionEvent e) throws IOException {
+	     	Stage stage = (Stage) mb.getScene().getWindow();
+	     	FXMLLoader loader = new FXMLLoader();
+	         loader.setLocation(getClass().getResource("/view/ThemKhachHang.fxml"));
+	         Parent sampleParent = loader.load();
+	         Scene scene = new Scene(sampleParent);
+	         stage.setScene(scene);
+	 	}
+
+	     public void timKiemKhachHang(ActionEvent e) throws IOException {
+	     	Stage stage = (Stage) mb.getScene().getWindow();
+	     	FXMLLoader loader = new FXMLLoader();
+	         loader.setLocation(getClass().getResource("/view/TimKiemKhachHang.fxml"));
+	         Parent sampleParent = loader.load();
+	         Scene scene = new Scene(sampleParent);
+	         stage.setScene(scene);
+	 	}
+
+	     public void capNhatKhachHang(ActionEvent e) throws IOException {
+	     	Stage stage = (Stage) mb.getScene().getWindow();
+	     	FXMLLoader loader = new FXMLLoader();
+	         loader.setLocation(getClass().getResource("/view/CapNhatKhachHang.fxml"));
+	         Parent sampleParent = loader.load();
+	         Scene scene = new Scene(sampleParent);
+	         stage.setScene(scene);
+	 	}
+	     public void themNCC(ActionEvent e) throws IOException {
+	      	Stage stage = (Stage) mb.getScene().getWindow();
+	      	FXMLLoader loader = new FXMLLoader();
+	          loader.setLocation(getClass().getResource("/view/ThemNCC.fxml"));
+	          Parent sampleParent = loader.load();
+	          Scene scene = new Scene(sampleParent);
+	          stage.setScene(scene);
+	  	}
+	     public void timKiemNCC(ActionEvent e) throws IOException {
+	      	Stage stage = (Stage) mb.getScene().getWindow();
+	      	FXMLLoader loader = new FXMLLoader();
+	          loader.setLocation(getClass().getResource("/view/TimKiemNCC.fxml"));
+	          Parent sampleParent = loader.load();
+	          Scene scene = new Scene(sampleParent);
+	          stage.setScene(scene);
+	  	}
+	     public void capNhatNCC(ActionEvent e) throws IOException {
+	      	Stage stage = (Stage) mb.getScene().getWindow();
+	      	FXMLLoader loader = new FXMLLoader();
+	          loader.setLocation(getClass().getResource("/view/CapNhatNCC.fxml"));
+	          Parent sampleParent = loader.load();
+	          Scene scene = new Scene(sampleParent);
+	          stage.setScene(scene);
+	  	}
+	     public void themDonThuocMau(ActionEvent e) throws IOException {
+	       	Stage stage = (Stage) mb.getScene().getWindow();
+	       	FXMLLoader loader = new FXMLLoader();
+	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
+	           Parent sampleParent = loader.load();
+	           Scene scene = new Scene(sampleParent);
+	           stage.setScene(scene);
+	   	}
+	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
+	       	Stage stage = (Stage) mb.getScene().getWindow();
+	       	FXMLLoader loader = new FXMLLoader();
+	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
+	           Parent sampleParent = loader.load();
+	           Scene scene = new Scene(sampleParent);
+	           stage.setScene(scene);
+	   	}
+	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
+	       	Stage stage = (Stage) mb.getScene().getWindow();
+	       	FXMLLoader loader = new FXMLLoader();
+	           loader.setLocation(getClass().getResource("/view/CapNhatDonThuocMau.fxml"));
+	           Parent sampleParent = loader.load();
+	           Scene scene = new Scene(sampleParent);
+	           stage.setScene(scene);
+	   	}
+
+	//End Navbar
+	public void cell() {
+		giaNhap.setCellValueFactory(new PropertyValueFactory<Kho, Float>("giaNhap"));
+		giaBan.setCellValueFactory(new PropertyValueFactory<Kho, Float>("giaBan"));
+		slTonKho.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("slTonKho"));
+		hanSuDung.setCellValueFactory(new PropertyValueFactory<Kho, Date>("hanSuDung"));
+		tenThuoc.setCellValueFactory(new PropertyValueFactory<Kho, String>("tenThuoc"));
+		soLo.setCellValueFactory(new PropertyValueFactory<Kho, String>("soLo"));
+		donViTinh.setCellValueFactory(new PropertyValueFactory<Kho, String>("donViTinh"));
+	}
+	public void getAllThuocTonKho() throws SQLException {
+		String sql = "select * from Tu t left join Thuoc th on t.maThuoc = th.maThuoc where slTonKho > 0";
+		ps = con.prepareStatement(sql);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+			Kho k = new Kho();
+			k.setTenThuoc(rs.getString("tenThuoc"));
+			k.setSlTonKho(rs.getInt("slTonKho"));
+			k.setDonViTinh(rs.getString("donViTinh"));
+			k.setGiaNhap(rs.getFloat("giaNhap"));
+			k.setGiaBan(rs.getFloat("giaBan"));
+			k.setSoLo(rs.getString("soLo"));
+			k.setHanSuDung(rs.getDate("hanSuDung"));
+			list.add(k);
+			table.setItems(list);
+		}
+	}
 
 }

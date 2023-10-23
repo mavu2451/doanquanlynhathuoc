@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -22,8 +21,6 @@
             <Label layoutX="46.0" layoutY="282.0" text="Mật khẩu" />
             <Hyperlink layoutX="225.0" layoutY="303.0" onAction="#quenMatKhau" prefHeight="23.0" prefWidth="96.0" text="Quên mật khẩu?" />
             <PasswordField fx:id="txtMatKhau" layoutX="113.0" layoutY="278.0" prefHeight="25.0" prefWidth="205.0" />
-            <Label layoutX="51.0" layoutY="192.0" text="Chức vụ" />
-            <ComboBox fx:id="cbbChucVu" layoutX="113.0" layoutY="188.0" onAction="#loaiChucVu" prefWidth="150.0" promptText="Chọn chức vụ..." />
             <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="24.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/icons/logo96.png" />
@@ -39,7 +36,7 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="149.0" layoutY="144.0" text="Đăng nhập">
+            <Label layoutX="169.0" layoutY="194.0" text="Đăng nhập">
                <font>
                   <Font size="16.0" />
                </font>

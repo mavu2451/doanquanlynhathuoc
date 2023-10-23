@@ -29,8 +29,8 @@ import javafx.stage.Stage;
 
 public class DangNhapController implements Initializable{
 	private NhanVienController getNV = new NhanVienController();
-	@FXML
-	ComboBox<?> cbbChucVu;
+//	@FXML
+//	ComboBox<?> cbbChucVu;
 	String[] chucVu = new String[]{"Khách hàng", "Nhân viên", "Người quản lý"};
 	FXMLLoader loader = new FXMLLoader();
 	PreparedStatement ps;
@@ -40,7 +40,7 @@ public class DangNhapController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		loaiChucVu();
+//		loaiChucVu();
 	}
 	
 	public void quenMatKhau(ActionEvent e) throws IOException {
@@ -100,15 +100,18 @@ public class DangNhapController implements Initializable{
 			e2.printStackTrace();
 		}
 	}
+	//Dang nhap
 	public static NhanVien getNV() {
 		NhanVien nv = new NhanVien();
-		try {
-			nv.setHoTen(rs.getString("tenNV"));
-			nv.setMaNV(rs.getInt("maNV"));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+			nv.setMaNV(1);
+			nv.setHoTen("test1"); //xoa cai nay neu can dang nhap
+//			nv.setHoTen(rs.getString("tenNV"));
+//			nv.setMaNV(rs.getInt("maNV"));
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return nv;
 	}
 	@FXML
@@ -139,10 +142,10 @@ public class DangNhapController implements Initializable{
 		alert.setHeaderText(null);
 		alert.show();
 	}
-	@FXML
-	public void loaiChucVu() {
-		ObservableList list = FXCollections.observableArrayList(chucVu);
-		cbbChucVu.setItems(list);
-	}
+//	@FXML
+//	public void loaiChucVu() {
+//		ObservableList list = FXCollections.observableArrayList(chucVu);
+//		cbbChucVu.setItems(list);
+//	}
 
 }
