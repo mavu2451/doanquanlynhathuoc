@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.XemThongTinThuocController">
+   <center>
+      <AnchorPane prefHeight="672.0" prefWidth="1738.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="647.0" layoutY="480.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="111.0" text="Quay lại" />
+            <ScrollPane layoutX="30.0" layoutY="91.0" prefHeight="370.0" prefWidth="959.0">
+               <content>
+                  <TableView fx:id="table" prefHeight="412.0" prefWidth="958.0">
+                    <columns>
+                      <TableColumn fx:id="maThuoc" prefWidth="63.0" text="Mã thuốc" />
+                        <TableColumn fx:id="tenThuoc" prefWidth="164.0" text="Tên thuốc" />
+                        <TableColumn fx:id="tenLoaiThuoc" prefWidth="122.0" text="Loại thuốc" />
+                        <TableColumn fx:id="donViTinh" prefWidth="142.0" text="Đơn vị tính" />
+                        <TableColumn fx:id="giaBan" prefWidth="101.0" text="Giá bán" />
+                        <TableColumn fx:id="slTonKho" prefWidth="119.0" text="Số lượng hiện có" />
+                        <TableColumn fx:id="soLo" prefWidth="113.0" text="Số lô" />
+                        <TableColumn fx:id="hanSuDung" prefWidth="122.0" text="Hạn sử dụng" />
+                    </columns>
+                  </TableView>
+               </content>
+            </ScrollPane>
+            <Label layoutX="403.0" layoutY="14.0" text="THÔNG TIN THUỐC">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <TextField layoutX="744.0" layoutY="49.0" prefHeight="25.0" prefWidth="245.0" promptText="Tìm kiếm tên thuốc..." />
+            <Label layoutX="678.0" layoutY="53.0" text="Tìm kiếm" />
+            <Button fx:id="btnThem" layoutX="292.0" layoutY="480.0" mnemonicParsing="false" onAction="#getThuoc" prefHeight="58.0" prefWidth="111.0" text="Thêm" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -499,6 +499,7 @@ public class CTPhieuNhapController implements Initializable{
 			ps.setInt(3, maNCC);
 			ps.execute();
 			maPN();
+			table.setItems(null);
 	}	
 	}
 	

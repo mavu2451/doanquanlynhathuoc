@@ -1,18 +1,29 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
-import entity.LoaiThuoc;
 import entity.NhanVien;
+import entity.PhieuNhap;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,34 +32,66 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class LoaiThuocController implements Initializable {
+public class ThemPhieuNhapController implements Initializable{
 	@FXML
 	private MenuButton mb;
+	@FXML
+	private TextField txtMaPN;
+	@FXML
+	private ComboBox<NhanVien> cbNhanVien;
+	@FXML
+	private TextField txtNCC;
+	@FXML
+	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
-	ResultSet rs;
+	static ResultSet rs;
 	@FXML
-	TableView<LoaiThuoc> table;
+	Label lblName;
 	@FXML
-	private TableColumn<LoaiThuoc, Integer> maLoaiThuoc;
+	TableView<PhieuNhap> table;
 	@FXML
-	private TableColumn<LoaiThuoc, String> loaiThuoc;
+	private ComboBox<?> cbbNCC;
 	@FXML
-	private ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
+	private TableColumn<PhieuNhap, Integer> maPN;
+	@FXML
+	private TableColumn<PhieuNhap, String> hoTen;
+	@FXML
+	private TableColumn<PhieuNhap, String> ngayNhap;
+
+	
+	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
+		getAllPN();
 		reload();
-		getAllLoaiThuoc();
+		NhanVien dnc = DangNhapController.getNV();
+//		try {
+//			while(rs.next()) {
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+
 	}
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
@@ -94,6 +137,7 @@ public class LoaiThuocController implements Initializable {
         scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
         stage.setScene(scene);
 	}
+
 	public void thuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -323,33 +367,139 @@ public class LoaiThuocController implements Initializable {
 	   	}
 
 	//End Navbar
-	public void cell() {
-		maLoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiThuoc"));
-		loaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiThuoc"));
+	public void themPN(ActionEvent e) {
+//		
+//		String sql = "insert into PhieuNhap(maNV) values (?)";
+//		try {
+////			String maPN = txtMaPN.getText();
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, getNV());
+//			System.out.println(getNV());
+//			ps.execute();		
+//
+//		}catch(Exception e1) {
+//			e1.printStackTrace();
+//		}
+//		reload();
+		
 	}
-	public ObservableList<LoaiThuoc> getAllLoaiThuoc(){
-		ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();
-		String sql = "select * from loaiThuoc";
+//	public int getNV() {
+//		NhanVien nv = new NhanVien();
+//		String sql = "select tenNV from NhanVien";
+//		PreparedStatement ps;
+//		try {
+//			ps = con.prepareStatement(sql);
+//			ResultSet rs = ps.executeQuery();
+//			while(rs.next()) {
+//				nv.setMaNV(rs.getInt("maNV"));
+//				nv.setHoTen(rs.getString("tenNV"));
+//				return nv.getMaNV();
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return nv.getMaNV();
+//	}
+	public void themTT(ActionEvent e){
 		try {
-			ps = con.prepareStatement(sql);
-			rs = ps.executeQuery();
+			NhanVien dnc = DangNhapController.getNV();
+			themPhieuNhap(dnc.getMaNV());
 			
-			while(rs.next()) {
-				LoaiThuoc lt = new LoaiThuoc();
-				lt.setMaLoaiThuoc(rs.getInt("maLoaiThuoc"));
-				lt.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-				loaiThuocList.add(lt);
-			}
-			
+//			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/CTPhieuNhap.fxml"));
+	        Parent sampleParent;
+			sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+//	        CTPhieuNhapController ct = loader.getController();
+	        PhieuNhap pn = table.getSelectionModel().getSelectedItem();     
+//	        ct.setMaPN(pn);
+	        stage.setScene(scene);
+	        stage.show();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			themThatBaiMessage();
+		}
+	}
+	public static PhieuNhap getPN() {
+		PhieuNhap pn = new PhieuNhap();
+		try {
+			pn.setMaPN(rs.getInt("maPN"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return loaiThuocList;
+		return pn;
+	}
+	public void themPhieuNhap(int i){
+		try {
+			String sql = "insert into PhieuNhap(maNV) values (?)";
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, i);
+			ps.execute();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void cell() {
+		maPN.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Integer>("maPN"));
+		hoTen.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("hoTen"));
+		ngayNhap.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("ngayNhap"));
+
+		
 	}
 	public void reload() {
-		loaiThuocList = getAllLoaiThuoc();
+		list = getAllPN();
 		cell();
-		table.setItems(loaiThuocList);
+		table.setItems(list);
+	}
+	public ObservableList<PhieuNhap> getAllPN(){
+		ObservableList<PhieuNhap> pnlist = FXCollections.observableArrayList();
+		String query = "select maPN, tenNV, ngayNhap from PhieuNhap p inner join NhanVien n on n.maNV = p.maNV";
+		
+		try {
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				PhieuNhap pn = new PhieuNhap();
+				pn.setMaPN(rs.getInt("maPN"));
+				pn.setHoTen(rs.getString("tenNV"));
+				pn.setNgayNhap(rs.getDate("ngayNhap"));
+				pnlist.add(pn);
+			}
+		}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}
+		return pnlist;
+}
+	public void getAllNCC() {
+	String sql = "select * from NhaCungCap";
+	try {
+		ps = con.prepareStatement(sql);
+		rs = ps.executeQuery();
+		ObservableList nccList = FXCollections.observableArrayList();
+		while(rs.next()) {
+			String ncc = rs.getString("tenNCC");
+			nccList.add(ncc);
+		}
+		cbbNCC.setItems(nccList);
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+	}
+}
+	@FXML
+	private void themThatBaiMessage() {
+		Alert alert = new Alert(AlertType.ERROR, "Mời chọn cột phiếu nhập", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
 	}
 }

@@ -7,23 +7,29 @@ public class Kho {
 	private int maThuoc;
 	private String tenThuoc;
 	private String donViTinh;
+	private String tenNCC;
+	private String tenLoaiThuoc;
 	private int slTonKho;
+	private int soLuong;
 	private float giaNhap;
 	private float giaBan;
 	private String soLo;
 	private Date hanSuDung;
-	public Kho(int maKho, int maThuoc, String tenThuoc, String donViTinh,int slTonKho, float giaNhap, float giaBan, String soLo,
-			Date hanSuDung) {
+	public Kho(int maKho, int maThuoc, String tenThuoc, String donViTinh, String tenNCC, String tenLoaiThuoc,
+			int slTonKho, float giaNhap, float giaBan, String soLo, Date hanSuDung, int soLuong) {
 		super();
 		this.maKho = maKho;
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
 		this.donViTinh = donViTinh;
+		this.tenNCC = tenNCC;
+		this.tenLoaiThuoc = tenLoaiThuoc;
 		this.slTonKho = slTonKho;
 		this.giaNhap = giaNhap;
 		this.giaBan = giaBan;
 		this.soLo = soLo;
 		this.hanSuDung = hanSuDung;
+		this.soLuong = soLuong;
 	}
 	public Kho() {
 		super();
@@ -46,6 +52,24 @@ public class Kho {
 	}
 	public void setTenThuoc(String tenThuoc) {
 		this.tenThuoc = tenThuoc;
+	}
+	public String getDonViTinh() {
+		return donViTinh;
+	}
+	public void setDonViTinh(String donViTinh) {
+		this.donViTinh = donViTinh;
+	}
+	public String getTenNCC() {
+		return tenNCC;
+	}
+	public void setTenNCC(String tenNCC) {
+		this.tenNCC = tenNCC;
+	}
+	public String getTenLoaiThuoc() {
+		return tenLoaiThuoc;
+	}
+	public void setTenLoaiThuoc(String tenLoaiThuoc) {
+		this.tenLoaiThuoc = tenLoaiThuoc;
 	}
 	public int getSlTonKho() {
 		return slTonKho;
@@ -77,11 +101,11 @@ public class Kho {
 	public void setHanSuDung(Date hanSuDung) {
 		this.hanSuDung = hanSuDung;
 	}
-	public String getDonViTinh() {
-		return donViTinh;
+	public int getSoLuong() {
+		return soLuong;
 	}
-	public void setDonViTinh(String donViTinh) {
-		this.donViTinh = donViTinh;
+	public void setSoLuong(int soLuong) {
+		this.soLuong = soLuong;
 	}
 	
 }

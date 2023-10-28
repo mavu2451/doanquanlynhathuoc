@@ -28,7 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class DangNhapController implements Initializable{
-	private NhanVienController getNV = new NhanVienController();
+	private ThemNhanVienController getNV = new ThemNhanVienController();
 //	@FXML
 //	ComboBox<?> cbbChucVu;
 	String[] chucVu = new String[]{"Khách hàng", "Nhân viên", "Người quản lý"};
@@ -85,6 +85,8 @@ public class DangNhapController implements Initializable{
 		        Parent sampleParent = loader.load();
 		        Scene scene = new Scene(sampleParent);   
 		        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+		        stage.setX(0);
+		        stage.setY(0);
 		        stage.setScene(scene);
 			}
 //			else if(rs.next() && trangThai.equals("Nghỉ việc")) {

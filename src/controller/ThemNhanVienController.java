@@ -52,7 +52,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class NhanVienController implements Initializable{
+public class ThemNhanVienController implements Initializable{
 	@FXML
 	private ImageView imageView;
 	private Image image;
@@ -628,7 +628,6 @@ public class NhanVienController implements Initializable{
 				nv.setVaiTro(rs.getString("vaiTro"));
 				nv.setTrangThai(rs.getString("trangThai"));
 				nvList.add(nv);
-				
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
