@@ -374,7 +374,7 @@ public class ThuocTrongKhoController implements Initializable{
 		donViTinh.setCellValueFactory(new PropertyValueFactory<Kho, String>("donViTinh"));
 	}
 	public void getAllThuocTonKho() throws SQLException {
-		String sql = "select * from Tu t left join Thuoc th on t.maThuoc = th.maThuoc where slTonKho > 0";
+		String sql = "select t.tenThuoc, donViTinh,sum(th.soLuong) as slTonkho, th.giaNhap, th.giaBan from Thuoc t left join CTPhieuNhap th on t.maThuoc = th.maThuoc inner join LoaiThuoc t on t.maLoaiThuoc = th.maLoaiThuoc where th.soLuong > 0 and th.trangThai=N'Đã nhập hàng' group by tenThuoc, donViTinh,th.giaNhap, th.giaBan";
 		ps = con.prepareStatement(sql);
 		rs = ps.executeQuery();
 		while(rs.next()) {
@@ -384,8 +384,8 @@ public class ThuocTrongKhoController implements Initializable{
 			k.setDonViTinh(rs.getString("donViTinh"));
 			k.setGiaNhap(rs.getFloat("giaNhap"));
 			k.setGiaBan(rs.getFloat("giaBan"));
-			k.setSoLo(rs.getString("soLo"));
-			k.setHanSuDung(rs.getDate("hanSuDung"));
+//			k.setSoLo(rs.getString("soLo"));
+//			k.setHanSuDung(rs.getDate("hanSuDung"));
 			list.add(k);
 			table.setItems(list);
 		}

@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemThuocController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemThuocController">
      <left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
@@ -320,8 +320,8 @@
             <TextField fx:id="txtDonViTinh" layoutX="416.0" layoutY="163.0" prefHeight="25.0" prefWidth="169.0" />
             <TextField fx:id="txtGiaNhap" layoutX="416.0" layoutY="219.0" prefHeight="25.0" prefWidth="169.0" />
             <TextField fx:id="txtCachDung" layoutX="416.0" layoutY="324.0" prefHeight="25.0" prefWidth="169.0" />
-            <Button layoutX="551.0" layoutY="720.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
-            <Button layoutX="764.0" layoutY="720.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
+            <Button layoutX="449.0" layoutY="720.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
+            <Button layoutX="636.0" layoutY="721.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
             <TextField fx:id="txtGiaBan" layoutX="876.0" layoutY="219.0" prefHeight="25.0" prefWidth="173.0" />
             <Label layoutX="802.0" layoutY="223.0" text="Giá bán" />
             <Label layoutX="295.0" layoutY="274.0" text="Quy cách đóng gói" />
@@ -333,6 +333,7 @@
             <Label layoutX="794.0" layoutY="340.0" text="Số đăng ký" />
             <TextField fx:id="txtDinhMucSL" layoutX="415.0" layoutY="390.0" prefHeight="25.0" prefWidth="170.0" promptText="Thông báo khi thuốc sắp hết" />
             <TextField fx:id="txtSoDangKy" layoutX="879.0" layoutY="336.0" prefHeight="25.0" prefWidth="170.0" />
+            <Button fx:id="nhapExcel" layoutX="803.0" layoutY="720.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="113.0" text="Nhập Excel" />
          </children>
       </AnchorPane>
    </center>

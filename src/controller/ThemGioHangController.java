@@ -487,28 +487,28 @@ public class ThemGioHangController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void lapPhieuDatThuocKhongKeDon(ActionEvent e) throws IOException {
+	public void lapHoaDonKhongKeDon(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThemPhieuDatThuocKhongTheoDon.fxml"));
+        loader.setLocation(getClass().getResource("/view/ThemHoaDonKhongTheoDon.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
        
 	}
-	public void lapPhieuDatThuocKeDon(ActionEvent e) throws IOException {
+	public void lapHoaDonKeDon(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThemPhieuDatThuocTheoDon.fxml"));
+        loader.setLocation(getClass().getResource("/view/ThemHoaDonTheoDon.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
        
 	}
-	public void timKiemPhieuDatThuoc(ActionEvent e) throws IOException {
+	public void timKiemHoaDon(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/TimKiemPhieuDatThuoc.fxml"));
+        loader.setLocation(getClass().getResource("/view/TimKiemHoaDon.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);

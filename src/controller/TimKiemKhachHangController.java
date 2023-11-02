@@ -548,10 +548,10 @@ public class TimKiemKhachHangController implements Initializable{
 		while(rs.next()) {
 			KhachHang kh = new KhachHang();
 			kh.setMaKH(rs.getInt("maKH"));
-			kh.setHoTen(rs.getString("hoTenKH"));
+			kh.setHoTen(rs.getString("tenKH"));
 			kh.setGioiTinh(rs.getString("gioiTinh"));
 			kh.setNgaySinh(rs.getDate("ngaySinh"));
-			kh.setSdt(rs.getInt("soDienThoai"));
+			kh.setSdt(rs.getInt("sdt"));
 			kh.setEmail(rs.getString("email"));
 			kh.setDiaChi(rs.getString("diaChi"));
 			list.add(kh);

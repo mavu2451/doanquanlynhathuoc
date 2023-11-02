@@ -30,6 +30,7 @@ tab{
 }
 .table-view .column-header{
     -fx-background-color: red;
+     -fx-text-fill: white
 }
 
 #hbTrangChu:hover{

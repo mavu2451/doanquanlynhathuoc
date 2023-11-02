@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -7,6 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import database.KetNoiDatabase;
 import entity.LoaiThuoc;
@@ -23,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -34,6 +42,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class ThuocController implements Initializable{
+	@FXML
+	private Button nhapExcel;
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 	@FXML
@@ -82,6 +92,7 @@ public class ThuocController implements Initializable{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+	
 	}
 //	public void thuoc(ActionEvent e) throws IOException {
 ////		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();

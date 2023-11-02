@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -7,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import database.KetNoiDatabase;
 import entity.LoaiThuoc;
@@ -23,6 +29,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -30,10 +39,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class TimKiemThuocController implements Initializable{
+	@FXML
+	private Button btnTimKiem, xuatExcel;
+	@FXML
+	private TextField txtTimThuoc, txtTimLoaiThuoc, txtTimDVT, txtTimNSX;
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 	@FXML
@@ -69,6 +83,7 @@ public class TimKiemThuocController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
 		reload();
 		NhanVien dnc = DangNhapController.getNV();
 //		try {
@@ -81,6 +96,113 @@ public class TimKiemThuocController implements Initializable{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+				xuatExcel.setOnAction(b->{
+					String query = "select * from Thuoc t left join LoaiThuoc th on t.maLoaiThuoc = th.maLoaiThuoc";
+					try {
+						ps = con.prepareStatement(query);
+						rs = ps.executeQuery();
+						XSSFWorkbook wb = new XSSFWorkbook();
+						XSSFSheet sheet = wb.createSheet("Thuốc");
+						XSSFRow header = sheet.createRow(0);
+						header.createCell(0).setCellValue("Mã thuốc");
+						header.createCell(1).setCellValue("Tên thuốc");
+						header.createCell(2).setCellValue("Loại thuốc");
+						header.createCell(3).setCellValue("Nước sản xuất");
+						header.createCell(4).setCellValue("Đơn vị tính");
+						header.createCell(5).setCellValue("Giá nhập");
+						header.createCell(6).setCellValue("Giá bán");
+						header.createCell(7).setCellValue("Cách dùng");
+						header.createCell(8).setCellValue("Trạng thái");
+						sheet.autoSizeColumn(0);
+						sheet.setColumnWidth(1, 256*25);
+						sheet.setColumnWidth(2, 256*25);
+						sheet.setColumnWidth(3, 256*25);
+						sheet.setColumnWidth(4, 256*25);
+						sheet.setColumnWidth(5, 256*25);
+						sheet.setColumnWidth(6, 256*25);
+						sheet.setColumnWidth(7, 256*25);
+						sheet.setColumnWidth(8, 256*25);
+						sheet.setZoom(150);
+						int index = 1;
+						while(rs.next()) {
+							XSSFRow row = sheet.createRow(index);
+							row.createCell(0).setCellValue(rs.getInt("maThuoc"));
+							row.createCell(1).setCellValue(rs.getString("tenThuoc"));
+							row.createCell(2).setCellValue(rs.getString("tenLoaiThuoc"));
+							row.createCell(3).setCellValue(rs.getString("nuocSanXuat"));
+							row.createCell(4).setCellValue(rs.getString("donViTinh"));
+							row.createCell(5).setCellValue(rs.getFloat("giaNhap"));
+							row.createCell(6).setCellValue(rs.getFloat("giaBan"));
+							row.createCell(7).setCellValue(rs.getString("cachDung"));
+							row.createCell(8).setCellValue(rs.getString("trangThai"));
+							index++;
+						}
+						FileOutputStream fo = new FileOutputStream("Thuoc.xlsx");
+						wb.write(fo);
+						fo.close();
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Thông báo");
+						alert.setHeaderText(null);
+						alert.setContentText("Thông tin thuốc đã được xuất thành công");
+						alert.showAndWait();
+						ps.close();
+						rs.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				});
+				btnTimKiem.setOnAction(a -> {
+					String timThuoc = txtTimThuoc.getText().toString();
+					String timLoaiThuoc = txtTimLoaiThuoc.getText().toString();
+					String timNSX = txtTimNSX.getText().toString();
+					String timDVT = txtTimDVT.getText().toString();
+					if(timThuoc == "" && timLoaiThuoc == "" && timNSX == "" && timDVT == "") {
+						table.getItems().clear();
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Thông báo");
+						alert.setContentText("Không được để trống");
+						alert.setHeaderText(null);
+						alert.showAndWait();
+						getAllThuoc();
+					}
+					else {
+					table.getItems().clear();
+					String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, t.nuocSanXuat, t.donViTinh, t.giaNhap, t.giaBan, t.cachDung, t.trangThai from Thuoc t left join LoaiThuoc lt on "
+							+ "lt.maLoaiThuoc = t.maLoaiThuoc where tenThuoc like'%"+timThuoc+"%' "
+									+ "and tenLoaiThuoc like '%"+timLoaiThuoc+"%'"
+									+ "and nuocSanXuat like '%"+timNSX+"%'"
+									+ "and donViTinh like '%"+timDVT+"%'";
+					try {
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							Thuoc t = new Thuoc();
+							t.setMaThuoc(rs.getInt("maThuoc"));
+							t.setTenThuoc(rs.getString("tenThuoc"));
+							t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+							t.setNsx(rs.getString("nuocSanXuat"));
+							t.setDvt(rs.getString("donViTinh"));
+							t.setGiaNhap(rs.getFloat("giaNhap"));
+							t.setGiaBan(rs.getFloat("giaBan"));
+							t.setCachDung(rs.getString("cachDung"));
+							t.setTrangThai(rs.getString("trangThai"));
+							thuocList.add(t);
+							table.setItems(thuocList);	
+						}	
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+				});
 	}
 //	public void thuoc(ActionEvent e) throws IOException {
 ////		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -395,7 +517,7 @@ public class TimKiemThuocController implements Initializable{
 				+ "select maThuoc, tenThuoc, tenLoaiThuoc, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
 				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc"
 				;
-		
+		String test = "";
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -411,7 +533,7 @@ public class TimKiemThuocController implements Initializable{
 				t.setCachDung(rs.getString("cachDung"));
 				t.setTrangThai(rs.getString("trangThai"));
 				thuocList.add(t);
-				
+				table.setItems(thuocList);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception

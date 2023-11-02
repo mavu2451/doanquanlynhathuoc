@@ -395,8 +395,8 @@ public class TimKiemHoaDonController implements Initializable{
 		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 		String query = "\r\n"
 				+ "select maThuoc, tenThuoc, loaiThuoc,tenNCC, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
-				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc inner join NhaCungCap n on"
-				+ " n.maNCC = t.maNCC";
+				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc"
+				;
 		
 		try {
 			ps = con.prepareStatement(query);
@@ -406,7 +406,6 @@ public class TimKiemHoaDonController implements Initializable{
 				t.setMaThuoc(rs.getInt("maThuoc"));
 				t.setTenThuoc(rs.getString("tenThuoc"));
 				t.setLoaiThuoc(rs.getString("loaiThuoc"));
-				t.setNcc(rs.getString("tenNCC"));
 				t.setNsx(rs.getString("nuocSanXuat"));
 				t.setDvt(rs.getString("donViTinh"));
 				t.setGiaNhap(rs.getFloat("giaNhap"));

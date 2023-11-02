@@ -95,10 +95,11 @@ public class CTPhieuNhapController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	ObservableList<CTPhieuNhap> list = FXCollections.observableArrayList();
-	String[] trangThaiList = {"Đã nhập","Chưa nhập"};
+	String[] trangThaiList = {"Đã nhập hàng","Chưa nhập hàng"};
 	//new CTPhieuNhap(1,1,"test","test","test","test",10000,20000,2,new Date(100000),new Date(200000),"test","test",20000,40000)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		dpNgayNhap.setValue(LocalDate.now());
 		cbbTrangThai.getItems().addAll(trangThaiList);
 		txtSoLuong.setText("1");
 		lblGiaBanQuyDoi.setText("0 đồng");
@@ -146,7 +147,9 @@ public class CTPhieuNhapController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
+	
 	
 //	public int setMaPN(PhieuNhap p) {
 //		lblMaPN.setText(String.valueOf(p.getMaPN()));
@@ -525,15 +528,7 @@ public class CTPhieuNhapController implements Initializable{
 		lblMaPN.setText(maPNS);
 		return maPN;
 	}
-	public int maCTPN() throws SQLException {
-		int maCTPN = 0;
-		String maCt = "select MAX(maCTPN) as mact from CTPhieuNhap";
-		ps = con.prepareStatement(maCt);
-		rs=ps.executeQuery();
-		while(rs.next()) 
-		maCTPN = rs.getInt("mact");
-		return maCTPN;
-	}
+
 	public int maThuoc() throws SQLException {
 		int maThuoc = 0;
 		String mThuoc = "select * from Thuoc where tenThuoc = N'"+cbbThuoc.getSelectionModel().getSelectedItem().toString()+"'";
@@ -570,56 +565,54 @@ public class CTPhieuNhapController implements Initializable{
 			
 //			pn.setHoTen(dnc.getHoTen());
 //			System.out.println(pn.getHoTen());
-			int maCTPN = maCTPN();
 			int mThuoc = maThuoc();
 			String tt = cbbTrangThai.getValue();
 			
-			String sql = "insert into CTPhieuNhap(maPN, maCTPN, maThuoc, giaNhap, giaBan, soLuong, ghiChu, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into CTPhieuNhap(maPN, maThuoc, giaNhap, giaBan, soLuong, thongTin, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?,?)";
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, mapn);
-			ps.setInt(2, maCTPN + 1);
-			ps.setInt(3, mThuoc);
-			ps.setFloat(4, gn);
-			ps.setFloat(5, gb);
-			ps.setInt(6, sl);
-			ps.setString(7, taGhiChu.getText());
-			ps.setString(8, txtSoLo.getText());
-			ps.setDate(9, dhsd);
-			ps.setFloat(10, gn * sl);
-			ps.setFloat(11, gb * sl);
-			ps.setString(12, tt);
+			ps.setInt(2, mThuoc);
+			ps.setFloat(3, gn);
+			ps.setFloat(4, gb);
+			ps.setInt(5, sl);
+			ps.setString(6, taGhiChu.getText());
+			ps.setString(7, txtSoLo.getText());
+			ps.setDate(8, dhsd);
+			ps.setFloat(9, gn * sl);
+			ps.setFloat(10, gb * sl);
+			ps.setString(11, tt);
 			ps.execute();
 			getAllCTPN(mapn);
 			tinhTong(mapn);
-			String kho = "select * from Tu where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and soLo='"+txtSoLo.getText()+"' and hanSuDung = '" +dhsd+ "'";
-			ps = con.prepareStatement(kho);
-			rs = ps.executeQuery();
-			Kho k = new Kho();
-			ObservableList<Kho> khoList = FXCollections.observableArrayList();
-			String maTh = String.valueOf(mThuoc);
-			String gNhap = String.valueOf(gn);
-			String gBan = String.valueOf(gb);
-			while(rs.next()) {
-				k.setMaThuoc(rs.getInt("maThuoc"));
-//				k.setTenThuoc(rs.getString("tenThuoc"));
-				k.setGiaNhap(rs.getFloat("giaNhap"));
-				k.setGiaBan(rs.getFloat("giaBan"));
-				k.setSlTonKho(rs.getInt("slTonKho"));
-				k.setSoLo(rs.getString("soLo"));
-				k.setHanSuDung(rs.getDate("hanSuDung"));
-				khoList.add(k);
-				int tongsl = rs.getInt("slTonKho") + sl;
-				System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
-				String maThuocS = String.valueOf(k.getMaThuoc());
-				System.out.println(maTh);
-				System.out.println(maThuocS);
-//				&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
-				if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
-					String themSl = "update Tu set slTonKho = '"+tongsl+"' where maThuoc ='"+mThuoc+"'";
-					ps = con.prepareStatement(themSl);
-					ps.execute();
-					System.out.println(themSl);
-				}
+//			String kho = "select * from Tu where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and soLo='"+txtSoLo.getText()+"' and hanSuDung = '" +dhsd+ "'";
+//			ps = con.prepareStatement(kho);
+//			rs = ps.executeQuery();
+//			Kho k = new Kho();
+//			ObservableList<Kho> khoList = FXCollections.observableArrayList();
+//			String maTh = String.valueOf(mThuoc);
+//			String gNhap = String.valueOf(gn);
+//			String gBan = String.valueOf(gb);
+//			while(rs.next()) {
+//				k.setMaThuoc(rs.getInt("maThuoc"));
+////				k.setTenThuoc(rs.getString("tenThuoc"));
+//				k.setGiaNhap(rs.getFloat("giaNhap"));
+//				k.setGiaBan(rs.getFloat("giaBan"));
+//				k.setSlTonKho(rs.getInt("slTonKho"));
+//				k.setSoLo(rs.getString("soLo"));
+//				k.setHanSuDung(rs.getDate("hanSuDung"));
+//				khoList.add(k);
+//				int tongsl = rs.getInt("slTonKho") + sl;
+//				System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
+//				String maThuocS = String.valueOf(k.getMaThuoc());
+//				System.out.println(maTh);
+//				System.out.println(maThuocS);
+////				&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+//				if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
+//					String themSl = "update Tu set slTonKho = '"+tongsl+"' where maThuoc ='"+mThuoc+"'";
+//					ps = con.prepareStatement(themSl);
+//					ps.execute();
+//					System.out.println(themSl);
+//				}
 			}
 //				if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
 //				
@@ -627,38 +620,38 @@ public class CTPhieuNhapController implements Initializable{
 			
 //			String kho1 = "select * from Tu where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and ngaySanXuat='"+dnsx+"' and hanSuDung = '" +dhsd+ "'";
 
-				String nhapKho = "insert into Tu(maThuoc, slTonKho, giaNhap, giaBan, soLo, hanSuDung, maPN) values (?,?,?,?,?,?,?)";
-				ps = con.prepareStatement(nhapKho);
-				ps.setInt(1, mThuoc);
-				ps.setInt(2, sl);
-				ps.setFloat(3, gn);
-				ps.setFloat(4,gb);
-				ps.setString(5, txtSoLo.getText());
-				ps.setDate(6, dhsd);
-				ps.setInt(7, mapn);
-				ps.execute();
-				
-				String count = "SELECT COUNT(*) as maThuoc FROM Tu GROUP BY maThuoc, giaNhap, giaBan, soLo, hanSuDung HAVING COUNT(*) > 1";
-				ps = con.prepareStatement(count);
-				rs = ps.executeQuery();
-				while(rs.next()) {
-					int c = rs.getInt("maThuoc");
-					if(c > 1) {
-						String drop = "delete from Tu where maTu = (select max(maTu) from Tu)";
-						ps = con.prepareStatement(drop);
-						ps.execute();
-						System.out.println(drop);
-					}
-		}
+//				String nhapKho = "insert into Tu(maThuoc, slTonKho, giaNhap, giaBan, soLo, hanSuDung, maPN) values (?,?,?,?,?,?,?)";
+//				ps = con.prepareStatement(nhapKho);
+//				ps.setInt(1, mThuoc);
+//				ps.setInt(2, sl);
+//				ps.setFloat(3, gn);
+//				ps.setFloat(4,gb);
+//				ps.setString(5, txtSoLo.getText());
+//				ps.setDate(6, dhsd);
+//				ps.setInt(7, mapn);
+//				ps.execute();
+//				
+//				String count = "SELECT COUNT(*) as maThuoc FROM Tu GROUP BY maThuoc, giaNhap, giaBan, soLo, hanSuDung HAVING COUNT(*) > 1";
+//				ps = con.prepareStatement(count);
+//				rs = ps.executeQuery();
+//				while(rs.next()) {
+//					int c = rs.getInt("maThuoc");
+//					if(c > 1) {
+//						String drop = "delete from Tu where maTu = (select max(maTu) from Tu)";
+//						ps = con.prepareStatement(drop);
+//						ps.execute();
+//						System.out.println(drop);
+//					}
+//		}
 		
-			}
+			
 //			String reset = "DBCC CHECKIDENT('Tu', RESEED, 0)";
 //			ps = con.prepareStatement(reset);
 //			ps.execute();
 
 	public void tinhTong(int mapn) throws SQLException {
 		String quydoi = "SELECT * FROM CTPhieuNhap\r\n"
-				+ "WHERE maCTPN = (SELECT MAX(maCTPN) FROM CTPhieuNhap)";
+				+ "WHERE maPN = (SELECT MAX(maPN) FROM CTPhieuNhap)";
 		ps = con.prepareStatement(quydoi);
 		rs = ps.executeQuery();
 		while(rs.next()) {
@@ -668,7 +661,7 @@ public class CTPhieuNhapController implements Initializable{
 			lblGiaNhapQuyDoi.setText(String.valueOf(giaNhap * soLuong + " đồng"));
 			lblGiaBanQuyDoi.setText(String.valueOf(giaBan * soLuong + " đồng"));
 		}
-		String tong = "select sum(tongGiaNhap) as gn, sum(tongGiaBan) as gb from CTPhieuNhap where maPN = '"+mapn+"'";
+		String tong = "select sum(GiaNhap * soLuong) as gn, sum(GiaBan * soLuong) as gb from CTPhieuNhap where maPN = '"+mapn+"' and trangThai=N'Đã nhập hàng'";
 		ps = con.prepareStatement(tong);
 		rs = ps.executeQuery();
 		while(rs.next()) {
