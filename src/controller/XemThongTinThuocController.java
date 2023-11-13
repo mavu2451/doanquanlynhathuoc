@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
 import entity.CTPhieuNhap;
-import entity.Kho;
+import entity.CTThuoc;
 import entity.LoaiThuoc;
 import entity.NhaCungCap;
 import entity.NhanVien;
@@ -61,26 +61,26 @@ public class XemThongTinThuocController implements Initializable{
 	@FXML
 	private Button btnThem;
 	@FXML
-	TableView<Kho> table;
+	TableView<CTThuoc> table;
 	@FXML
-	private TableColumn<Kho, Integer> maThuoc;
+	private TableColumn<CTThuoc, Integer> maThuoc;
 	@FXML
-	private TableColumn<Kho, String> tenThuoc;
+	private TableColumn<CTThuoc, String> tenThuoc;
 	@FXML
-	private TableColumn<Kho, String> tenLoaiThuoc;
+	private TableColumn<CTThuoc, String> tenLoaiThuoc;
 	@FXML
-	private TableColumn<Kho, String> donViTinh;
+	private TableColumn<CTThuoc, String> donViTinh;
 	@FXML
-	private TableColumn<Kho, Integer> slTonKho;
+	private TableColumn<CTThuoc, Integer> slTonKho;
 	@FXML
-	private TableColumn<Kho, Float> giaBan;
+	private TableColumn<CTThuoc, Float> giaBan;
 	@FXML
-	private TableColumn<Kho, String> soLo;
+	private TableColumn<CTThuoc, String> soLo;
 	@FXML
-	private TableColumn<Kho, Date> hanSuDung;
+	private TableColumn<CTThuoc, Date> hanSuDung;
 
 	
-	private ObservableList<Kho> list = FXCollections.observableArrayList();
+	private ObservableList<CTThuoc> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -375,21 +375,21 @@ public class XemThongTinThuocController implements Initializable{
 
 	//End Navbar
 	public void cell() {
-		maThuoc.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("maThuoc"));
-		giaBan.setCellValueFactory(new PropertyValueFactory<Kho, Float>("giaBan"));
-		slTonKho.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("slTonKho"));
-		hanSuDung.setCellValueFactory(new PropertyValueFactory<Kho, Date>("hanSuDung"));
-		tenThuoc.setCellValueFactory(new PropertyValueFactory<Kho, String>("tenThuoc"));
-		tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<Kho, String>("tenLoaiThuoc"));
-		soLo.setCellValueFactory(new PropertyValueFactory<Kho, String>("soLo"));
-		donViTinh.setCellValueFactory(new PropertyValueFactory<Kho, String>("donViTinh"));
+		maThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("maThuoc"));
+		giaBan.setCellValueFactory(new PropertyValueFactory<CTThuoc, Float>("giaBan"));
+		slTonKho.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("slTonKho"));
+		hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc, Date>("hanSuDung"));
+		tenThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenThuoc"));
+		tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenLoaiThuoc"));
+		soLo.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("soLo"));
+		donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
 	}
 	public void getAllThuocTonKho() throws SQLException {
 		String sql = "select * from Tu t left join Thuoc th on t.maThuoc = th.maThuoc left join LoaiThuoc l on l.maLoaiThuoc = th.maLoaiThuoc where slTonKho > 0 ";
 		ps = con.prepareStatement(sql);
 		rs = ps.executeQuery();
 		while(rs.next()) {
-			Kho k = new Kho();
+			CTThuoc k = new CTThuoc();
 			k.setMaThuoc(rs.getInt("maThuoc"));
 			k.setTenThuoc(rs.getString("tenThuoc"));
 			k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
@@ -409,7 +409,7 @@ public class XemThongTinThuocController implements Initializable{
 		String sql = "select * from Tu t left join Thuoc th on t.maThuoc = th.maThuoc where tenThuoc ='"+list.get(0).getTenThuoc()+"'";
 		ps = con.prepareStatement(sql);
 		rs = ps.executeQuery();
-		Kho k = new Kho();
+		CTThuoc k = new CTThuoc();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ThemHoaDonKhongTheoDon.fxml"));
 		Parent root = loader.load();
 		ThemHoaDonKhongTheoDonController tc = loader.getController();

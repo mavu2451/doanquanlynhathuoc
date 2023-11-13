@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class CTHoaDon {
 	private int maCTHD;
 	private int maHD;
+	private int maThuoc;
 	private String tenThuoc;
 	private String tenLoaiThuoc;
 	private String donViTinh;
@@ -17,7 +18,7 @@ public class CTHoaDon {
 	private Date hanSuDung;
 	private String cachDung;
 	private float tongGiaBan;
-	public CTHoaDon(int maCTHD, int maHD, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
+	public CTHoaDon(int maCTHD,int maThuoc, int maHD, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
 			int soLuong, String soLo, Date hanSuDung, String cachDung, float tongGiaBan) {
 		super();
 		this.maCTHD = maCTHD;
@@ -41,6 +42,13 @@ public class CTHoaDon {
 	}
 	public void setMaCTHD(int maCTHD) {
 		this.maCTHD = maCTHD;
+	}
+	
+	public int getMaThuoc() {
+		return maThuoc;
+	}
+	public void setMaThuoc(int maThuoc) {
+		this.maThuoc = maThuoc;
 	}
 	public int getMaHD() {
 		return maHD;

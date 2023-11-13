@@ -29,10 +29,12 @@ tab{
 
 }
 .table-view .column-header{
-    -fx-background-color: red;
-     -fx-text-fill: white
+    -fx-background-color: #517fa4;
 }
-
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
 #hbTrangChu:hover{
 	-fx-background-color:#4b7699;
 }

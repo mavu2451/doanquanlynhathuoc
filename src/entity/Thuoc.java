@@ -1,5 +1,7 @@
 package entity;
 
+import java.sql.Date;
+
 public class Thuoc {
 	private int maThuoc;
 	private String tenThuoc;
@@ -13,8 +15,9 @@ public class Thuoc {
 	private String cachDung;
 	private String thongTin;
 	private String trangThai;
+	private Date hanSuDung;
 	public Thuoc(int maThuoc, String tenThuoc, String loaiThuoc, String ncc, String dvt, int soLuong, float giaNhap,
-			float giaBan, String nsx, String cachDung, String thongTin, String trangThai) {
+			float giaBan, String nsx, String cachDung, String thongTin,Date hanSuDung, String trangThai) {
 		super();
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
@@ -28,6 +31,7 @@ public class Thuoc {
 		this.cachDung = cachDung;
 		this.thongTin = thongTin;
 		this.trangThai = trangThai;
+		this.hanSuDung = hanSuDung;
 	}
 	public String getLoaiThuoc() {
 		return loaiThuoc;
@@ -105,6 +109,12 @@ public class Thuoc {
 	}
 	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
+	}
+	public Date getHanSuDung() {
+		return hanSuDung;
+	}
+	public void setHanSuDung(Date hanSuDung) {
+		this.hanSuDung = hanSuDung;
 	}
 	
 	

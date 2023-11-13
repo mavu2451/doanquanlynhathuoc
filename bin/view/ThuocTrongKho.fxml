@@ -298,17 +298,18 @@
    <center>
       <AnchorPane fx:id="ap" prefHeight="824.0" prefWidth="1374.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-              <ScrollPane layoutX="102.0" layoutY="153.0" prefHeight="531.0" prefWidth="1238.0">
+              <ScrollPane layoutX="102.0" layoutY="153.0" prefHeight="637.0" prefWidth="1538.0">
                <content>
-                  <TableView fx:id="table" prefHeight="529.0" prefWidth="1237.0">
+                  <TableView fx:id="table" prefHeight="629.0" prefWidth="1546.0">
                     <columns>
-                      <TableColumn fx:id="tenThuoc" prefWidth="253.0" text="Tên thuốc" />
-                        <TableColumn fx:id="donViTinh" prefWidth="139.0" text="Đơn vị tính" />
-                        <TableColumn fx:id="giaNhap" prefWidth="169.0" text="Giá nhập" />
-                        <TableColumn fx:id="giaBan" prefWidth="138.0" text="Giá bán" />
-                        <TableColumn fx:id="slTonKho" prefWidth="118.0" text="Số lượng tồn kho" />
-                        <TableColumn fx:id="soLo" prefWidth="222.0" text="Số lô" />
-                        <TableColumn fx:id="hanSuDung" prefWidth="197.0" text="Hạn sử dụng" />
+                        <TableColumn fx:id="maThuoc" prefWidth="147.0" text="Mã thuốc" />
+                      <TableColumn fx:id="tenThuoc" prefWidth="267.0" text="Tên thuốc" />
+                        <TableColumn fx:id="tenLoaiThuoc" prefWidth="193.0" text="Loại thuốc" />
+                        <TableColumn fx:id="donViTinh" prefWidth="238.0" text="Đơn vị tính" />
+                        <TableColumn fx:id="giaNhap" prefWidth="184.0" text="Giá nhập" />
+                        <TableColumn fx:id="giaBan" prefWidth="181.0" text="Giá bán" />
+                        <TableColumn fx:id="slTonKho" minWidth="0.0" prefWidth="107.0" text="Số lượng tồn kho" />
+                        <TableColumn fx:id="hanSuDung" prefWidth="206.0" text="Hạn sử dụng" />
                     </columns>
                   </TableView>
                </content>
@@ -318,16 +319,15 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Button layoutX="1082.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="Tìm kiếm" />
-            <TextField fx:id="txtTimKiem" layoutX="171.0" layoutY="110.0" prefHeight="25.0" prefWidth="888.0" promptText="Tìm kiếm thuốc" />
+            <Button layoutX="1507.0" layoutY="111.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="Tìm kiếm" />
+            <TextField fx:id="txtTimKiem" layoutX="171.0" layoutY="110.0" prefHeight="25.0" prefWidth="1304.0" promptText="Tìm kiếm thuốc" />
             <Label layoutX="103.0" layoutY="113.0" text="Tìm kiếm">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button layoutX="903.0" layoutY="706.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="179.0" text="Tải trang" />
-            <Button layoutX="1133.0" layoutY="706.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="207.0" text="Xem thông tin chi tiết" />
-            <Button layoutX="1248.0" layoutY="111.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="92.0" text="Bộ lọc" />
+            <Button layoutX="1093.0" layoutY="813.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="179.0" text="Tải trang" />
+            <Button fx:id="btnTTCT" layoutX="1351.0" layoutY="813.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="207.0" text="Xem thông tin chi tiết" />
          </children>
       </AnchorPane>
    </center>

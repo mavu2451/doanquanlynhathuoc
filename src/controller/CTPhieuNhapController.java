@@ -18,7 +18,7 @@ import database.KetNoiDatabase;
 import entity.PhieuNhap;
 import entity.Thuoc;
 import entity.CTPhieuNhap;
-import entity.Kho;
+import entity.CTThuoc;
 import entity.NhanVien;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleFloatProperty;
@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Cell;
 import javafx.scene.control.ComboBox;
@@ -45,6 +46,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -95,7 +97,7 @@ public class CTPhieuNhapController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	ObservableList<CTPhieuNhap> list = FXCollections.observableArrayList();
-	String[] trangThaiList = {"Đã nhập hàng","Chưa nhập hàng"};
+	String[] trangThaiList = {"Đã nhập hàng","Lưu tạm"};
 	//new CTPhieuNhap(1,1,"test","test","test","test",10000,20000,2,new Date(100000),new Date(200000),"test","test",20000,40000)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -539,14 +541,14 @@ public class CTPhieuNhapController implements Initializable{
 		return maThuoc;
 	}
 
-	public void insert(ActionEvent e) throws SQLException {
-
+	public void insert(ActionEvent e){
 //		LocalDate nsx = dpNSX.getValue();
 //		Date dnsx = Date.valueOf(nsx);
-
+			try {
 			LocalDate hsd = dpHSD.getValue();
 			Date dhsd = Date.valueOf(hsd);
-			int mapn = maPN();
+			int mapn;
+			mapn = maPN();
 			float gb = Float.parseFloat(txtGiaBan.getText());
 			float gn = Float.parseFloat(txtGiaNhap.getText());
 			int mt = Integer.parseInt(txtMaThuoc.getText());
@@ -584,65 +586,77 @@ public class CTPhieuNhapController implements Initializable{
 			ps.execute();
 			getAllCTPN(mapn);
 			tinhTong(mapn);
-//			String kho = "select * from Tu where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and soLo='"+txtSoLo.getText()+"' and hanSuDung = '" +dhsd+ "'";
-//			ps = con.prepareStatement(kho);
-//			rs = ps.executeQuery();
-//			Kho k = new Kho();
-//			ObservableList<Kho> khoList = FXCollections.observableArrayList();
-//			String maTh = String.valueOf(mThuoc);
-//			String gNhap = String.valueOf(gn);
-//			String gBan = String.valueOf(gb);
-//			while(rs.next()) {
-//				k.setMaThuoc(rs.getInt("maThuoc"));
-////				k.setTenThuoc(rs.getString("tenThuoc"));
-//				k.setGiaNhap(rs.getFloat("giaNhap"));
-//				k.setGiaBan(rs.getFloat("giaBan"));
-//				k.setSlTonKho(rs.getInt("slTonKho"));
-//				k.setSoLo(rs.getString("soLo"));
-//				k.setHanSuDung(rs.getDate("hanSuDung"));
-//				khoList.add(k);
-//				int tongsl = rs.getInt("slTonKho") + sl;
-//				System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
-//				String maThuocS = String.valueOf(k.getMaThuoc());
-//				System.out.println(maTh);
-//				System.out.println(maThuocS);
-////				&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
-//				if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
-//					String themSl = "update Tu set slTonKho = '"+tongsl+"' where maThuoc ='"+mThuoc+"'";
-//					ps = con.prepareStatement(themSl);
-//					ps.execute();
-//					System.out.println(themSl);
-//				}
+			if(tt.contains("Lưu tạm")) {
+				luuThanhCong();
 			}
-//				if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
-//				
-//			}
+			else {
+			String ctt = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and soLo='"+txtSoLo.getText()+"' and hanSuDung = '" +dhsd+ "'";
+			ps = con.prepareStatement(ctt);
+			rs = ps.executeQuery();
+			CTThuoc k = new CTThuoc();
+			ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
+			String maTh = String.valueOf(mThuoc);
+			String gNhap = String.valueOf(gn);
+			String gBan = String.valueOf(gb);
+			while(rs.next()) {
+				k.setMaThuoc(rs.getInt("maThuoc"));
+//				k.setTenThuoc(rs.getString("tenThuoc"));
+				k.setGiaNhap(rs.getFloat("giaNhap"));
+				k.setGiaBan(rs.getFloat("giaBan"));
+				k.setSlTonKho(rs.getInt("soLuongCon"));
+				k.setSoLo(rs.getString("soLo"));
+				k.setHanSuDung(rs.getDate("hanSuDung"));
+				khoList.add(k);
+				int tongsl = rs.getInt("soLuongCon") + sl;
+				System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
+				String maThuocS = String.valueOf(k.getMaThuoc());
+				System.out.println(maTh);
+				System.out.println(maThuocS);
+//				&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+				if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
+					String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"'";
+					ps = con.prepareStatement(themSl);
+					ps.execute();
+					System.out.println(themSl);
+				}
+			}
+				if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
+				
+			}
 			
-//			String kho1 = "select * from Tu where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and ngaySanXuat='"+dnsx+"' and hanSuDung = '" +dhsd+ "'";
+//			String kho1 = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' soLo='"+1+"' and hanSuDung = '" +dhsd+ "'";
 
-//				String nhapKho = "insert into Tu(maThuoc, slTonKho, giaNhap, giaBan, soLo, hanSuDung, maPN) values (?,?,?,?,?,?,?)";
-//				ps = con.prepareStatement(nhapKho);
-//				ps.setInt(1, mThuoc);
-//				ps.setInt(2, sl);
-//				ps.setFloat(3, gn);
-//				ps.setFloat(4,gb);
-//				ps.setString(5, txtSoLo.getText());
-//				ps.setDate(6, dhsd);
+				String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, soLo, hanSuDung) values (?,?,?,?,?,?)";
+				ps = con.prepareStatement(nhapThuoc);
+				ps.setInt(1, mThuoc);
+				ps.setInt(2, sl);
+				ps.setFloat(3, gn);
+				ps.setFloat(4,gb);
+				ps.setString(5, txtSoLo.getText());
+				ps.setDate(6, dhsd);
 //				ps.setInt(7, mapn);
-//				ps.execute();
-//				
-//				String count = "SELECT COUNT(*) as maThuoc FROM Tu GROUP BY maThuoc, giaNhap, giaBan, soLo, hanSuDung HAVING COUNT(*) > 1";
-//				ps = con.prepareStatement(count);
-//				rs = ps.executeQuery();
-//				while(rs.next()) {
-//					int c = rs.getInt("maThuoc");
-//					if(c > 1) {
-//						String drop = "delete from Tu where maTu = (select max(maTu) from Tu)";
-//						ps = con.prepareStatement(drop);
-//						ps.execute();
-//						System.out.println(drop);
-//					}
-//		}
+				ps.execute();
+				
+				String count = "SELECT COUNT(*) as maThuoc FROM CTThuoc GROUP BY maThuoc, giaNhap, giaBan, soLo, hanSuDung HAVING COUNT(*) > 1";
+				ps = con.prepareStatement(count);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					int c = rs.getInt("maThuoc");
+					for(int i = c;i> 1;i--) {
+						String drop = "delete from CTThuoc where maCTThuoc = (select max(maCTThuoc) from CTThuoc where maThuoc = "+mThuoc+")";
+						ps = con.prepareStatement(drop);
+						ps.execute();
+						System.out.println(drop);
+						}
+					}
+				luuThanhCong1();
+			}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+
+			}
+		}
 		
 			
 //			String reset = "DBCC CHECKIDENT('Tu', RESEED, 0)";
@@ -808,6 +822,19 @@ public class CTPhieuNhapController implements Initializable{
 		e.printStackTrace();
 	}
 }
+	public void luuThanhCong() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(null);
+		alert.setContentText("Lưu thành công");
+		alert.showAndWait();
+	}
+	public void luuThanhCong1() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(null);
+		alert.setContentText("Lưu thành công, thuốc đã được mang vào kho");
+		alert.showAndWait();
+	}
+	
 //	@FXML
 //	private void searchByMaPN() {
 //		txtTimKiem.setOnKeyReleased(e->{

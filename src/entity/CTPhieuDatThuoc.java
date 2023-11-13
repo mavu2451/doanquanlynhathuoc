@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class CTPhieuDatThuoc {
-	private int maCTHD;
-	private int maHD;
+
+	private int maPDT;
 	private String tenThuoc;
 	private String tenLoaiThuoc;
 	private String donViTinh;
@@ -17,11 +17,10 @@ public class CTPhieuDatThuoc {
 	private Date hanSuDung;
 	private String cachDung;
 	private float tongGiaBan;
-	public CTPhieuDatThuoc(int maCTHD, int maHD, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
+	public CTPhieuDatThuoc( int maPDT, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
 			int soLuong, String soLo, Date hanSuDung, String cachDung, float tongGiaBan) {
 		super();
-		this.maCTHD = maCTHD;
-		this.maHD = maHD;
+		this.maPDT = maPDT;
 		this.tenThuoc = tenThuoc;
 		this.tenLoaiThuoc = tenLoaiThuoc;
 		this.donViTinh = donViTinh;
@@ -36,17 +35,12 @@ public class CTPhieuDatThuoc {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public int getMaCTHD() {
-		return maCTHD;
+	
+	public int getMaPDT() {
+		return maPDT;
 	}
-	public void setMaCTHD(int maCTHD) {
-		this.maCTHD = maCTHD;
-	}
-	public int getMaHD() {
-		return maHD;
-	}
-	public void setMaHD(int maHD) {
-		this.maHD = maHD;
+	public void setMaPDT(int maPDT) {
+		this.maPDT = maPDT;
 	}
 	public String getTenThuoc() {
 		return tenThuoc;

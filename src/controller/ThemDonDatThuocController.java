@@ -20,9 +20,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.CTHoaDon;
 import entity.CTPhieuDatThuoc;
 import entity.KhachHang;
-import entity.Kho;
+import entity.CTThuoc;
 import entity.NhanVien;
 import entity.PhieuNhap;
 import javafx.collections.FXCollections;
@@ -62,7 +63,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class ThemGioHangController implements Initializable{
+public class ThemDonDatThuocController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
@@ -71,7 +72,7 @@ public class ThemGioHangController implements Initializable{
 	@FXML
 	private TextField txtNCC, txtNSX, txtTenThuoc, txtSL, txtTenKH, txtGioiTinh, txtSdt, txtEmail, txtTienNhan;
 	@FXML 
-	private Button btnThemKH, btnThemTenThuoc;
+	private Button btnThemKH, btnThemTenThuoc, btnThemPhieu;
 	@FXML
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
@@ -82,11 +83,11 @@ public class ThemGioHangController implements Initializable{
 	@FXML
 	TableView<CTPhieuDatThuoc> table;
 	@FXML
-	private TableColumn<CTPhieuDatThuoc, Integer> maCTPDT;
+	private TableColumn<CTPhieuDatThuoc, Integer> maPDT;
 	@FXML
 	private TableColumn<CTPhieuDatThuoc, String> tenThuoc;
-	@FXML
-	private TableColumn<CTPhieuDatThuoc, String> tenLoaiThuoc;
+//	@FXML
+//	private TableColumn<CTPhieuDatThuoc, String> tenLoaiThuoc;
 	@FXML
 	private TableColumn<CTPhieuDatThuoc, String> donViTinh;
 	@FXML
@@ -109,6 +110,7 @@ public class ThemGioHangController implements Initializable{
 //		reload();
 		NhanVien dnc = DangNhapController.getNV();
 		dpNgayNhap.setValue(LocalDate.now());
+		lblThanhTien.setText("0 đồng");
 		try {
 			cell();
 		} catch (SQLException e2) {
@@ -119,221 +121,250 @@ public class ThemGioHangController implements Initializable{
 //		try {
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
-		
-		 btnThemTenThuoc.setOnAction(arg01 -> {
-			
-			ObservableList<Kho> Klist = FXCollections.observableArrayList();
-			BorderPane root = new BorderPane();
-			ScrollPane scroll = new ScrollPane();
-			TextField txtTimKiem = new TextField();
-			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
-			Button chon = new Button("Chọn sản phẩm");
-			TextField soLuong = new TextField("0");
-			Label chonSL = new Label("Chọn số lượng");
-			HBox h1 = new HBox(3);
-			HBox h2 = new HBox(3);
-			
-			Stage stage = new Stage();
-			TableView tableView = new TableView<Kho>();
-			TableColumn maThuoc = new TableColumn<Kho, Integer>("Mã thuốc");
-			maThuoc.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("maThuoc"));
-			TableColumn tenThuoc = new TableColumn<Kho, String>("Tên thuốc");
-			tenThuoc.setCellValueFactory(new PropertyValueFactory<Kho, String>("tenThuoc"));
-			TableColumn donViTinh = new TableColumn<Kho, String>("Đơn vị tính");
-			donViTinh.setCellValueFactory(new PropertyValueFactory<Kho, String>("donViTinh"));
-			TableColumn slTonKho = new TableColumn<Kho, Integer>("Số lượng hiện có");
-			slTonKho.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("slTonKho"));
-			TableColumn giaBan = new TableColumn<Kho, Float>("Giá bán");
-			giaBan.setCellValueFactory(new PropertyValueFactory<Kho, Float>("giaBan"));
-			TableColumn soLo = new TableColumn<Kho, String>("Số lô");
-			soLo.setCellValueFactory(new PropertyValueFactory<Kho, String>("soLo"));
-			TableColumn hanSuDung = new TableColumn<Kho, Date>("Hạn sử dụng");	
-			hanSuDung.setCellValueFactory(new PropertyValueFactory<Kho, Date>("hanSuDung"));
-			
-			tableView.getColumns().add(maThuoc);
-			tableView.getColumns().add(tenThuoc);
-			tableView.getColumns().add(donViTinh);
-			tableView.getColumns().add(slTonKho);
-			tableView.getColumns().add(giaBan);
-			tableView.getColumns().add(soLo);
-			tableView.getColumns().add(hanSuDung);
-			root.setCenter(scroll);
-			scroll.setContent(tableView);
-			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
-			h2.getChildren().addAll(chonSL, soLuong, chon);
-			root.setTop(h1);
-			root.setBottom(h2);
-			
-
-
-			
-			String sql = "select * from Tu t left join Thuoc th on t.maThuoc = th.maThuoc left join LoaiThuoc l on l.maLoaiThuoc = th.maLoaiThuoc where slTonKho > 0 order by tenThuoc";
+		btnThemPhieu.setOnAction(arg01->{
+			int maKH;
 			try {
-				taoHD();
-				int maHD = getMaHD();
-				ps = con.prepareStatement(sql);
-				rs = ps.executeQuery();
-				while(rs.next()) {
-					Kho k = new Kho();
-					k.setMaKho(rs.getInt("maTu"));
-					k.setMaThuoc(rs.getInt("maThuoc"));
-					k.setTenThuoc(rs.getString("tenThuoc"));
-					String tenT = rs.getString("tenThuoc");
-					k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-					k.setSlTonKho(rs.getInt("slTonKho"));
-					k.setDonViTinh(rs.getString("donViTinh"));
-					k.setGiaBan(rs.getFloat("giaBan"));
-					k.setSoLo(rs.getString("soLo"));
-					k.setHanSuDung(rs.getDate("hanSuDung"));
-					Klist.add(k);
-					tableView.setItems(Klist);
-					chon.setOnAction(arg02 ->{
-						int index = tableView.getSelectionModel().getSelectedIndex();
-						if(index<=-1) {
-							return;
-						}
-						if(Integer.parseInt(slTonKho.getCellData(index).toString()) < Integer.parseInt(soLuong.getText().toString())) {
-							themThatBaiMessage1();
-						}
-						else if(Integer.parseInt(soLuong.getText().toString()) == 0){
-							themThatBaiMessage2();
-						}
-						
-						else {
-							String sqlTenThuoc = String.valueOf(tenThuoc.getCellData(index).toString());
-							String sqlDVT = String.valueOf(donViTinh.getCellData(index).toString());
-							String sqlGiaBan = String.valueOf(giaBan.getCellData(index).toString());
-							String sqlSoLo = String.valueOf(soLo.getCellData(index).toString());
-							String sqlHSD = String.valueOf(hanSuDung.getCellData(index).toString());
-							System.out.println(sqlTenThuoc + " " + sqlDVT +" " + sqlGiaBan + " " + sqlSoLo + " " + sqlHSD + " ");
-							String get = "select maTu,t.maThuoc,th.tenThuoc,th.donViTinh,t.giaBan,t.soLo,t.hanSuDung from Tu t left join Thuoc th on th.maThuoc = t.maThuoc where tenThuoc = '" +sqlTenThuoc+"' and donViTinh = '" +sqlDVT+"' and t.giaBan = '" +sqlGiaBan+ "' and soLo ='"+sqlSoLo+"' and hanSuDung='"+sqlHSD+"'" ;
-							try {
-								ps = con.prepareStatement(get);
-								rs = ps.executeQuery();
-								
-								while(rs.next()) {
-									Kho kho = new Kho();
-									kho.setMaKho(rs.getInt("maTu"));
-									kho.setMaThuoc(rs.getInt("maThuoc"));
-									kho.setTenThuoc(rs.getString("tenThuoc"));
-									kho.setDonViTinh(rs.getString("donViTinh"));
-									kho.setGiaBan(rs.getFloat("giaBan"));
-									kho.setSoLo(rs.getString("soLo"));
-									kho.setHanSuDung(rs.getDate("hanSuDung"));
-									String add = "insert into CTPhieuDatThuoc(maThuoc, maTu, donGia, soLuong,maPDT, thanhTien) values(?,?,?,?,?,?)";
-									ps = con.prepareStatement(add);
-									ps.setInt(1, kho.getMaThuoc());
-									ps.setInt(2, kho.getMaKho());
-									ps.setFloat(3, kho.getGiaBan());
-									ps.setFloat(4, Float.parseFloat(soLuong.getText()));
-									ps.setInt(5, maHD);
-									ps.setFloat(6, kho.getGiaBan()*Float.parseFloat(soLuong.getText()));
-									System.out.println(ps.execute());
-								}
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-//							txtTenThuoc.setText(tenThuoc.getCellData(index).toString());
-//							txtSL.setText(soLuong.getText().toString());
-							try {
-								getCTPhieuDatThuoc();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							stage.close();
-						}
-					});
-				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				maKH = getTTKhachHang();
+			if(maKH == 0) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Thông báo");
+				alert.setContentText("Mời bạn chọn khách hàng trước");
+				alert.setHeaderText(null);
+				alert.showAndWait();
 			}
-			
-			
-			Scene scene = new Scene(root,570,300);
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.show();
-			 
+			else {
+				Alert alert1 = new Alert(AlertType.CONFIRMATION);
+				alert1.setTitle("Thông báo");
+				alert1.setContentText("Bạn có muốn thêm phiếu chứ?");
+				alert1.setHeaderText(null);
+				alert1.showAndWait();
+				Optional<ButtonType> result = alert1.showAndWait();
+				int maP = getMaPDT();
+				if(result.get()==ButtonType.OK) {
+					String sql = "update DonDatThuoc set tongTien = '"+Float.parseFloat(lblThanhTien.getText())+"'where maPDT = '"+maP+"'";
+					ps = con.prepareStatement(sql);
+					ps.execute();
+					Alert alert2 = new Alert(AlertType.INFORMATION);
+					alert2.setTitle("Thông báo");
+					alert2.setContentText("Đơn hàng đã được thêm thành công");
+					alert2.setHeaderText(null);
+					alert2.showAndWait();
+					txtTenKH.setText("");
+					txtGioiTinh.setText("");
+					txtSdt.setText("");
+					txtEmail.setText("");
+					lblThanhTien.setText("0 đồng");
+					table.setItems(null);
+					hd = 0;
+				}
+				else if(result.get()==ButtonType.CANCEL) {
+					
+				}
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		});
-		btnThemKH.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				ObservableList<KhachHang> Khlist = FXCollections.observableArrayList();
+		 btnThemTenThuoc.setOnAction(arg01 -> {
+			 int maKH;
+			try {
+				maKH = getTTKhachHang();
+			if(maKH == 0) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Thông báo");
+				alert.setContentText("Mời bạn chọn khách hàng trước");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+				}
+				else {	
+				ObservableList<CTThuoc> Tlist = FXCollections.observableArrayList();
 				BorderPane root = new BorderPane();
 				ScrollPane scroll = new ScrollPane();
 				TextField txtTimKiem = new TextField();
-				Label lblTimKiem = new Label("Tìm kiếm khách hàng");
-		
-				Button chon = new Button("Chọn khách hàng");
-				HBox h1 = new HBox(2);
-				HBox h2 = new HBox(2);
+				Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
+				Button chon = new Button("Chọn sản phẩm");
+				TextField soLuong = new TextField("0");
+				Label chonSL = new Label("Chọn số lượng");
+				HBox h1 = new HBox(3);
+				HBox h2 = new HBox(3);
 				
 				Stage stage = new Stage();
-				TableView tableView = new TableView<Kho>();
-				tableView.setPrefWidth(650);
-				TableColumn maKH = new TableColumn<Kho, Integer>("Mã khách hàng");
-				maKH.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("maKH"));
-				TableColumn tenKH = new TableColumn<Kho, String>("Tên khách hàng");
-				tenKH.setCellValueFactory(new PropertyValueFactory<Kho, String>("hoTen"));
-				TableColumn gioiTinh = new TableColumn<Kho, String>("Giới tính");
-				gioiTinh.setCellValueFactory(new PropertyValueFactory<Kho, String>("gioiTinh"));
-				TableColumn ngaySinh = new TableColumn<Kho, Integer>("Ngày sinh");
-				ngaySinh.setCellValueFactory(new PropertyValueFactory<Kho, Integer>("ngaySinh"));
-				TableColumn sdt = new TableColumn<Kho, Float>("Số điện thoại");
-				sdt.setCellValueFactory(new PropertyValueFactory<Kho, Float>("sdt"));
-				TableColumn email = new TableColumn<Kho, String>("Email");
-				email.setCellValueFactory(new PropertyValueFactory<Kho, String>("email"));
-				TableColumn diaChi = new TableColumn<Kho, Date>("Địa chỉ");	
-				diaChi.setCellValueFactory(new PropertyValueFactory<Kho, Date>("diaChi"));
+				TableView tableView = new TableView<CTThuoc>();
+				TableColumn maThuoc = new TableColumn<CTThuoc, Integer>("Mã thuốc");
+				maThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("maThuoc"));
+				TableColumn tenThuoc = new TableColumn<CTThuoc, String>("Tên thuốc");
+				tenThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenThuoc"));
+				TableColumn donViTinh = new TableColumn<CTThuoc, String>("Đơn vị tính");
+				donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
+				TableColumn slTonKho = new TableColumn<CTThuoc, Integer>("Số lượng hiện có");
+				slTonKho.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("slTonKho"));
+				TableColumn giaBan = new TableColumn<CTThuoc, Float>("Giá bán");
+				giaBan.setCellValueFactory(new PropertyValueFactory<CTThuoc, Float>("giaBan"));
+//				TableColumn soLo = new TableColumn<Kho, String>("Số lô");
+//				soLo.setCellValueFactory(new PropertyValueFactory<Kho, String>("soLo"));
+//				TableColumn hanSuDung = new TableColumn<Kho, Date>("Hạn sử dụng");	
+//				hanSuDung.setCellValueFactory(new PropertyValueFactory<Kho, Date>("hanSuDung"));
 				
-				tableView.getColumns().add(maKH);
-				tableView.getColumns().add(tenKH);
-				tableView.getColumns().add(gioiTinh);
-				tableView.getColumns().add(ngaySinh);
-				tableView.getColumns().add(sdt);
-				tableView.getColumns().add(email);
-				tableView.getColumns().add(diaChi);
+				tableView.getColumns().add(maThuoc);
+				tableView.getColumns().add(tenThuoc);
+				tableView.getColumns().add(donViTinh);
+				tableView.getColumns().add(slTonKho);
+				tableView.getColumns().add(giaBan);
+//				tableView.getColumns().add(soLo);
+//				tableView.getColumns().add(hanSuDung);
 				root.setCenter(scroll);
 				scroll.setContent(tableView);
-				h1.getChildren().addAll(lblTimKiem, txtTimKiem);
-			
-				h2.getChildren().addAll(chon);
+				h1.getChildren().addAll( lblTimKiem, txtTimKiem);
+				h2.getChildren().addAll(chonSL, soLuong, chon);
 				root.setTop(h1);
 				root.setBottom(h2);
-				String sql = "select * from KhachHang";
+
+				String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0  group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 				try {
+					taoHD();
+					int maPDT = getMaPDT();
 					ps = con.prepareStatement(sql);
 					rs = ps.executeQuery();
 					while(rs.next()) {
-						KhachHang kh = new KhachHang();
-						kh.setMaKH(rs.getInt("maKH"));
-						kh.setHoTen(rs.getString("hoTenKH"));
-						kh.setGioiTinh(rs.getString("gioiTinh"));
-						kh.setNgaySinh(rs.getDate("ngaySinh"));
-						kh.setSdt(rs.getInt("soDienThoai"));
-						kh.setEmail(rs.getString("email"));
-						kh.setDiaChi(rs.getString("diaChi"));
-						Khlist.add(kh);
-						tableView.setItems(Khlist);
+						CTThuoc t = new CTThuoc();
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						String tenT = rs.getString("tenThuoc");
+//						k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						t.setSlTonKho(rs.getInt("soLuongCon"));
+						t.setDonViTinh(rs.getString("donViTinh"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						Tlist.add(t);
+						tableView.setItems(Tlist);
 						chon.setOnAction(arg02 ->{
 							int index = tableView.getSelectionModel().getSelectedIndex();
 							if(index<=-1) {
 								return;
 							}
+							if(Integer.parseInt(slTonKho.getCellData(index).toString()) < Integer.parseInt(soLuong.getText().toString())) {
+								themThatBaiMessage1();
+							}
+							else if(Integer.parseInt(soLuong.getText().toString()) == 0){
+								themThatBaiMessage2();
+							}
+							
 							else {
+								int sl = Integer.parseInt(soLuong.getText());
+								table.setItems(null);
+								String sqlMaThuoc = String.valueOf(maThuoc.getCellData(index).toString());
+								String sqlTenThuoc = String.valueOf(tenThuoc.getCellData(index).toString());
+								String sqlDVT = String.valueOf(donViTinh.getCellData(index).toString());
+								String sqlGiaBan = String.valueOf(giaBan.getCellData(index).toString());
+								int slpn=0;
 								
-								txtTenKH.setText(tenKH.getCellData(index).toString());
-								txtSdt.setText(sdt.getCellData(index).toString());
-								txtEmail.setText(email.getCellData(index).toString());
-								txtGioiTinh.setText(gioiTinh.getCellData(index).toString());
+								try {
+									String hd = "insert into CTDonDatThuoc(maPDT,maThuoc,soLuong,donGia,thanhTien) values (?,?,?,?,?)";
+									ps = con.prepareStatement(hd);
+									ps.setInt(1, maPDT);
+									ps.setInt(2, Integer.parseInt(sqlMaThuoc));
+									ps.setInt(3, sl);
+									ps.setFloat(4, Float.parseFloat(sqlGiaBan));
+									float thanhTien = Float.parseFloat(sqlGiaBan) * sl;
+									ps.setFloat(5, thanhTien);
+									ps.execute();
+									
+									String get = "select * from CTDonDatThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPDT = '"+maPDT+"'";
+									ps = con.prepareStatement(get);
+									rs = ps.executeQuery();
+									int i = 1;
+									ObservableList<CTPhieuDatThuoc> ctPhieuDatThuocList = FXCollections.observableArrayList();
+									while(rs.next()) {
+										CTPhieuDatThuoc ct = new CTPhieuDatThuoc();
+										ct.setMaPDT(i++);
+										ct.setTenThuoc(rs.getString("tenThuoc"));
+										ct.setDonGia(rs.getFloat("donGia"));
+										ct.setSoLuong(rs.getInt("soLuong"));
+										ct.setTongGiaBan(rs.getFloat("thanhTien"));
+										ctPhieuDatThuocList.add(ct);
+										table.setItems(ctPhieuDatThuocList);
+									}	
+										String tongGiaBan = "select sum(thanhTien) as tong from CTDonDatThuoc where maPDT ='"+maPDT+"'";
+										ps = con.prepareStatement(tongGiaBan);
+										rs = ps.executeQuery();
+										while(rs.next()) {
+											float tong = rs.getFloat("tong");
+											String tongS = String.valueOf(tong);
+											lblThanhTien.setText(tongS);
+									}
+										while(sl > 0) {
+											String getsl = "select TOP 1(hanSuDung),soLuongCon from CTThuoc where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"'and soLuongCon > 0 order by hanSuDung";
+											ps = con.prepareStatement(getsl);
+											rs = ps.executeQuery();
+											while(rs.next())
+											slpn = rs.getInt("soLuongCon");
+											sl = sl - slpn; // sl = 5, slpn = 4, sl = 1, slpn = 6 = -5
+											System.out.println(sl);
+											if(sl > 0) { // sl = 1
+												String update = "update CTThuoc set soLuongCon = 0 where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' and hanSuDung = (select TOP 1(hanSuDung) from CTThuoc where soLuongCon > 0 and maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' order by hanSuDung)"; // slpn = 0
+												ps = con.prepareStatement(update);
+												ps.execute();
+												
+											}
+											if(sl <= 0) { // -5 < 0
+												int slcl = sl + slpn; // -5 + 6
+												slpn = slpn - slcl;
+												String update2 = "update CTThuoc set soLuongCon = "+slpn+" where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' and hanSuDung = (select TOP 1(hanSuDung)from CTThuoc where soLuongCon > 0 and maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' order by hanSuDung)";
+												ps = con.prepareStatement(update2);
+												ps.execute();
+											}
+										}
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+////								String sqlSoLo = String.valueOf(soLo.getCellData(index).toString());
+////								String sqlHSD = String.valueOf(hanSuDung.getCellData(index).toString());
+//								System.out.println(sqlTenThuoc + " " + sqlDVT +" " + sqlGiaBan + " ");
+//								String get = "select maTu,t.maThuoc,th.tenThuoc,th.donViTinh,t.giaBan,t.soLo,t.hanSuDung from Tu t left join Thuoc th on th.maThuoc = t.maThuoc where tenThuoc = '" +sqlTenThuoc+"' and donViTinh = '" +sqlDVT+"' and t.giaBan = '" +sqlGiaBan+ "' and soLo ='"+sqlSoLo+"' and hanSuDung='"+sqlHSD+"'" ;
+//								try {
+////									ps = con.prepareStatement(get);
+////									rs = ps.executeQuery();
+////									
+////									while(rs.next()) {
+////										Kho kho = new Kho();
+////										kho.setMaKho(rs.getInt("maTu"));
+////										kho.setMaThuoc(rs.getInt("maThuoc"));
+////										kho.setTenThuoc(rs.getString("tenThuoc"));
+////										kho.setDonViTinh(rs.getString("donViTinh"));
+////										kho.setGiaBan(rs.getFloat("giaBan"));
+////										kho.setSoLo(rs.getString("soLo"));
+////										kho.setHanSuDung(rs.getDate("hanSuDung"));
+////										String add = "insert into CTHoaDon(maThuoc, maTu, donGia, soLuong,maPDT, thanhTien) values(?,?,?,?,?,?)";
+////										ps = con.prepareStatement(add);
+////										ps.setInt(1, kho.getMaThuoc());
+////										ps.setInt(2, kho.getMaKho());
+////										ps.setFloat(3, kho.getGiaBan());
+////										ps.setFloat(4, Float.parseFloat(soLuong.getText()));
+////										ps.setInt(5, maPDT);
+////										ps.setFloat(6, kho.getGiaBan()*Float.parseFloat(soLuong.getText()));
+////										System.out.println(ps.execute());
+////										int tongsl = Integer.parseInt(slTonKho.getCellData(index).toString()) - Integer.parseInt(soLuong.getText().toString());
+////										System.out.println(tongsl);
+////										String updateSl = "update Tu set slTonKho='"+tongsl+"' where maTu='"+kho.getMaKho()+"'";
+////										ps = con.prepareStatement(updateSl);
+////										ps.execute();
+////										
+////									}
+//								} catch (SQLException e1) {
+//									// TODO Auto-generated catch block
+//									e1.printStackTrace();
+//								}
+//								
+////								txtTenThuoc.setText(tenThuoc.getCellData(index).toString());
+////								txtSL.setText(soLuong.getText().toString());
+//								try {
+//									getCTHoaDon();
+//								} catch (SQLException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
 								stage.close();
+								
 							}
 						});
 					}
@@ -342,14 +373,123 @@ public class ThemGioHangController implements Initializable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				try {
+					int maPDT = getMaPDT();
+					String tongGiaBan = "select sum(thanhTien) as tong from CTDonDatThuoc where maPDT ='"+maPDT+"'";
+					ps = con.prepareStatement(tongGiaBan);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						float tong = rs.getFloat("tong");
+						String tongS = String.valueOf(tong);
+						lblThanhTien.setText(tongS);
+					}
+				} catch (Exception e) {
+		// TODO: handle exception
+					e.printStackTrace();
+					}
 				
-				
-				Scene scene = new Scene(root,650,350);
+				Scene scene = new Scene(root,400,300);
 				stage.setScene(scene);
 				stage.setResizable(false);
 				stage.show();
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-		});
+		 }
+			);
+			btnThemKH.setOnAction(new EventHandler<ActionEvent>() {
+				
+				@Override
+				public void handle(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					ObservableList<KhachHang> Khlist = FXCollections.observableArrayList();
+					BorderPane root = new BorderPane();
+					ScrollPane scroll = new ScrollPane();
+					TextField txtTimKiem = new TextField();
+					Label lblTimKiem = new Label("Tìm kiếm khách hàng");
+			
+					Button chon = new Button("Chọn khách hàng");
+					HBox h1 = new HBox(2);
+					HBox h2 = new HBox(2);
+					
+					Stage stage = new Stage();
+					TableView tableView = new TableView<KhachHang>();
+					tableView.setPrefWidth(650);
+					TableColumn maKH = new TableColumn<KhachHang, Integer>("Mã khách hàng");
+					maKH.setCellValueFactory(new PropertyValueFactory<KhachHang, Integer>("maKH"));
+					TableColumn tenKH = new TableColumn<KhachHang, String>("Tên khách hàng");
+					tenKH.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("hoTen"));
+					TableColumn gioiTinh = new TableColumn<KhachHang, String>("Giới tính");
+					gioiTinh.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("gioiTinh"));
+					TableColumn ngaySinh = new TableColumn<KhachHang, Integer>("Ngày sinh");
+					ngaySinh.setCellValueFactory(new PropertyValueFactory<KhachHang, Date>("ngaySinh"));
+					TableColumn sdt = new TableColumn<KhachHang, Float>("Số điện thoại");
+					sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, Integer>("sdt"));
+					TableColumn email = new TableColumn<KhachHang, String>("Email");
+					email.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("email"));
+					TableColumn diaChi = new TableColumn<KhachHang, Date>("Địa chỉ");	
+					diaChi.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("diaChi"));
+					
+					tableView.getColumns().add(maKH);
+					tableView.getColumns().add(tenKH);
+					tableView.getColumns().add(gioiTinh);
+					tableView.getColumns().add(ngaySinh);
+					tableView.getColumns().add(sdt);
+					tableView.getColumns().add(email);
+					tableView.getColumns().add(diaChi);
+					root.setCenter(scroll);
+					scroll.setContent(tableView);
+					h1.getChildren().addAll(lblTimKiem, txtTimKiem);
+				
+					h2.getChildren().addAll(chon);
+					root.setTop(h1);
+					root.setBottom(h2);
+					String sql = "select * from KhachHang";
+					try {
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							KhachHang kh = new KhachHang();
+							kh.setMaKH(rs.getInt("maKH"));
+							kh.setHoTen(rs.getString("tenKH"));
+							kh.setGioiTinh(rs.getString("gioiTinh"));
+							kh.setNgaySinh(rs.getDate("ngaySinh"));
+							kh.setSdt(rs.getInt("sdt"));
+							kh.setEmail(rs.getString("email"));
+							kh.setDiaChi(rs.getString("diaChi"));
+							Khlist.add(kh);
+							tableView.setItems(Khlist);
+//							getCTHoaDon();
+							chon.setOnAction(arg02 ->{
+								int index = tableView.getSelectionModel().getSelectedIndex();
+								if(index<=-1) {
+									return;
+								}
+								else {
+									txtTenKH.setText(tenKH.getCellData(index).toString());
+									txtSdt.setText(sdt.getCellData(index).toString());
+									txtEmail.setText(email.getCellData(index).toString());
+									txtGioiTinh.setText(gioiTinh.getCellData(index).toString());
+									stage.close();
+								}
+							});
+						}
+						
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					Scene scene = new Scene(root,650,350);
+					stage.setScene(scene);
+					stage.setResizable(false);
+					stage.show();
+				}
+			});
+	
 	}
 	public void getKH(ActionEvent e) throws SQLException, IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/XemThongTinThuoc.fxml"));
@@ -669,7 +809,7 @@ public class ThemGioHangController implements Initializable{
 //	}
 
 	  public int getTTKhachHang() throws SQLException{
-		String getKH1 = "select * from KhachHang where hoTenKH = N'"+txtTenKH.getText()+"' and gioiTinh = N'"+txtGioiTinh.getText()+"'";
+		String getKH1 = "select * from KhachHang where tenKH = N'"+txtTenKH.getText()+"' and gioiTinh = N'"+txtGioiTinh.getText()+"'";
 		ps = con.prepareStatement(getKH1);
 		rs = ps.executeQuery();
 		int maKH = 0;
@@ -678,41 +818,41 @@ public class ThemGioHangController implements Initializable{
 		System.out.println(maKH);
 		return maKH;
 	  }
-		public int getMaHD() throws SQLException {
-			 String chonhd = "select max(maPDT) as maHD from PhieuDatThuoc";
+		public int getMaPDT() throws SQLException {
+			 String chonhd = "select max(maPDT) as maPDT from DonDatThuoc";
 			 ps = con.prepareStatement(chonhd);
 			 rs = ps.executeQuery();
-			 int maHD = 0;
+			 int maPDT = 0;
 			 while(rs.next()) 
-			 maHD = rs.getInt("maHD");
-			 return maHD;
+			 maPDT = rs.getInt("maPDT");
+			 return maPDT;
 		}
-	 public void tienThoi() {
-		 float tienNhan = Float.parseFloat(txtTienNhan.getText());
-		 float thanhTien = Float.parseFloat(lblThanhTien.getText());
-		 lblTienThoi.setText(String.valueOf(tienNhan - thanhTien));
-	 }
+//	 public void tienThoi() {
+//		 float tienNhan = Float.parseFloat(txtTienNhan.getText());
+//		 float thanhTien = Float.parseFloat(lblThanhTien.getText());
+//		 lblTienThoi.setText(String.valueOf(tienNhan - thanhTien));
+//	 }
 	 public void cell() throws SQLException {
-		 maCTPDT.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Integer>("maCTHD"));
+		 maPDT.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Integer>("maPDT"));
 		 tenThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, String>("tenThuoc"));
-		 tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, String>("tenLoaiThuoc"));
+//		 tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, String>("tenLoaiThuoc"));
 		 donViTinh.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, String>("donViTinh"));
 		 donGia.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Float>("donGia"));
 		 soLuong.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Integer>("soLuong"));
-		 tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Float>("tongGiaBan"));
+//		 tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuDatThuoc, Float>("tongGiaBan"));
 
 	 }
 	 public void getCTPhieuDatThuoc() throws SQLException {
-		 int maHD = getMaHD();
-		 String sql = "select * from CTPhieuDatThuoc cthd left join Thuoc t on t.maThuoc = cthd.maThuoc inner join Tu tu on tu.maTu = cthd.maTu inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maPDT = '"+maHD+"'";
+		 int maPDT = getMaPDT();
+		 String sql = "select * from CTDonDatThuoc cthd left join Thuoc t on t.maThuoc = cthd.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maPDT = '"+maPDT+"'";
 		 ps = con.prepareStatement(sql);
 		 rs = ps.executeQuery();
 		 ObservableList<CTPhieuDatThuoc> cthdList = FXCollections.observableArrayList();
 		 int i = 0;
 		 while(rs.next()) {
 			 CTPhieuDatThuoc cthd = new CTPhieuDatThuoc();
-			 cthd.setMaHD(maHD);
-			 cthd.setMaCTHD(i = i + 1);
+			 cthd.setMaPDT(i = i + 1);
+//			 cthd.setMaCTHD(i = i + 1);
 			 cthd.setTenThuoc(rs.getString("tenThuoc"));
 			 cthd.setDonViTinh(rs.getString("donViTinh"));
 			 cthd.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
@@ -723,29 +863,31 @@ public class ThemGioHangController implements Initializable{
 			 cthdList.add(cthd);
 			 table.setItems(cthdList);
 		 }
-		 String tongTien = "select sum(thanhTien) as tt from CTPhieuDatThuoc where maPDT ='"+maHD+"'";
+		 String tongTien = "select sum(thanhTien) as tt from CTDonDatThuoc where maPDT ='"+maPDT+"'";
 		 ps = con.prepareStatement(tongTien);
 		 rs = ps.executeQuery();
 		 
 		 while(rs.next()) {
 			 float tong = rs.getFloat("tt");
 			 lblThanhTien.setText(tong + "");
-			 tienThoi();
+//			 tienThoi();
 		 }
 	 }
-	 public void taoHD() {
+	 public void taoHD() throws SQLException {
 		 NhanVien dnc = DangNhapController.getNV();
 		 LocalDate ldNgayNhap = dpNgayNhap.getValue();
 		 Date dNgayNhap = Date.valueOf(ldNgayNhap);
+		 int maKH = getTTKhachHang();
 		 if(hd == 0) {
 			 hd += 1;
-			 String taohd = "insert into PhieuDatThuoc(maNV, ngayLapHD, tongTien) values(?,?,?)";
+			 String taohd = "insert into DonDatThuoc(maNV, ngayLapDon, tongTien, maKH, trangThai) values(?,?,?,?,N'Phiếu tạm')";
 			 System.out.println(taohd);
 			 try {
 				ps = con.prepareStatement(taohd);
 				 ps.setInt(1, dnc.getMaNV());
 				 ps.setDate(2, dNgayNhap);
 				 ps.setFloat(3, 0);
+				 ps.setInt(4, maKH);
 				 ps.execute();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -764,10 +906,10 @@ public class ThemGioHangController implements Initializable{
 		alert.setHeaderText(null);
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get()==ButtonType.OK) {
-			int maHD = getMaHD();
+			int maPDT = getMaPDT();
 			int ma = getTTKhachHang();
-			System.out.println("ma hoa don" + maHD);
-			String tongTien = "select sum(thanhTien) as tt from CTPhieuDatThuoc where maPDT ='"+maHD+"'";
+			System.out.println("ma phieu " + maPDT);
+			String tongTien = "select sum(thanhTien) as tt from CTPhieuDatThuoc where maPDT ='"+maPDT+"'";
 			ps = con.prepareStatement(tongTien);
 			rs = ps.executeQuery();
 			while(rs.next()) { 
@@ -775,7 +917,7 @@ public class ThemGioHangController implements Initializable{
 			System.out.println(rs.getFloat("tt"));
 			lblThanhTien.setText(tong+ "");
 			System.out.println("in hoá đơn thành công");
-			String sql1 = "update PhieuDatThuoc set tongTien = '"+tong+"', maKH = '"+ma+"' where maPDT = '"+maHD+"'";
+			String sql1 = "update PhieuDatThuoc set tongTien = '"+tong+"', maKH = '"+ma+"' where maPDT = '"+maPDT+"'";
 			ps = con.prepareStatement(sql1);
 			ps.execute();
 			txtTenKH.setText("");

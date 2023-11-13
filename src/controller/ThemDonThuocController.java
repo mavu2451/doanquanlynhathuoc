@@ -53,7 +53,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class ThemDonThuocMauController implements Initializable{
+public class ThemDonThuocController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML

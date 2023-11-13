@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import database.KetNoiDatabase;
+import entity.CTThuoc;
 import entity.LoaiThuoc;
 import entity.NhaCungCap;
 import entity.NhanVien;
@@ -36,16 +37,19 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TimKiemThuocController implements Initializable{
 	@FXML
-	private Button btnTimKiem, xuatExcel;
+	private Button btnTimKiem, xuatExcel, btnTTCT;
 	@FXML
 	private TextField txtTimThuoc, txtTimLoaiThuoc, txtTimDVT, txtTimNSX;
 	@FXML
@@ -96,6 +100,8 @@ public class TimKiemThuocController implements Initializable{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+			
+
 				xuatExcel.setOnAction(b->{
 					String query = "select * from Thuoc t left join LoaiThuoc th on t.maLoaiThuoc = th.maLoaiThuoc";
 					try {
@@ -488,6 +494,7 @@ public class TimKiemThuocController implements Initializable{
 	   	}
 
 	//End Navbar
+
 	
 	public void boLocThuoc(ActionEvent e) throws IOException {
 		Stage stage = new Stage();
@@ -515,7 +522,7 @@ public class TimKiemThuocController implements Initializable{
 		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 		String query = "\r\n"
 				+ "select maThuoc, tenThuoc, tenLoaiThuoc, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
-				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc"
+				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc order by maThuoc, trangThai"
 				;
 		String test = "";
 		try {

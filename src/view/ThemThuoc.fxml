@@ -3,20 +3,25 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemThuocController">
@@ -298,42 +303,89 @@
    <center>
        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="584.0" layoutY="14.0" text="THÊM THUỐC MỚI">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="31.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="707.0">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.10000000149011612" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Rectangle>
+            <Label layoutX="268.0" layoutY="45.0" text="THÊM THUỐC MỚI">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="337.0" layoutY="66.0" text="Mã thuốc" />
-            <Label layoutX="786.0" layoutY="66.0" text="Tên thuốc" />
-            <Label layoutX="331.0" layoutY="117.0" text="Loại thuốc" />
-            <Label layoutX="329.0" layoutY="167.0" text="Đơn vị tính" />
-            <Label layoutX="339.0" layoutY="223.0" text="Giá nhập" />
-            <Label layoutX="763.0" layoutY="167.0" text="Nước sản xuất" />
-            <ComboBox fx:id="cbbNSX" layoutX="877.0" layoutY="163.0" prefHeight="25.0" prefWidth="171.0" promptText="Chọn nước sản xuất..." />
-            <Label layoutX="339.0" layoutY="328.0" text="Cách dùng" />
-            <Label layoutX="797.0" layoutY="274.0" text="Trạng thái" />
-            <ComboBox fx:id="cbbTrangThai" layoutX="876.0" layoutY="270.0" prefHeight="25.0" prefWidth="172.0" promptText="Chọn trạng thái..." />
-            <Label layoutX="337.0" layoutY="471.0" text="Thông tin lưu ý" />
-            <TextArea fx:id="txtThongTin" layoutX="339.0" layoutY="503.0" prefHeight="200.0" prefWidth="722.0" />
-            <TextField fx:id="txtMaThuoc" layoutX="416.0" layoutY="63.0" prefHeight="25.0" prefWidth="168.0" />
-            <TextField fx:id="txtTenThuoc" layoutX="877.0" layoutY="62.0" prefHeight="25.0" prefWidth="168.0" />
-            <TextField fx:id="txtDonViTinh" layoutX="416.0" layoutY="163.0" prefHeight="25.0" prefWidth="169.0" />
-            <TextField fx:id="txtGiaNhap" layoutX="416.0" layoutY="219.0" prefHeight="25.0" prefWidth="169.0" />
-            <TextField fx:id="txtCachDung" layoutX="416.0" layoutY="324.0" prefHeight="25.0" prefWidth="169.0" />
-            <Button layoutX="449.0" layoutY="720.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
-            <Button layoutX="636.0" layoutY="721.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
-            <TextField fx:id="txtGiaBan" layoutX="876.0" layoutY="219.0" prefHeight="25.0" prefWidth="173.0" />
-            <Label layoutX="802.0" layoutY="223.0" text="Giá bán" />
-            <Label layoutX="295.0" layoutY="274.0" text="Quy cách đóng gói" />
-            <TextField fx:id="txtQuyCach" layoutX="416.0" layoutY="270.0" prefHeight="25.0" prefWidth="169.0" />
-            <ComboBox fx:id="cbbLoaiThuoc" layoutX="416.0" layoutY="113.0" prefHeight="25.0" prefWidth="168.0" promptText="Chọn loại thuốc..." />
-            <CheckBox fx:id="cbThuocKeDon" layoutX="877.0" layoutY="117.0" mnemonicParsing="false" />
-            <Label layoutX="766.0" layoutY="117.0" text="Thuốc kê đơn" />
-            <Label layoutX="295.0" layoutY="394.0" text="Định mức số lượng" />
-            <Label layoutX="794.0" layoutY="340.0" text="Số đăng ký" />
-            <TextField fx:id="txtDinhMucSL" layoutX="415.0" layoutY="390.0" prefHeight="25.0" prefWidth="170.0" promptText="Thông báo khi thuốc sắp hết" />
-            <TextField fx:id="txtSoDangKy" layoutX="879.0" layoutY="336.0" prefHeight="25.0" prefWidth="170.0" />
-            <Button fx:id="nhapExcel" layoutX="803.0" layoutY="720.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="113.0" text="Nhập Excel" />
+            <Label layoutX="90.0" layoutY="109.0" text="Mã thuốc" />
+            <Label layoutX="443.0" layoutY="110.0" text="Tên thuốc" />
+            <Label layoutX="84.0" layoutY="160.0" text="Loại thuốc" />
+            <Label layoutX="82.0" layoutY="210.0" text="Đơn vị tính" />
+            <Label layoutX="92.0" layoutY="266.0" text="Giá nhập" />
+            <Label layoutX="416.0" layoutY="161.0" text="Nước sản xuất" />
+            <ComboBox fx:id="cbbNSX" layoutX="530.0" layoutY="157.0" prefHeight="25.0" prefWidth="171.0" promptText="Chọn nước sản xuất..." />
+            <Label layoutX="92.0" layoutY="371.0" text="Cách dùng" />
+            <Label layoutX="450.0" layoutY="268.0" text="Trạng thái" />
+            <ComboBox fx:id="cbbTrangThai" layoutX="529.0" layoutY="264.0" prefHeight="25.0" prefWidth="172.0" promptText="Chọn trạng thái..." />
+            <Label layoutX="90.0" layoutY="489.0" text="Thông tin lưu ý" />
+            <TextArea fx:id="txtThongTin" layoutX="92.0" layoutY="521.0" prefHeight="200.0" prefWidth="602.0" />
+            <TextField fx:id="txtMaThuoc" layoutX="169.0" layoutY="106.0" prefHeight="25.0" prefWidth="168.0" />
+            <TextField fx:id="txtTenThuoc" layoutX="534.0" layoutY="106.0" prefHeight="25.0" prefWidth="168.0" />
+            <TextField fx:id="txtDonViTinh" layoutX="169.0" layoutY="206.0" prefHeight="25.0" prefWidth="169.0" />
+            <TextField fx:id="txtGiaNhap" layoutX="169.0" layoutY="262.0" prefHeight="25.0" prefWidth="169.0" />
+            <TextField fx:id="txtCachDung" layoutX="169.0" layoutY="367.0" prefHeight="25.0" prefWidth="169.0" />
+            <Button layoutX="140.0" layoutY="738.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
+            <Button layoutX="531.0" layoutY="739.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
+            <TextField fx:id="txtGiaBan" layoutX="529.0" layoutY="213.0" prefHeight="25.0" prefWidth="173.0" />
+            <Label layoutX="455.0" layoutY="217.0" text="Giá bán" />
+            <Label layoutX="48.0" layoutY="317.0" text="Quy cách đóng gói" />
+            <TextField fx:id="txtQuyCach" layoutX="169.0" layoutY="313.0" prefHeight="25.0" prefWidth="169.0" />
+            <ComboBox fx:id="cbbLoaiThuoc" layoutX="169.0" layoutY="156.0" prefHeight="25.0" prefWidth="168.0" promptText="Chọn loại thuốc..." />
+            <Label layoutX="411.0" layoutY="381.0" text="Định mức số lượng" />
+            <Label layoutX="447.0" layoutY="334.0" text="Số đăng ký" />
+            <TextField fx:id="txtDinhMucSL" layoutX="531.0" layoutY="377.0" prefHeight="25.0" prefWidth="170.0" promptText="Thông báo khi thuốc sắp hết" />
+            <TextField fx:id="txtSoDangKy" layoutX="532.0" layoutY="330.0" prefHeight="25.0" prefWidth="170.0" />
+            <Button fx:id="nhapExcel" layoutX="1010.0" layoutY="64.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="113.0" text="Nhập Excel" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="761.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="909.0">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.10000000149011612" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Rectangle>
+            <ScrollPane layoutX="797.0" layoutY="102.0" prefHeight="783.0" prefWidth="841.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="805.0" prefWidth="843.0">
+                     <children>
+                        <TableView fx:id="table" layoutX="-1.0" prefHeight="775.0" prefWidth="837.0">
+                          <columns>
+                            <TableColumn prefWidth="59.0" text="Mã thuốc" />
+                            <TableColumn prefWidth="91.0" text="Tên thuốc" />
+                              <TableColumn prefWidth="75.0" text="Loại thuốc" />
+                              <TableColumn prefWidth="75.0" text="Đơn vị tính" />
+                              <TableColumn prefWidth="94.0" text="Nước sản xuất" />
+                              <TableColumn prefWidth="116.0" text="Quy cách đóng gói" />
+                              <TableColumn prefWidth="82.0" text="Cách dùng" />
+                              <TableColumn prefWidth="55.0" text="Giá nhập" />
+                              <TableColumn prefWidth="66.0" text="Giá bán" />
+                              <TableColumn prefWidth="115.0" text="Trạng thái" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <ComboBox layoutX="797.0" layoutY="68.0" prefWidth="150.0" promptText="Thuốc kê đơn" />
+            <Label layoutX="1090.0" layoutY="45.0" text="THÔNG TIN THUỐC">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button layoutX="326.0" layoutY="739.0" mnemonicParsing="false" onAction="#luu" prefHeight="50.0" prefWidth="103.0" text="Cập nhật" />
+            <TextField layoutX="1489.0" layoutY="68.0" />
+            <Label layoutX="1398.0" layoutY="72.0" text="Tìm kiếm thuốc" />
          </children>
       </AnchorPane>
    </center>

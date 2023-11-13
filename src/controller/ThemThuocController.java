@@ -32,13 +32,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -62,6 +68,10 @@ public class ThemThuocController implements Initializable{
 	private ComboBox<?> cbbNSX;
 	@FXML
 	private ComboBox<?> cbbTrangThai;
+	@FXML
+	private TableColumn<Thuoc, String> tenThuoc;
+	@FXML
+	private TableView<Thuoc> table;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
@@ -382,7 +392,9 @@ public class ThemThuocController implements Initializable{
 	    }
 	    return 0;
 	 }
-
+	ObservableList<Thuoc> list = FXCollections.observableArrayList(
+		
+			);
 	public int getLT() throws SQLException {
 		int mlt = 0;
 		String sql = "select * from LoaiThuoc where tenLoaiThuoc = N'"+cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString()+"'";
@@ -392,37 +404,54 @@ public class ThemThuocController implements Initializable{
 		mlt = rs.getInt("maLoaiThuoc");
 		return mlt;
 	}
+	public void luu() {
+		Thuoc t = new Thuoc();
+		t.setTenThuoc("Thuoc an than");
+//		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
+		list.add(t);
+		table.setItems(list);
+	}
 	public void add() throws SQLException {
-
-		
-		String sql = "insert into Thuoc(maThuoc, tenThuoc, maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
-		int mlt = getLT();
-//		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
-		float gn = Float.parseFloat(txtGiaNhap.getText());
-		float gb = Float.parseFloat(txtGiaBan.getText());
-		System.out.println(mlt);
-		try {
+		for(int i=1;i<table.getItems().size();i++) {
+			String sql = "insert into Thuoc(maThuoc, tenThuoc) values (?,?)";
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
-			ps.setString(2, txtTenThuoc.getText().toString());
-			ps.setInt(3, mlt);
-			ps.setString(4, txtDonViTinh.getText().toString());
-			ps.setFloat(5, gn);
-			ps.setFloat(6, gb);
-			ps.setString(7, txtQuyCach.getText().toString());
-			ps.setString(8, txtCachDung.getText().toString());
-			ps.setString(9, cbbNSX.getSelectionModel().getSelectedItem().toString());
-			ps.setString(10, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
-			ps.setInt(11, Integer.parseInt(txtDinhMucSL.getText()));
-			ps.setString(12, txtSoDangKy.getText().toString());
-			ps.setString(13, txtThongTin.getText().toString());
-			ps.setInt(14, select());
+			ps.setInt(1, 5+i);
+			ps.setString(2, table.getItems().get(i).getTenThuoc());
 			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		
+//		String sql = "insert into Thuoc(maThuoc, tenThuoc, maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+////		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
+//		int mlt = getLT();
+////		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
+//		float gn = Float.parseFloat(txtGiaNhap.getText());
+//		float gb = Float.parseFloat(txtGiaBan.getText());
+//		System.out.println(mlt);
+//		try {
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
+//			ps.setString(2, txtTenThuoc.getText().toString());
+//			ps.setInt(3, mlt);
+//			ps.setString(4, txtDonViTinh.getText().toString());
+//			ps.setFloat(5, gn);
+//			ps.setFloat(6, gb);
+//			ps.setString(7, txtQuyCach.getText().toString());
+//			ps.setString(8, txtCachDung.getText().toString());
+//			ps.setString(9, cbbNSX.getSelectionModel().getSelectedItem().toString());
+//			ps.setString(10, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
+//			ps.setInt(11, Integer.parseInt(txtDinhMucSL.getText()));
+//			ps.setString(12, txtSoDangKy.getText().toString());
+//			ps.setString(13, txtThongTin.getText().toString());
+//			ps.setInt(14, select());
+//			ps.execute();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm trong kho không đủ", ButtonType.OK);
+//  		alert.setTitle("Thông báo");
+//  		alert.setHeaderText(null);
+//  		alert.show();
+//		}
 		
 	}
 //	public void xemLoai() throws IOException {
