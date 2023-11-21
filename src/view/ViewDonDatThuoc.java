@@ -33,7 +33,7 @@ public class ViewDonDatThuoc  extends Application {
 //		} catch(Exception e) {
 //			e.printStackTrace();
 //		}		
-				Parent root = FXMLLoader.load(getClass().getResource("ViewDonDatThuoc.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("GioHang.fxml"));
 				Scene scene = new Scene(root);
 				scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				primaryStage.setScene(scene);

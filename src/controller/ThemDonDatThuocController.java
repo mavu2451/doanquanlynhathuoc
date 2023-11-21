@@ -397,8 +397,7 @@ public class ThemDonDatThuocController implements Initializable{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		 }
-			);
+		 });
 			btnThemKH.setOnAction(new EventHandler<ActionEvent>() {
 				
 				@Override

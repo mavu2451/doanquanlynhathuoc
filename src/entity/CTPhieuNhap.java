@@ -19,9 +19,10 @@ public class CTPhieuNhap {
 	private String thongTin;
 	private float tongGiaNhap;
 	private float tongGiaBan;
+	private String trangThai;
 	public CTPhieuNhap(int maCTPN, int maPN, int maThuoc, String tenThuoc, String donViTinh, float giaNhap,
 			float giaBan, int sl, String soLo, Date hanSuDung, String thongTin, float tongGiaNhap,
-			float tongGiaBan) {
+			float tongGiaBan, String trangThai) {
 		super();
 		this.maCTPN = maCTPN;
 		this.maPN = maPN;
@@ -36,6 +37,7 @@ public class CTPhieuNhap {
 		this.thongTin = thongTin;
 		this.tongGiaNhap = tongGiaNhap;
 		this.tongGiaBan = tongGiaBan;
+		this.trangThai = trangThai;
 	}
 	public CTPhieuNhap() {
 		super();
@@ -118,6 +120,12 @@ public class CTPhieuNhap {
 	}
 	public void setTongGiaBan(float tongGiaBan) {
 		this.tongGiaBan = tongGiaBan;
+	}
+	public String getTrangThai() {
+		return trangThai;
+	}
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
 	}
 	
 

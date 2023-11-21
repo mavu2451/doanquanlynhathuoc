@@ -33,6 +33,9 @@ public class CTHoaDon {
 		this.cachDung = cachDung;
 		this.tongGiaBan = tongGiaBan;
 	}
+	public CTHoaDon(String tenThuoc, String donViTinh, int soLuong, float donGia, float tongGiaBan) {
+		super();
+	}
 	public CTHoaDon() {
 		super();
 		// TODO Auto-generated constructor stub

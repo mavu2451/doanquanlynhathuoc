@@ -304,7 +304,7 @@
    <center>
        <AnchorPane prefHeight="672.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="795.0" layoutX="605.0" layoutY="19.0" stroke="WHITE" strokeType="INSIDE" width="745.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="605.0" layoutY="19.0" stroke="WHITE" strokeType="INSIDE" width="1060.0">
                <effect>
                   <DropShadow>
                      <color>
@@ -312,7 +312,7 @@
                      </color>
                   </DropShadow>
                </effect></Rectangle>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="795.0" layoutX="28.0" layoutY="20.0" stroke="WHITE" strokeType="INSIDE" width="563.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="882.0" layoutX="28.0" layoutY="20.0" stroke="WHITE" strokeType="INSIDE" width="563.0">
                <effect>
                   <DropShadow>
                      <color>
@@ -320,54 +320,54 @@
                      </color>
                   </DropShadow>
                </effect></Rectangle>
-            <ScrollPane layoutX="617.0" layoutY="71.0" prefHeight="603.0" prefWidth="727.0">
+            <ScrollPane layoutX="617.0" layoutY="71.0" prefHeight="682.0" prefWidth="1019.0">
                <content>
-                  <TableView fx:id="table" prefHeight="606.0" prefWidth="728.0">
+                  <TableView fx:id="table" prefHeight="686.0" prefWidth="1016.0">
                     <columns>
                         <TableColumn fx:id="tenThuoc" prefWidth="76.0" text="Tên thuốc" />
                         <TableColumn fx:id="dvt" prefWidth="81.0" text="Đơn vị tính" />
                         <TableColumn fx:id="giaNhap" prefWidth="79.0" text="Giá nhập" />
                         <TableColumn fx:id="giaBan" prefWidth="91.0" text="Giá bán" />
-                        <TableColumn fx:id="soLuong" prefWidth="62.0" text="Số lượng" />
-                        <TableColumn fx:id="hsd" prefWidth="110.0" text="Hạn sử dụng" />
-                        <TableColumn fx:id="tongGiaNhap" prefWidth="92.0" text="Tổng giá nhập" />
-                        <TableColumn fx:id="tongGiaBan" prefWidth="123.0" text="Tổng giá bán" />
+                        <TableColumn fx:id="soLuong" prefWidth="140.0" text="Số lượng" />
+                        <TableColumn fx:id="hsd" prefWidth="144.0" text="Hạn sử dụng" />
+                        <TableColumn fx:id="tongGiaNhap" prefWidth="153.0" text="Tổng giá nhập" />
+                        <TableColumn fx:id="tongGiaBan" prefWidth="246.0" text="Tổng giá bán" />
                     </columns>
                   </TableView>
                </content>
             </ScrollPane>
             <Button layoutX="617.0" layoutY="37.0" mnemonicParsing="false" text="Tải trang" />
-            <Label layoutX="850.0" layoutY="27.0" text="CHI TIẾT PHIẾU NHẬP">
+            <Label layoutX="980.0" layoutY="27.0" text="CHI TIẾT PHIẾU NHẬP">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="1126.0" layoutY="769.0" text="Tổng tiền bán:">
+            <Label layoutX="1413.0" layoutY="853.0" text="Tổng tiền bán:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblTongGiaBan" layoutX="1266.0" layoutY="769.0" text="0 đồng">
+            <Label fx:id="lblTongGiaBan" layoutX="1553.0" layoutY="853.0" text="0 đồng">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="1126.0" layoutY="689.0" text="NGƯỜI NHẬP:">
+            <Label layoutX="1413.0" layoutY="773.0" text="NGƯỜI NHẬP:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblNV" layoutX="1266.0" layoutY="689.0" text="Label">
+            <Label fx:id="lblNV" layoutX="1553.0" layoutY="773.0" text="Label">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="652.0" layoutY="774.0" text="GIÁ BÁN ĐÃ QUY ĐỔI:">
+            <Label layoutX="662.0" layoutY="854.0" text="GIÁ BÁN ĐÃ QUY ĐỔI:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblGiaBanQuyDoi" layoutX="836.0" layoutY="774.0" text="0 đồng">
+            <Label fx:id="lblGiaBanQuyDoi" layoutX="846.0" layoutY="854.0" text="0 đồng">
                <font>
                   <Font size="16.0" />
                </font>
@@ -379,8 +379,7 @@
             </Label>
             <Label layoutX="60.0" layoutY="197.0" text="Mã thuốc" />
             <Label layoutX="346.0" layoutY="198.0" text="Tên thuốc" />
-            <ComboBox fx:id="cbbThuoc" layoutX="421.0" layoutY="194.0" onAction="#getAllTenThuoc" prefWidth="150.0" visibleRowCount="5" />
-            <Label layoutX="328.0" layoutY="269.0" text="Loại sản phẩm" />
+            <Label layoutX="345.0" layoutY="269.0" text="Loại thuốc" />
             <Label layoutX="329.0" layoutY="73.0" text="Nhà cung cấp" />
             <Label layoutX="57.0" layoutY="269.0" text="Đơn vị tính" />
             <Label layoutX="75.0" layoutY="337.0" text="Giá nhập" />
@@ -389,57 +388,59 @@
             <Label layoutX="341.0" layoutY="403.0" text="Hạn sử dụng" />
             <Label layoutX="75.0" layoutY="475.0" text="Số lượng" />
             <Label layoutX="45.0" layoutY="572.0" text="Thông tin lưu ý" />
-            <TextArea fx:id="taGhiChu" layoutX="130.0" layoutY="572.0" prefHeight="126.0" prefWidth="444.0" />
+            <TextArea fx:id="taGhiChu" layoutX="130.0" layoutY="572.0" prefHeight="202.0" prefWidth="444.0" />
             <TextField fx:id="txtMaThuoc" editable="false" layoutX="141.0" layoutY="194.0" />
             <TextField fx:id="txtDonViTinh" editable="false" layoutX="141.0" layoutY="266.0" />
             <TextField fx:id="txtGiaNhap" editable="false" layoutX="141.0" layoutY="334.0" />
             <DatePicker fx:id="dpHSD" layoutX="426.0" layoutY="399.0" prefHeight="25.0" prefWidth="146.0" />
             <TextField fx:id="txtSoLuong" layoutX="139.0" layoutY="472.0" />
             <Button layoutX="437.0" layoutY="114.0" mnemonicParsing="false" onAction="#themPN" prefHeight="43.0" prefWidth="107.0" text="Tạo phiếu nhập" />
-            <Button layoutX="129.0" layoutY="714.0" mnemonicParsing="false" onAction="#insert" prefHeight="63.0" prefWidth="91.0" text="Lưu" />
-            <Button layoutX="287.0" layoutY="715.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="113.0" text="Xoá trắng" />
+            <Button layoutX="128.0" layoutY="807.0" mnemonicParsing="false" onAction="#insert" prefHeight="63.0" prefWidth="91.0" text="Lưu" />
+            <Button layoutX="286.0" layoutY="808.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="113.0" text="Xoá trắng" />
             <Label layoutX="366.0" layoutY="337.0" text="Giá bán" />
             <TextField fx:id="txtGiaBan" editable="false" layoutX="425.0" layoutY="333.0" />
             <Label layoutX="69.0" layoutY="74.0" text="Ngày nhập" />
             <TextField fx:id="txtLoaiThuoc" editable="false" layoutX="425.0" layoutY="265.0" />
             <TextField fx:id="txtNSX" editable="false" layoutX="425.0" layoutY="471.0" />
-            <Label layoutX="639.0" layoutY="733.0" text="GIÁ NHẬP ĐÃ QUY ĐỔI:">
+            <Label layoutX="649.0" layoutY="813.0" text="GIÁ NHẬP ĐÃ QUY ĐỔI:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblGiaNhapQuyDoi" layoutX="836.0" layoutY="733.0" text="0 đồng">
+            <Label fx:id="lblGiaNhapQuyDoi" layoutX="846.0" layoutY="813.0" text="0 đồng">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="1117.0" layoutY="729.0" text="Tổng tiền nhập:">
+            <Label layoutX="1404.0" layoutY="813.0" text="Tổng tiền nhập:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblTongGiaNhap" layoutX="1266.0" layoutY="729.0" text="0 đồng">
+            <Label fx:id="lblTongGiaNhap" layoutX="1553.0" layoutY="813.0" text="0 đồng">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button layoutX="1174.0" layoutY="37.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="167.0" text="Xem thông tin chi tiết" />
+            <Button layoutX="1470.0" layoutY="37.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="167.0" text="Xem thông tin chi tiết" />
             <ComboBox fx:id="cbbNCC" layoutX="415.0" layoutY="70.0" prefWidth="150.0" visibleRowCount="5" />
             <DatePicker fx:id="dpNgayNhap" layoutX="140.0" layoutY="70.0" prefHeight="25.0" prefWidth="151.0" />
-            <Label layoutX="683.0" layoutY="689.0" text="MÃ PHIẾU NHẬP:">
+            <Label layoutX="693.0" layoutY="769.0" text="MÃ PHIẾU NHẬP:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblMaPN" layoutX="831.0" layoutY="689.0" text="Label">
+            <Label fx:id="lblMaPN" layoutX="841.0" layoutY="769.0" text="Label">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button layoutX="486.0" layoutY="715.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="77.0" text="Xoá" />
+            <Button layoutX="485.0" layoutY="808.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="77.0" text="Xoá" />
             <TextField fx:id="txtSoLo" layoutX="141.0" layoutY="399.0" />
             <ComboBox fx:id="cbbTrangThai" layoutX="425.0" layoutY="527.0" prefWidth="150.0" />
             <Label layoutX="348.0" layoutY="531.0" text="Trạng thái" />
+            <TextField fx:id="txtTenThuoc" editable="false" layoutX="424.0" layoutY="194.0" />
+            <Button fx:id="btnThemThuoc" layoutX="551.0" layoutY="194.0" mnemonicParsing="false" text="+" />
          </children>
       </AnchorPane>
    </center>

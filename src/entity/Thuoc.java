@@ -11,13 +11,16 @@ public class Thuoc {
 	private int soLuong;
 	private float giaNhap;
 	private float giaBan;
+	private String quyCachDongGoi;
 	private String nsx;
 	private String cachDung;
 	private String thongTin;
 	private String trangThai;
 	private Date hanSuDung;
+	private String thuocKeDon;
 	public Thuoc(int maThuoc, String tenThuoc, String loaiThuoc, String ncc, String dvt, int soLuong, float giaNhap,
-			float giaBan, String nsx, String cachDung, String thongTin,Date hanSuDung, String trangThai) {
+			float giaBan, String quyCachDongGoi, String nsx, String cachDung, String thongTin, String trangThai,
+			Date hanSuDung, String thuocKeDon) {
 		super();
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
@@ -27,17 +30,13 @@ public class Thuoc {
 		this.soLuong = soLuong;
 		this.giaNhap = giaNhap;
 		this.giaBan = giaBan;
+		this.quyCachDongGoi = quyCachDongGoi;
 		this.nsx = nsx;
 		this.cachDung = cachDung;
 		this.thongTin = thongTin;
 		this.trangThai = trangThai;
 		this.hanSuDung = hanSuDung;
-	}
-	public String getLoaiThuoc() {
-		return loaiThuoc;
-	}
-	public void setLoaiThuoc(String loaiThuoc) {
-		this.loaiThuoc = loaiThuoc;
+		this.thuocKeDon = thuocKeDon;
 	}
 	public Thuoc() {
 		super();
@@ -55,7 +54,12 @@ public class Thuoc {
 	public void setTenThuoc(String tenThuoc) {
 		this.tenThuoc = tenThuoc;
 	}
-
+	public String getLoaiThuoc() {
+		return loaiThuoc;
+	}
+	public void setLoaiThuoc(String loaiThuoc) {
+		this.loaiThuoc = loaiThuoc;
+	}
 	public String getNcc() {
 		return ncc;
 	}
@@ -85,6 +89,12 @@ public class Thuoc {
 	}
 	public void setGiaBan(float giaBan) {
 		this.giaBan = giaBan;
+	}
+	public String getQuyCachDongGoi() {
+		return quyCachDongGoi;
+	}
+	public void setQuyCachDongGoi(String quyCachDongGoi) {
+		this.quyCachDongGoi = quyCachDongGoi;
 	}
 	public String getNsx() {
 		return nsx;
@@ -116,6 +126,11 @@ public class Thuoc {
 	public void setHanSuDung(Date hanSuDung) {
 		this.hanSuDung = hanSuDung;
 	}
-	
-	
+	public String getThuocKeDon() {
+		return thuocKeDon;
+	}
+	public void setThuocKeDon(String thuocKeDon) {
+		this.thuocKeDon = thuocKeDon;
+	}
+
 }

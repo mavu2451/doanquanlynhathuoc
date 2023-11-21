@@ -11,46 +11,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.base.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.controls.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.fxml.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.graphics.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.media.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.swing.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx.web.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/javafx-sdk-20.0.1/lib/javafx-swt.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/mssql-jdbc-12.4.0.jre8.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -157,6 +117,31 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/poi-bin-5.2.3-20220909/poi-bin-5.2.3/lib/xmlbeans-5.1.1.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/jasperreport/jasperreports-6.20.6.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/jasperreport/commons-beanutils-1.9.4.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/jasperreport/commons-collections-3.2.2.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/jasperreport/commons-digester-2.1.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mavuv/Desktop/QuanLyHieuThuoc/QuanLyHieuThuoc/lib/jasperreport/commons-logging-1.1.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

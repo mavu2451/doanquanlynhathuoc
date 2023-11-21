@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -63,13 +65,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
+
 
 public class ThemHoaDonKhongTheoDonController implements Initializable{
+
+	 ObservableList<CTHoaDon> cthdList = FXCollections.observableArrayList();
 	@FXML
 	private MenuButton mb;
 	@FXML
 	private TextField txtMaPN;
-
+	
 	@FXML
 	private TextField txtNCC, txtNSX, txtTenThuoc, txtSL, txtTenKH, txtGioiTinh, txtSdt, txtEmail, txtTienNhan;
 	@FXML 
@@ -604,7 +616,6 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
         stage.show();
-		System.out.println("test thu");
 	}
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
@@ -951,7 +962,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 		 String sql = "select * from CTHoaDon cthd left join Thuoc t on t.maThuoc = cthd.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maHD = '"+maHD+"'";
 		 ps = con.prepareStatement(sql);
 		 rs = ps.executeQuery();
-		 ObservableList<CTHoaDon> cthdList = FXCollections.observableArrayList();
+
 		 int i = 0;
 		 while(rs.next()) {
 			 CTHoaDon cthd = new CTHoaDon();
@@ -1014,6 +1025,25 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 				lblTienThoi.setText(String.valueOf(tienThoi));
 			}
 	 }
+	public void inHD(ActionEvent e1) {
+			String src = "C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\src\\report\\HoaDonThuoc.jrxml";
+
+			try {
+				JasperReport jr = JasperCompileManager.compileReport(src);
+				HashMap<String, Object> p = new HashMap<>();
+				ArrayList<CTHoaDon> cth = new ArrayList<>();
+				
+				for(CTHoaDon ct : cthdList) {
+					cth.add(new CTHoaDon(ct.getTenThuoc(), ct.getDonViTinh(), ct.getSoLuong(), ct.getDonGia(), ct.getTongGiaBan()));
+				}
+				JRBeanCollectionDataSource jcs = new JRBeanCollectionDataSource(cthdList);
+				JasperPrint jp = JasperFillManager.fillReport(jr,p,jcs);
+				JasperViewer.viewReport(jp);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+	}
 	@FXML
 	public void thanhToan(ActionEvent e) throws SQLException{
 		int maHD = getMaHD();
@@ -1106,5 +1136,4 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 //		}
 //		return nv.getMaNV();
 //	}
-
 

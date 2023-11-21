@@ -182,10 +182,10 @@ public class TimKiemThuocController implements Initializable{
 					else {
 					table.getItems().clear();
 					String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, t.nuocSanXuat, t.donViTinh, t.giaNhap, t.giaBan, t.cachDung, t.trangThai from Thuoc t left join LoaiThuoc lt on "
-							+ "lt.maLoaiThuoc = t.maLoaiThuoc where tenThuoc like'%"+timThuoc+"%' "
-									+ "and tenLoaiThuoc like '%"+timLoaiThuoc+"%'"
-									+ "and nuocSanXuat like '%"+timNSX+"%'"
-									+ "and donViTinh like '%"+timDVT+"%'";
+							+ "lt.maLoaiThuoc = t.maLoaiThuoc where tenThuoc like N'%"+timThuoc+"%' "
+									+ "and tenLoaiThuoc like N'%"+timLoaiThuoc+"%'"
+									+ "and nuocSanXuat like N'%"+timNSX+"%'"
+									+ "and donViTinh like N'%"+timDVT+"%'";
 					try {
 						ps = con.prepareStatement(sql);
 						rs = ps.executeQuery();

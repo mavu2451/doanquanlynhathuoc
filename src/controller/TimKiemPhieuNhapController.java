@@ -3,14 +3,17 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.CTPhieuNhap;
 import entity.NhanVien;
 import entity.PhieuNhap;
+import entity.Thuoc;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,11 +29,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TimKiemPhieuNhapController implements Initializable{
@@ -43,12 +50,15 @@ public class TimKiemPhieuNhapController implements Initializable{
 	@FXML
 	private TextField txtNCC;
 	@FXML
+	private Button btnXemCT;
+	@FXML
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	static ResultSet rs;
 	@FXML
 	Label lblName;
+
 	@FXML
 	TableView<PhieuNhap> table;
 	@FXML
@@ -56,7 +66,9 @@ public class TimKiemPhieuNhapController implements Initializable{
 	@FXML
 	private TableColumn<PhieuNhap, String> hoTen;
 	@FXML
-	private TableColumn<PhieuNhap, String> ngayNhap;
+	private TableColumn<PhieuNhap, Date> ngayNhap;
+	@FXML
+	private TableColumn<PhieuNhap, String> tenNCC;
 
 	
 	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
@@ -70,6 +82,151 @@ public class TimKiemPhieuNhapController implements Initializable{
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
 
+		cell();
+		getAllPN();
+		btnXemCT.setOnAction(arg->{
+			int index = table.getSelectionModel().getSelectedIndex();
+			if(index<=-1) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setContentText("Mời bạn chọn phiếu nhập");
+				alert.showAndWait();
+			}
+			else {
+			String sqlMaPN = String.valueOf(maPN.getCellData(index).toString());
+			ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
+			BorderPane root = new BorderPane();
+			ScrollPane scroll = new ScrollPane();
+			TextField txtTimKiem = new TextField();
+			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
+			Button chon = new Button("Đã nhập hàng");
+			HBox h1 = new HBox(2);
+			HBox h2 = new HBox(1);
+			
+			Stage stage = new Stage();
+;			TableView tableView = new TableView<CTPhieuNhap>();
+			TableColumn maThuoc = new TableColumn<CTPhieuNhap, Integer>("Mã thuốc");
+			maThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Integer>("maThuoc"));
+			TableColumn tenThuoc = new TableColumn<CTPhieuNhap, String>("Tên thuốc");
+			tenThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("tenThuoc"));
+			TableColumn giaNhap = new TableColumn<CTPhieuNhap, Float>("Giá bán");
+			giaNhap.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("giaNhap"));
+			TableColumn giaBan = new TableColumn<CTPhieuNhap, Float>("Giá bán");
+			giaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("giaBan"));
+			TableColumn soLuong = new TableColumn<CTPhieuNhap, Integer>("Số lượng nhập");
+			soLuong.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Integer>("sl"));
+			TableColumn tongGiaNhap = new TableColumn<CTPhieuNhap, Float>("Tổng giá nhập");
+			tongGiaNhap.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("tongGiaNhap"));
+			TableColumn tongGiaBan = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
+			tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("hanSuDung"));
+			TableColumn soLo = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
+			soLo.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("soLo"));
+			TableColumn hanSuDung = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
+			hanSuDung.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("hanSuDung"));
+			TableColumn trangThai = new TableColumn<CTPhieuNhap, Float>("Trạng thái");
+			trangThai.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("trangThai"));
+			
+			tableView.getColumns().add(maThuoc);
+			tableView.getColumns().add(tenThuoc);
+			tableView.getColumns().add(giaNhap);
+			tableView.getColumns().add(giaBan);
+			tableView.getColumns().add(soLuong);
+			tableView.getColumns().add(tongGiaNhap);
+			tableView.getColumns().add(tongGiaBan);
+			tableView.getColumns().add(soLo);
+			tableView.getColumns().add(hanSuDung);
+			tableView.getColumns().add(trangThai);
+			root.setCenter(scroll);
+			scroll.setContent(tableView);
+			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
+			h2.getChildren().addAll( chon);
+			root.setTop(h1);
+			root.setBottom(h2);
+			String sql = "select * from CTPhieuNhap ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPN = '"+sqlMaPN+"'";
+			try {
+				ps = con.prepareStatement(sql);
+				rs = ps.executeQuery();
+				ObservableList<CTPhieuNhap> ctList = FXCollections.observableArrayList();
+				while(rs.next()) {
+					CTPhieuNhap ctpn = new CTPhieuNhap();
+					ctpn.setMaThuoc(rs.getInt("maThuoc"));
+					ctpn.setTenThuoc(rs.getString("tenThuoc"));
+					ctpn.setDonViTinh(rs.getString("donViTinh"));
+					ctpn.setGiaNhap(rs.getFloat("giaNhap"));
+					ctpn.setGiaBan(rs.getFloat("giaBan"));
+					ctpn.setSl(rs.getInt("soLuong"));
+					ctpn.setTongGiaNhap(rs.getFloat("tongGiaNhap"));
+					ctpn.setTongGiaBan(rs.getFloat("tongGiaBan"));
+					ctpn.setSoLo(rs.getString("soLo"));
+					ctpn.setHanSuDung(rs.getDate("hanSuDung"));
+					ctpn.setTrangThai(rs.getString("trangThai"));
+					ctList.add(ctpn);
+					tableView.setItems(ctList);
+					chon.setOnAction(args ->{
+						int indexCT = tableView.getSelectionModel().getSelectedIndex();
+						String sqlTrangThai = String.valueOf(trangThai.getCellData(indexCT).toString());
+						if(indexCT <= -1) {
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setHeaderText(null);
+							alert.setContentText("Mời bạn chọn thông tin");
+							alert.showAndWait();
+						}
+						else if(sqlTrangThai.equals("Đã nhập hàng")) {
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setHeaderText(null);
+							alert.setContentText("Thuốc đã được nhập");
+							alert.showAndWait();
+						}
+						else {
+
+						String sqlMaThuoc = String.valueOf(maThuoc.getCellData(indexCT).toString());
+						String update = "update CTPhieuNhap set trangThai = N'Đã nhập hàng' where maPN = '"+sqlMaPN+"'and maThuoc = '"+sqlMaThuoc+"'";
+						try {
+							ps = con.prepareStatement(update);
+							ps.execute();
+							Alert alert1 = new Alert(AlertType.INFORMATION);
+							alert1.setHeaderText(null);
+							alert1.setContentText("Cập nhật trạng thái thành công");
+							alert1.showAndWait();
+							String sql1 = "select * from CTPhieuNhap ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPN = '"+sqlMaPN+"'";
+							ps = con.prepareStatement(sql1);
+							rs = ps.executeQuery();
+							ObservableList<CTPhieuNhap> ctList1 = FXCollections.observableArrayList();
+							while(rs.next()) {
+									CTPhieuNhap ctpn1 = new CTPhieuNhap();
+									ctpn1.setMaThuoc(rs.getInt("maThuoc"));
+									ctpn1.setTenThuoc(rs.getString("tenThuoc"));
+									ctpn1.setDonViTinh(rs.getString("donViTinh"));
+									ctpn1.setGiaNhap(rs.getFloat("giaNhap"));
+									ctpn1.setGiaBan(rs.getFloat("giaBan"));
+									ctpn1.setSl(rs.getInt("soLuong"));
+									ctpn1.setTongGiaNhap(rs.getFloat("tongGiaNhap"));
+									ctpn1.setTongGiaBan(rs.getFloat("tongGiaBan"));
+									ctpn1.setSoLo(rs.getString("soLo"));
+									ctpn1.setHanSuDung(rs.getDate("hanSuDung"));
+									ctpn1.setTrangThai(rs.getString("trangThai"));
+									ctList1.add(ctpn1);
+									tableView.setItems(ctList1);
+								
+							
+						}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						}
+					});
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			Scene scene = new Scene(root,900,400);
+			stage.setScene(scene);
+			stage.setResizable(false);
+			stage.show();
+			}
+		});
 	}
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
@@ -354,22 +511,31 @@ public class TimKiemPhieuNhapController implements Initializable{
 	   	}
 
 	//End Navbar
-	public void themPN(ActionEvent e) {
-//		
-//		String sql = "insert into PhieuNhap(maNV) values (?)";
-//		try {
-////			String maPN = txtMaPN.getText();
-//			ps = con.prepareStatement(sql);
-//			ps.setInt(1, getNV());
-//			System.out.println(getNV());
-//			ps.execute();		
-//
-//		}catch(Exception e1) {
-//			e1.printStackTrace();
-//		}
-//		reload();
-		
-	}
+	      public void getAllPN()  {
+	    	  String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC";
+	    	  try {
+				ps = con.prepareStatement(sql);
+		    	  rs = ps.executeQuery();
+		    	  while(rs.next()) {
+		    		  PhieuNhap pn = new PhieuNhap();
+		    		  pn.setMaPN(rs.getInt("maPN"));
+		    		  pn.setHoTen(rs.getString("tenNV"));
+		    		  pn.setTenNCC(rs.getString("tenNCC"));
+		    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+		    		  list.add(pn);
+		    		  table.setItems(list);
+		    	  }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	      }
+	      public void cell() {
+	    	maPN.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Integer>("maPN"));
+	  		hoTen.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("hoTen"));
+	  		tenNCC.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("tenNCC"));
+	  		ngayNhap.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Date>("ngayNhap"));
+	      }
 //	public int getNV() {
 //		NhanVien nv = new NhanVien();
 //		String sql = "select tenNV from NhanVien";

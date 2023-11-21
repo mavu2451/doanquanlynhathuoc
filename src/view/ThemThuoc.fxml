@@ -346,7 +346,7 @@
             <TextField fx:id="txtDinhMucSL" layoutX="531.0" layoutY="377.0" prefHeight="25.0" prefWidth="170.0" promptText="Thông báo khi thuốc sắp hết" />
             <TextField fx:id="txtSoDangKy" layoutX="532.0" layoutY="330.0" prefHeight="25.0" prefWidth="170.0" />
             <Button fx:id="nhapExcel" layoutX="1010.0" layoutY="64.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="113.0" text="Nhập Excel" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="761.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="909.0">
+            <Rectangle fx:id="cbThuocKeDon" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="761.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="909.0">
                <effect>
                   <DropShadow>
                      <color>
@@ -386,6 +386,8 @@
             <Button layoutX="326.0" layoutY="739.0" mnemonicParsing="false" onAction="#luu" prefHeight="50.0" prefWidth="103.0" text="Cập nhật" />
             <TextField layoutX="1489.0" layoutY="68.0" />
             <Label layoutX="1398.0" layoutY="72.0" text="Tìm kiếm thuốc" />
+            <ComboBox fx:id="cbbThuocKeDon" layoutX="168.0" layoutY="421.0" prefHeight="25.0" prefWidth="171.0" promptText="Chọn" />
+            <Label layoutX="76.0" layoutY="425.0" text="Thuốc kê đơn" />
          </children>
       </AnchorPane>
    </center>

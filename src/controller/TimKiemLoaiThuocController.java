@@ -325,7 +325,7 @@ public class TimKiemLoaiThuocController implements Initializable {
 	//End Navbar
 	public void cell() {
 		maLoaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, Integer>("maLoaiThuoc"));
-		loaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("loaiThuoc"));
+		loaiThuoc.setCellValueFactory(new PropertyValueFactory<LoaiThuoc, String>("tenLoaiThuoc"));
 	}
 	public ObservableList<LoaiThuoc> getAllLoaiThuoc(){
 		ObservableList<LoaiThuoc> loaiThuocList = FXCollections.observableArrayList();

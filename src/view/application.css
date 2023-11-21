@@ -9,7 +9,31 @@ tab{
 .split-menu-button .arrow {
     -fx-background-color: white;
 }
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #B5B5B5 transparent;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+}
+.combo-box{
+	 -fx-background-color: transparent;
+	  -fx-border-color: #B5B5B5 #B5B5B5 #B5B5B5 #B5B5B5;
+}
+.date-picker{
+	 -fx-background-color: transparent;	 
+}
 
+.date-picker > .arrow-button{
+	-fx-background-color: #EAEAEA;	 
+	-fx-border-color: #EAEAEA #EAEAEA #EAEAEA #EAEAEA;
+}
+.date-picker > .text-field{
+	 -fx-background-color: transparent;
+		-fx-border-color: #B5B5B5 #B5B5B5 #B5B5B5 #B5B5B5;
+}
+.text-field:focused {
+    -fx-background-color: -fx-focus-color, -fx-background ;
+}
 #dtNgay {
  	-fx-background-color: linear-gradient(to right, #f857a6 0%, #ff5858  51%);
  	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);

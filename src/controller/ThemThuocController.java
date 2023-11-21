@@ -50,6 +50,7 @@ import javafx.util.StringConverter;
 
 public class ThemThuocController implements Initializable{
 	String[] countries = new String[]{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe", "Palestine"};
+	String[] thuocKeDon = new String[] {"Thuốc kê đơn", "Thuốc không kê đơn"};
 	@FXML
 	private Button nhapExcel;
 	@FXML
@@ -57,7 +58,7 @@ public class ThemThuocController implements Initializable{
 	@FXML
 	private TextArea txtThongTin;
 	@FXML
-	private CheckBox cbThuocKeDon;
+	private ComboBox<?> cbbThuocKeDon;
 	@FXML
 	private TextField txtMaThuoc, txtTenThuoc, txtXemLoai, txtDonViTinh, txtGiaNhap, txtGiaBan, txtQuyCach, txtCachDung, txtDinhMucSL, txtSoDangKy;
 	@FXML
@@ -386,12 +387,7 @@ public class ThemThuocController implements Initializable{
 	   	}
 
 	//End Navbar
-	public int select() {
-	    if(cbThuocKeDon.isSelected()) {
-	    	return 1;
-	    }
-	    return 0;
-	 }
+
 	ObservableList<Thuoc> list = FXCollections.observableArrayList(
 		
 			);
@@ -404,6 +400,7 @@ public class ThemThuocController implements Initializable{
 		mlt = rs.getInt("maLoaiThuoc");
 		return mlt;
 	}
+
 	public void luu() {
 		Thuoc t = new Thuoc();
 		t.setTenThuoc("Thuoc an than");
@@ -412,46 +409,39 @@ public class ThemThuocController implements Initializable{
 		table.setItems(list);
 	}
 	public void add() throws SQLException {
-		for(int i=1;i<table.getItems().size();i++) {
-			String sql = "insert into Thuoc(maThuoc, tenThuoc) values (?,?)";
+
+		String sql = "insert into Thuoc(tenThuoc, maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
+		int mlt = getLT();
+//		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
+		float gn = Float.parseFloat(txtGiaNhap.getText());
+		float gb = Float.parseFloat(txtGiaBan.getText());
+		System.out.println(mlt);
+		try {
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, 5+i);
-			ps.setString(2, table.getItems().get(i).getTenThuoc());
+			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
+			ps.setString(2, txtTenThuoc.getText().toString());
+			ps.setInt(3, mlt);
+			ps.setString(4, txtDonViTinh.getText().toString());
+			ps.setFloat(5, gn);
+			ps.setFloat(6, gb);
+			ps.setString(7, txtQuyCach.getText().toString());
+			ps.setString(8, txtCachDung.getText().toString());
+			ps.setString(9, cbbNSX.getSelectionModel().getSelectedItem().toString());
+			ps.setString(10, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
+			ps.setInt(11, Integer.parseInt(txtDinhMucSL.getText()));
+			ps.setString(12, txtSoDangKy.getText().toString());
+			ps.setString(13, txtThongTin.getText().toString());
+			ps.setString(14, cbbThuocKeDon.getSelectionModel().getSelectedItem().toString());
 			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm trong kho không đủ", ButtonType.OK);
+  		alert.setTitle("Thông báo");
+  		alert.setHeaderText(null);
+  		alert.show();
 		}
-		
-//		String sql = "insert into Thuoc(maThuoc, tenThuoc, maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-////		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
-//		int mlt = getLT();
-////		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
-//		float gn = Float.parseFloat(txtGiaNhap.getText());
-//		float gb = Float.parseFloat(txtGiaBan.getText());
-//		System.out.println(mlt);
-//		try {
-//			ps = con.prepareStatement(sql);
-//			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
-//			ps.setString(2, txtTenThuoc.getText().toString());
-//			ps.setInt(3, mlt);
-//			ps.setString(4, txtDonViTinh.getText().toString());
-//			ps.setFloat(5, gn);
-//			ps.setFloat(6, gb);
-//			ps.setString(7, txtQuyCach.getText().toString());
-//			ps.setString(8, txtCachDung.getText().toString());
-//			ps.setString(9, cbbNSX.getSelectionModel().getSelectedItem().toString());
-//			ps.setString(10, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
-//			ps.setInt(11, Integer.parseInt(txtDinhMucSL.getText()));
-//			ps.setString(12, txtSoDangKy.getText().toString());
-//			ps.setString(13, txtThongTin.getText().toString());
-//			ps.setInt(14, select());
-//			ps.execute();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm trong kho không đủ", ButtonType.OK);
-//  		alert.setTitle("Thông báo");
-//  		alert.setHeaderText(null);
-//  		alert.show();
-//		}
 		
 	}
 //	public void xemLoai() throws IOException {
@@ -499,7 +489,7 @@ public class ThemThuocController implements Initializable{
 		txtTenThuoc.setText("");
 		cbbLoaiThuoc.setValue(null);
 		txtDonViTinh.setText("");
-		cbThuocKeDon.setSelected(false);
+		cbbThuocKeDon.setValue(null);
 		cbbNSX.setValue(null);
 		txtGiaNhap.setText("");
 		txtGiaBan.setText("");
@@ -527,8 +517,8 @@ public class ThemThuocController implements Initializable{
 		}
 
 	}
-//	public void getAllNCC() {
-//		String sql = "select * from NhaCungCap";
+//	public void getAllThuoc() {
+//		String sql = "select * from Thuoc";
 //		try {
 //			ps = con.prepareStatement(sql);
 //			rs = ps.executeQuery();

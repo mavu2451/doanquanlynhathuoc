@@ -39,6 +39,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -48,6 +49,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class CTPhieuNhapController implements Initializable{
@@ -57,15 +60,15 @@ public class CTPhieuNhapController implements Initializable{
 	ObservableList<CTPhieuNhap> ctpnList = FXCollections.observableArrayList();
 	int maPN;
 	@FXML
-	private Button btnNgayNhap;
+	private Button btnNgayNhap,btnThemThuoc;
 	@FXML
 	private DatePicker dpNgayNhap, dpHSD;
 	@FXML
-	private TextField txtSoLuong, txtMaThuoc, txtTimKiem, txtNSX, txtNCC, txtLoaiThuoc, txtDonViTinh,txtGiaNhap,txtGiaBan, txtSoLo;
+	private TextField txtSoLuong, txtMaThuoc, txtTimKiem, txtNSX, txtNCC, txtLoaiThuoc, txtDonViTinh,txtGiaNhap,txtGiaBan, txtSoLo,txtTenThuoc;
 	@FXML
 	private TextArea taGhiChu;
 	@FXML
-	private ComboBox<?> cbbThuoc, cbbNCC;
+	private ComboBox<?> cbbNCC;
 	@FXML
 	TableView<CTPhieuNhap> table;
 	@FXML 
@@ -97,12 +100,13 @@ public class CTPhieuNhapController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	ObservableList<CTPhieuNhap> list = FXCollections.observableArrayList();
-	String[] trangThaiList = {"Đã nhập hàng","Lưu tạm"};
+	String[] trangThaiList = {"Lưu tạm","Đã nhập hàng"};
 	//new CTPhieuNhap(1,1,"test","test","test","test",10000,20000,2,new Date(100000),new Date(200000),"test","test",20000,40000)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		dpNgayNhap.setValue(LocalDate.now());
 		cbbTrangThai.getItems().addAll(trangThaiList);
+		cbbTrangThai.getSelectionModel().selectFirst();
 		txtSoLuong.setText("1");
 		lblGiaBanQuyDoi.setText("0 đồng");
 		float gb = 0;
@@ -122,7 +126,7 @@ public class CTPhieuNhapController implements Initializable{
 		// TODO Auto-generated method stub
 		reload();
 		cell();
-		getAllTenThuoc();
+//		getAllTenThuoc();
 		getAllNCC();
 		String t = "select * from PhieuNhap";
 //		ps=con.prepareStatement(t);
@@ -132,6 +136,110 @@ public class CTPhieuNhapController implements Initializable{
 //		}
 //		table.setItems();
 //		
+		btnThemThuoc.setOnAction(args ->{
+			ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
+			BorderPane root = new BorderPane();
+			ScrollPane scroll = new ScrollPane();
+			TextField txtTimKiem = new TextField();
+			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
+			Button chon = new Button("Chọn sản phẩm");
+			HBox h1 = new HBox(2);
+			HBox h2 = new HBox(1);
+			
+			Stage stage = new Stage();
+;			TableView tableView = new TableView<Thuoc>();
+			TableColumn maThuoc = new TableColumn<Thuoc, Integer>("Mã thuốc");
+			maThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("maThuoc"));
+			TableColumn tenThuoc = new TableColumn<Thuoc, String>("Tên thuốc");
+			tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
+			TableColumn loaithuoc = new TableColumn<Thuoc, String>("Loại thuốc");
+			loaithuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
+			TableColumn donViTinh = new TableColumn<Thuoc, String>("Đơn vị tính");
+			donViTinh.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
+			TableColumn giaNhap = new TableColumn<Thuoc, Float>("Giá bán");
+			giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
+			TableColumn giaBan = new TableColumn<Thuoc, Float>("Giá bán");
+			giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));
+			TableColumn trangThai = new TableColumn<Thuoc, Float>("Trạng thái");
+			trangThai.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("trangThai"));
+//			TableColumn soLo = new TableColumn<Kho, String>("Số lô");
+//			soLo.setCellValueFactory(new PropertyValueFactory<Kho, String>("soLo"));
+//			TableColumn hanSuDung = new TableColumn<Kho, Date>("Hạn sử dụng");	
+//			hanSuDung.setCellValueFactory(new PropertyValueFactory<Kho, Date>("hanSuDung"));
+			
+			tableView.getColumns().add(maThuoc);
+			tableView.getColumns().add(tenThuoc);
+			tableView.getColumns().add(loaithuoc);
+			tableView.getColumns().add(donViTinh);
+			tableView.getColumns().add(giaNhap);
+			tableView.getColumns().add(giaBan);
+			tableView.getColumns().add(trangThai);
+//			tableView.getColumns().add(soLo);
+//			tableView.getColumns().add(hanSuDung);
+			root.setCenter(scroll);
+			scroll.setContent(tableView);
+			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
+			h2.getChildren().addAll( chon);
+			root.setTop(h1);
+			root.setBottom(h2);
+			String thuoc = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc";
+
+			try {
+				ps = con.prepareStatement(thuoc);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					Thuoc th = new Thuoc();
+					th.setMaThuoc(rs.getInt("maThuoc"));
+					th.setTenThuoc(rs.getString("tenThuoc"));
+					th.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+					th.setDvt(rs.getString("donViTinh"));
+					th.setNsx(rs.getString("nuocSanXuat"));
+					th.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+					th.setCachDung(rs.getString("cachDung"));
+					th.setGiaNhap(rs.getFloat("giaNhap"));
+					th.setGiaBan(rs.getFloat("giaBan"));
+					th.setTrangThai(rs.getString("trangThai"));
+					thuocList.add(th);
+					tableView.setItems(thuocList);
+					chon.setOnAction(arg2->{
+						int index = tableView.getSelectionModel().getSelectedIndex();
+						if(index<=-1) {
+							return;
+						}
+						else {
+							String sqlMaThuoc = String.valueOf(maThuoc.getCellData(index).toString());
+							String sqlTenThuoc = String.valueOf(tenThuoc.getCellData(index).toString());
+							String select = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc where t.maThuoc = '"+sqlMaThuoc+"'";
+							try {
+								ps = con.prepareStatement(select);
+								rs = ps.executeQuery();
+								while(rs.next()) {
+									Thuoc h = new Thuoc();
+									txtMaThuoc.setText(String.valueOf(rs.getInt("maThuoc")));
+									txtTenThuoc.setText(rs.getString("tenThuoc"));
+									txtLoaiThuoc.setText(rs.getString("tenLoaiThuoc"));
+									txtDonViTinh.setText(rs.getString("donViTinh"));
+									txtNSX.setText(rs.getString("nuocSanXuat"));
+									txtGiaNhap.setText(String.valueOf(rs.getFloat("giaNhap")));
+									txtGiaBan.setText(String.valueOf(rs.getFloat("giaBan")));
+									stage.close();
+								}
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			Scene scene = new Scene(root,700,300);
+			stage.setScene(scene);
+			stage.setResizable(false);
+			stage.show();
+		});
+		
 		String sql = "select * from NhanVien";
 		PreparedStatement ps;
 		try {
@@ -531,15 +639,15 @@ public class CTPhieuNhapController implements Initializable{
 		return maPN;
 	}
 
-	public int maThuoc() throws SQLException {
-		int maThuoc = 0;
-		String mThuoc = "select * from Thuoc where tenThuoc = N'"+cbbThuoc.getSelectionModel().getSelectedItem().toString()+"'";
-		ps = con.prepareStatement(mThuoc);
-		rs = ps.executeQuery();
-		while(rs.next()) 
-		maThuoc = rs.getInt("maThuoc");
-		return maThuoc;
-	}
+//	public int maThuoc() throws SQLException {
+//		int maThuoc = 0;
+//		String mThuoc = "select * from Thuoc where tenThuoc = N'"+cbbThuoc.getSelectionModel().getSelectedItem().toString()+"'";
+//		ps = con.prepareStatement(mThuoc);
+//		rs = ps.executeQuery();
+//		while(rs.next()) 
+//		maThuoc = rs.getInt("maThuoc");
+//		return maThuoc;
+//	}
 
 	public void insert(ActionEvent e){
 //		LocalDate nsx = dpNSX.getValue();
@@ -567,7 +675,7 @@ public class CTPhieuNhapController implements Initializable{
 			
 //			pn.setHoTen(dnc.getHoTen());
 //			System.out.println(pn.getHoTen());
-			int mThuoc = maThuoc();
+			int mThuoc = Integer.parseInt(txtMaThuoc.getText());
 			String tt = cbbTrangThai.getValue();
 			
 			String sql = "insert into CTPhieuNhap(maPN, maThuoc, giaNhap, giaBan, soLuong, thongTin, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?,?)";
@@ -742,70 +850,70 @@ public class CTPhieuNhapController implements Initializable{
 			}
 		return pnlist;
 	}
-	public void getAllTenThuoc(){
-		
-		String sql = "select * from Thuoc order by tenThuoc";
-		
-		try {
-			ps = con.prepareStatement(sql);
-			rs = ps.executeQuery();
-			ObservableList thuocList = FXCollections.observableArrayList();
-			while(rs.next()) {
-				Thuoc t = new Thuoc();
-				String ls = rs.getString("tenThuoc");
-				thuocList.add(ls);
-			}
-			cbbThuoc.setItems(thuocList);
+//	public void getAllTenThuoc(){
+//		
+//		String sql = "select * from Thuoc order by tenThuoc";
+//		
+//		try {
+//			ps = con.prepareStatement(sql);
+//			rs = ps.executeQuery();
+//			ObservableList thuocList = FXCollections.observableArrayList();
+//			while(rs.next()) {
+//				Thuoc t = new Thuoc();
+//				String ls = rs.getString("tenThuoc");
+//				thuocList.add(ls);
+//			}
+//			cbbThuoc.setItems(thuocList);
+////			
+////			int selectedItem = cbbThuoc.getSelectionModel().getSelectedIndex() + 1;
+//
 //			
-//			int selectedItem = cbbThuoc.getSelectionModel().getSelectedIndex() + 1;
-
-			
-			if(cbbThuoc.getValue() != null) {
-				Thuoc t = new Thuoc();
-				String get = cbbThuoc.getSelectionModel().getSelectedItem().toString();
-				String getIndex = "select * from Thuoc where tenThuoc = N'" + get +"'";
-				ps = con.prepareStatement(getIndex);
-				rs= ps.executeQuery();
-				while(rs.next()) {
-					t.setMaThuoc(rs.getInt("maThuoc"));
-					t.setTenThuoc(rs.getString("tenThuoc"));
-					System.out.println(t.getMaThuoc());
-				}
-				String q1 = "select * from Thuoc t inner join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc"
-						+ " where maThuoc = " + t.getMaThuoc() +"";
-				try {
-					ObservableList selectThuoc = FXCollections.observableArrayList();
-					ps = con.prepareStatement(q1);
-					rs = ps.executeQuery();
-					while(rs.next()) {
-						String mt = String.valueOf(rs.getInt("maThuoc"));
-						String lt = rs.getString("tenLoaiThuoc");
-						String tt = rs.getString("tenThuoc");
-						String dvt = rs.getString("donViTinh");
-						String gn = String.valueOf(rs.getFloat("giaNhap"));
-						String gb = String.valueOf(rs.getFloat("giaBan"));
-						String nsx = rs.getString("nuocSanXuat");
-						txtMaThuoc.setText(mt);
-						txtDonViTinh.setText(dvt);
-						txtLoaiThuoc.setText(lt);
-						txtGiaNhap.setText(gn);
-						txtGiaBan.setText(gb);
-//						txtSoLuong.getText();
-						txtNSX.setText(nsx);
-						String giaQD = String.valueOf(Float.parseFloat(txtGiaBan.getText()) * Integer.parseInt(txtSoLuong.getText()));
-						selectThuoc.add(mt);
-
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+//			if(cbbThuoc.getValue() != null) {
+//				Thuoc t = new Thuoc();
+//				String get = cbbThuoc.getSelectionModel().getSelectedItem().toString();
+//				String getIndex = "select * from Thuoc where tenThuoc = N'" + get +"'";
+//				ps = con.prepareStatement(getIndex);
+//				rs= ps.executeQuery();
+//				while(rs.next()) {
+//					t.setMaThuoc(rs.getInt("maThuoc"));
+//					t.setTenThuoc(rs.getString("tenThuoc"));
+//					System.out.println(t.getMaThuoc());
+//				}
+//				String q1 = "select * from Thuoc t inner join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc"
+//						+ " where maThuoc = " + t.getMaThuoc() +"";
+//				try {
+//					ObservableList selectThuoc = FXCollections.observableArrayList();
+//					ps = con.prepareStatement(q1);
+//					rs = ps.executeQuery();
+//					while(rs.next()) {
+//						String mt = String.valueOf(rs.getInt("maThuoc"));
+//						String lt = rs.getString("tenLoaiThuoc");
+//						String tt = rs.getString("tenThuoc");
+//						String dvt = rs.getString("donViTinh");
+//						String gn = String.valueOf(rs.getFloat("giaNhap"));
+//						String gb = String.valueOf(rs.getFloat("giaBan"));
+//						String nsx = rs.getString("nuocSanXuat");
+//						txtMaThuoc.setText(mt);
+//						txtDonViTinh.setText(dvt);
+//						txtLoaiThuoc.setText(lt);
+//						txtGiaNhap.setText(gn);
+//						txtGiaBan.setText(gb);
+////						txtSoLuong.getText();
+//						txtNSX.setText(nsx);
+//						String giaQD = String.valueOf(Float.parseFloat(txtGiaBan.getText()) * Integer.parseInt(txtSoLuong.getText()));
+//						selectThuoc.add(mt);
+//
+//					}
+//				} catch (Exception e) {
+//					// TODO: handle exception
+//				}
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	public void getAllNCC() {
 	String sql = "select * from NhaCungCap";
 	try {
