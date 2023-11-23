@@ -848,11 +848,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 										}
 								}
 								}
-								Alert thanhcong = new Alert(AlertType.INFORMATION);
-								thanhcong.setTitle("Thông báo");
-								thanhcong.setContentText("Hoá đơn đã được thêm thành công");
-								thanhcong.setHeaderText(null);
-								thanhcong.showAndWait();
+							
 								float tong = Float.parseFloat(lblThanhTien.getText());
 								float tienNhan = Float.parseFloat(txtTienNhan.getText());
 								float tienThoi = Float.parseFloat(lblTienThoi.getText());
@@ -868,6 +864,11 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					}
 			  		}
 			  		}
+			  			Alert thanhcong = new Alert(AlertType.INFORMATION);
+						thanhcong.setTitle("Thông báo");
+						thanhcong.setContentText("Hoá đơn đã được thêm thành công");
+						thanhcong.setHeaderText(null);
+						thanhcong.showAndWait();
 						txtTenKH.setText("");
 						txtGioiTinh.setText("");
 						txtSdt.setText("");
@@ -875,6 +876,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 						lblMaDonThuoc.setText("0");
 						txtGhiChu.setText("");
 						table.setItems(null);
+						
 			  		}
 			      }
 			 	 public void tienThoi() {
@@ -949,15 +951,18 @@ public class ThemHoaDonTheoDonController implements Initializable{
 						t2.addCell(new Cell().add(new Paragraph(donGia.getCellData(i).toString()).setFont(pflight)));
 						t2.addCell(new Cell().add(new Paragraph(tongGiaBan.getCellData(i).toString()).setFont(pflight)));
 					}
+					float tongtien = Float.parseFloat(lblThanhTien.getText());
+					float tiennhan = Float.parseFloat(txtTienNhan.getText());
+					float tienthoi = Float.parseFloat(lblTienThoi.getText());
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-					t3.addCell(new Cell().add(new Paragraph("Thành tiền: " + lblThanhTien.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					t3.addCell(new Cell().add(new Paragraph("Thành tiền: " + String.format("%.0f", tongtien) + " đồng").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-					t3.addCell(new Cell().add(new Paragraph("Tiền nhận: " + txtTienNhan.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					t3.addCell(new Cell().add(new Paragraph("Tiền nhận: " + String.format("%.0f", tiennhan) + " đồng").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-					t3.addCell(new Cell().add(new Paragraph("Tiền thối: " + lblTienThoi.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					t3.addCell(new Cell().add(new Paragraph("Tiền thối: " + String.format("%.0f", tienthoi) + " đồng").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 					Table divide1 = new Table(full);
 					divide1.setBorder(g);
 					Table t4 = new Table(half);

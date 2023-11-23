@@ -38,7 +38,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 
-public class ThongKeThuocSapHetHanController implements Initializable{
+public class ThongKeThuocSapHetHangController implements Initializable{
 	Connection con = KetNoiDatabase.getConnection();
 	@FXML
 	private MenuButton mb;
@@ -47,7 +47,7 @@ public class ThongKeThuocSapHetHanController implements Initializable{
 	@FXML
 	private MenuItem mNhapHang;
 	@FXML
-	private Label lblName, lblHetHan, lblHetHan1;
+	private Label lblName, lblHetHang;
 	@FXML
 	private DatePicker dpHanSuDung;
 	@FXML
@@ -379,7 +379,7 @@ public class ThongKeThuocSapHetHanController implements Initializable{
 		
 		});
 
-		thuocSapHetHan();
+		thuocSapHetHang();
 		// TODO Auto-generated method stub
 		cell();
 		String sql = "select * from NhanVien";
@@ -398,66 +398,18 @@ public class ThongKeThuocSapHetHanController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String hh = "  SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0 ";
+		String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
 		try {
 			ps = con.prepareStatement(hh);
 			rs = ps.executeQuery();
 			while(rs.next()) {
-				lblHetHan.setText(rs.getInt("tong") + "");
+				lblHetHang.setText(rs.getInt("tong") + "");
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String hh1 = "  SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) <= 0 ";
-		try {
-			ps = con.prepareStatement(hh1);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				lblHetHan1.setText(rs.getInt("tong") + "");
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-			
-		
-		ObservableList<String> het = FXCollections.observableArrayList("Thuốc sắp hết hạn","Thuốc đã hết hạn");
-		cbbThuocSapHet.setItems(het);
-		cbbThuocSapHet.getSelectionModel().selectFirst();
-		cbbThuocSapHet.setOnAction(arg->{
-			if(cbbThuocSapHet.getSelectionModel().getSelectedItem().toString().equals("Thuốc sắp hết hạn")) {
-				list.clear();
-				table.setItems(null);
-				thuocSapHetHan();
-			}
-			else if(cbbThuocSapHet.getSelectionModel().getSelectedItem().toString().equals("Thuốc đã hết hạn")) {
-				list.clear();
-				table.setItems(null);
-				String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) <= 0 ORDER BY hanSuDung ";
-				try {
-					PreparedStatement ps1 = con.prepareStatement(sql1);
-					rs = ps1.executeQuery();
-					int i = 1;
-					while(rs.next()) {
-						CTThuoc ct = new CTThuoc();
-						ct.setMaThuoc(i++);
-						ct.setTenThuoc(rs.getString("tenThuoc"));
-						ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-						ct.setDonViTinh(rs.getString("donViTinh"));
-						ct.setSlTonKho(rs.getInt("soLuongCon"));
-						ct.setSoLo(rs.getString("soLo"));
-						ct.setHanSuDung(rs.getDate("hanSuDung"));
-						list.add(ct);
-						table.setItems(list);
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-	
+
 		
 	}
 	public void cell() {
@@ -469,10 +421,10 @@ public class ThongKeThuocSapHetHanController implements Initializable{
 		 soLo.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("soLo"));
 		 hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc,Date>("hanSuDung"));
 	}
-	public void thuocSapHetHan() {
-		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0 and datediff(day,GETDATE(),hanSuDung) < 30 ORDER BY hanSuDung ";
-		try {
-			PreparedStatement ps1 = con.prepareStatement(sql1);
+	public void thuocSapHetHang() {
+		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
+			try {
+		PreparedStatement ps1 = con.prepareStatement(sql1);
 			rs = ps1.executeQuery();
 			int i = 1;
 			while(rs.next()) {
