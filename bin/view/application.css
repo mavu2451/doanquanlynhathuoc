@@ -1,4 +1,6 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+
 tab{
 	-fx-background-color: linear-gradient(to top right,#2C71E1,  #458DEC);
 }
@@ -99,6 +101,11 @@ tab{
 }
 #taiKhoan .arrow{
 	-fx-background-color:transparent;
+}
+.chart{
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+
 }
 
          

@@ -74,8 +74,6 @@ public class ThuocTrongKhoController implements Initializable{
 	private TableColumn<Thuoc, Float> giaNhap;
 	@FXML
 	private TableColumn<Thuoc, Float> giaBan;
-	@FXML
-	private TableColumn<Thuoc, Date> hanSuDung;
 
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
@@ -448,7 +446,6 @@ public class ThuocTrongKhoController implements Initializable{
 		giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
 		giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));
 		slTonKho.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("soLuong"));
-		hanSuDung.setCellValueFactory(new PropertyValueFactory<Thuoc, Date>("hanSuDung"));
 		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
 		tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
 		donViTinh.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
@@ -466,7 +463,6 @@ public class ThuocTrongKhoController implements Initializable{
 			k.setGiaNhap(rs.getFloat("giaNhap"));
 			k.setGiaBan(rs.getFloat("giaBan"));
 			k.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
-			k.setHanSuDung(rs.getDate("hanSuDung"));
 			thuocList.add(k);
 //			table.setItems(thuocList);
 		}

@@ -306,10 +306,9 @@
                       <TableColumn fx:id="tenThuoc" prefWidth="267.0" text="Tên thuốc" />
                         <TableColumn fx:id="tenLoaiThuoc" prefWidth="193.0" text="Loại thuốc" />
                         <TableColumn fx:id="donViTinh" prefWidth="238.0" text="Đơn vị tính" />
-                        <TableColumn fx:id="giaNhap" prefWidth="184.0" text="Giá nhập" />
-                        <TableColumn fx:id="giaBan" prefWidth="181.0" text="Giá bán" />
-                        <TableColumn fx:id="slTonKho" minWidth="0.0" prefWidth="107.0" text="Số lượng tồn kho" />
-                        <TableColumn fx:id="hanSuDung" prefWidth="206.0" text="Hạn sử dụng" />
+                        <TableColumn fx:id="giaNhap" prefWidth="246.0" text="Giá nhập" />
+                        <TableColumn fx:id="giaBan" prefWidth="278.0" text="Giá bán" />
+                        <TableColumn fx:id="slTonKho" minWidth="0.0" prefWidth="154.0" text="Số lượng tồn kho" />
                     </columns>
                   </TableView>
                </content>

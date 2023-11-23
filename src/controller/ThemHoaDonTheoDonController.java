@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +19,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
 
 import database.KetNoiDatabase;
 import entity.CTDonThuocKhamBenh;
@@ -53,6 +66,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -76,6 +90,8 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	private ComboBox<NhanVien> cbNhanVien;
 	@FXML
 	private TextField txtNCC;
+	@FXML
+	private TextArea txtGhiChu;
 	@FXML
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
@@ -111,12 +127,13 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	private TableColumn<CTHoaDon, Float> tongGiaBan;
 	int hd = 0;
 	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
+	NhanVien dnc = DangNhapController.getNV();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 //		getAllPN();
 //		reload();
-		NhanVien dnc = DangNhapController.getNV();
+	
 //		try {
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
@@ -253,6 +270,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 												int slTonKho = rs2.getInt("soLuongCon");
 												tt.setDonViTinh(rs2.getString("donViTinh"));
 												tt.setGiaBan(rs2.getFloat("giaBan"));
+												
 												float giaBan = rs2.getFloat("giaBan");
 												if(slTonKho == 0) {
 													Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm của thuốc '"+tenT+"' trong kho không đủ", ButtonType.OK);
@@ -686,7 +704,6 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			 donGia.setCellValueFactory(new PropertyValueFactory<CTHoaDon, Float>("donGia"));
 			 soLuong.setCellValueFactory(new PropertyValueFactory<CTHoaDon, Integer>("soLuong"));
 			 tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTHoaDon, Float>("tongGiaBan"));
-
 		 }
 	 	 public void getCTHoaDon() throws SQLException {
 			 int maHD = getMaHD();
@@ -722,19 +739,21 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			 }
 			 cell();
 		 }
-	 	 public void taoHD() {
+	 	 public void taoHD() throws SQLException {
 			 NhanVien dnc = DangNhapController.getNV();
 			 LocalDate ldNgayNhap = dpNgayNhap.getValue();
 			 Date dNgayNhap = Date.valueOf(ldNgayNhap);
+			 int maKH = getTTKhachHang();
 			 if(hd == 0) {
 				 hd += 1;
-				 String taohd = "insert into HoaDon(maNV, ngayLapHD, tongTien) values(?,?,?)";
+				 String taohd = "insert into HoaDon(maNV, ngayLapHD, tongTien, maKH) values(?,?,?,?)";
 				 System.out.println(taohd);
 				 try {
 					ps = con.prepareStatement(taohd);
 					 ps.setInt(1, dnc.getMaNV());
 					 ps.setDate(2, dNgayNhap);
 					 ps.setFloat(3, 0);
+					 ps.setFloat(4, maKH);
 					 ps.execute();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -764,7 +783,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 				  		alert.show();
 
 				  	}
-			      public void thanhToan(ActionEvent e) throws SQLException {
+			      public void thanhToan(ActionEvent e) throws SQLException, IOException {
 						int slpn = 0;
 			    	Alert alert = new Alert(AlertType.CONFIRMATION);
 			    	alert.setTitle("Thông báo");
@@ -782,14 +801,16 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			  			}
 			  		else {
 			    	  int getMaHD = getMaHD();
-			    	  for(int i = 0; i<tableView.getItems().size();i++) {
+			    	  inHD1();
+			    	 
+			    	  
+			    	  for(int i = 0; i<table.getItems().size();i++) {
 			    		  String sqlMaThuoc = String.valueOf(maThuoc.getCellData(i));
-			    		  String soL = String.valueOf(soLuong.getCellData(i));
-			    		  int sl = Integer.parseInt(soL);
+			    		  int sl = Integer.parseInt(soLuong.getCellData(i).toString());
+			    		  System.out.println(sl);
 			    		  ObservableList<CTThuoc> Tlist = FXCollections.observableArrayList();
 			    		  String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and t.maThuoc = '"+sqlMaThuoc+"' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 							try {
-								taoHD();
 								int maHD = getMaHD();
 								ps = con.prepareStatement(sql);
 								rs = ps.executeQuery();
@@ -832,12 +853,28 @@ public class ThemHoaDonTheoDonController implements Initializable{
 								thanhcong.setContentText("Hoá đơn đã được thêm thành công");
 								thanhcong.setHeaderText(null);
 								thanhcong.showAndWait();
-						}catch (Exception e2) {
+								float tong = Float.parseFloat(lblThanhTien.getText());
+								float tienNhan = Float.parseFloat(txtTienNhan.getText());
+								float tienThoi = Float.parseFloat(lblTienThoi.getText());
+								String sql1 = "update HoaDon set "
+										+ "tongTien = '"+tong+"', tienNhan = '"+tienNhan+"', tienThua = '"+tienThoi+"', ghiChu = '"+txtGhiChu.getText()+"' where maHD = '"+maHD+"'";
+								ps = con.prepareStatement(sql1);
+								ps.execute();
+								hd = 0;
+
+			    	  }catch (Exception e2) {
 						// TODO: handle exception
 						e2.printStackTrace();
 					}
-			    	  }	
 			  		}
+			  		}
+						txtTenKH.setText("");
+						txtGioiTinh.setText("");
+						txtSdt.setText("");
+						txtEmail.setText("");
+						lblMaDonThuoc.setText("0");
+						txtGhiChu.setText("");
+						table.setItems(null);
 			  		}
 			      }
 			 	 public void tienThoi() {
@@ -845,6 +882,102 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					 float thanhTien = Float.parseFloat(lblThanhTien.getText());
 					 lblTienThoi.setText(String.valueOf(tienNhan - thanhTien));
 				 }
+			 	public void inHD1() throws IOException, SQLException {
+			 		int maHD = getMaHD();
+			 		String s = "select hd.maDonThuoc, bacSiKeDon, chanDoan, loiDan from HoaDon hd left join DonThuocKhamBenh dt on dt.maDonThuoc = hd.maDonThuoc where maHD = '"+maHD+"'";
+			 		ps = con.prepareStatement(s);
+			 		rs = ps.executeQuery();
+			 		DonThuocKhamBenh dt = new DonThuocKhamBenh();
+			 		ObservableList<DonThuocKhamBenh> list = FXCollections.observableArrayList();
+			 		while(rs.next()) {
+			 			dt.setMaDonThuoc(rs.getInt("maDonThuoc"));
+			 			dt.setBacSiKeDon(rs.getString("bacSiKeDon"));
+			 			dt.setChanDoan(rs.getString("chanDoan"));
+			 			dt.setLoiDan(rs.getString("loiDan"));
+			 			list.add(dt);
+					dpNgayNhap.setValue(LocalDate.now());
+					LocalDate ldNgayNhap = dpNgayNhap.getValue();
+					Date dNgayNhap = Date.valueOf(ldNgayNhap);
+					String p = "C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\pdf\\hoadontheodon.pdf";
+					float tc = 285f;
+					float twocol = tc + 150f;
+					float three = tc + 50f;
+					float twocolwidth[] = {twocol,three,tc};
+					float half[] = {450f};
+					float half2[] = {370f};
+					float full[] = {770f};
+					float sixcolwidth[] = {50f,150f,100f,70f,200f,200f};
+					PdfWriter pdf = new PdfWriter(p);
+					PdfFont pf = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Black.ttf", "Identity-H", true);
+					PdfFont pflight = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Light.ttf", "Identity-H", true);
+					PdfDocument pd = new PdfDocument(pdf);
+					pd.setDefaultPageSize(PageSize.A4);
+					Document d = new Document(pd);
+					Table t = new Table(twocolwidth);
+					t.addCell(new Cell().add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf)).setBorder(Border.NO_BORDER));
+					t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
+					t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
+					Table divide = new Table(full);
+					Border g = new SolidBorder(1f/2f);
+					divide.setBorder(g);
+					Table t1 = new Table(full);
+					t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
+					t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Bác sĩ kê đơn: " + dt.getBacSiKeDon()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Chẩn đoán: " + dt.getChanDoan()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Lời dặn: " + dt.getLoiDan()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					
+//					d.add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf));
+//					d.add(new Paragraph("HOÁ ĐƠN BÁN HÀNG").setFont(pflight));
+					Table t2 = new Table(sixcolwidth);
+					t2.addCell(new Cell().add(new Paragraph("STT").setFont(pf)));
+					t2.addCell(new Cell().add(new Paragraph("Tên thuốc").setFont(pf)));
+					t2.addCell(new Cell().add(new Paragraph("Đơn vị tính").setFont(pf)));
+					t2.addCell(new Cell().add(new Paragraph("Số lượng").setFont(pf)));
+					t2.addCell(new Cell().add(new Paragraph("Đơn giá").setFont(pf)));
+					t2.addCell(new Cell().add(new Paragraph("Tổng").setFont(pf)));
+					Table t3 = new Table(full);
+					int j = 1;
+					for(int i = 0;i < table.getItems().size();i++) {
+						t2.addCell(new Cell().add(new Paragraph(j++ + "").setFont(pflight).setTextAlignment(TextAlignment.RIGHT)));
+						t2.addCell(new Cell().add(new Paragraph(tenThuoc.getCellData(i)).setFont(pflight)));
+						t2.addCell(new Cell().add(new Paragraph(donViTinh.getCellData(i)).setFont(pflight)));
+						t2.addCell(new Cell().add(new Paragraph(soLuong.getCellData(i).toString()).setFont(pflight)));
+						t2.addCell(new Cell().add(new Paragraph(donGia.getCellData(i).toString()).setFont(pflight)));
+						t2.addCell(new Cell().add(new Paragraph(tongGiaBan.getCellData(i).toString()).setFont(pflight)));
+					}
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("Thành tiền: " + lblThanhTien.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("Tiền nhận: " + txtTienNhan.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+					t3.addCell(new Cell().add(new Paragraph("Tiền thối: " + lblTienThoi.getText()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+					Table divide1 = new Table(full);
+					divide1.setBorder(g);
+					Table t4 = new Table(half);
+					Table t5 = new Table(half2);
+					t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+					t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+					t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + txtGhiChu.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+					d.add(t);
+					d.add(divide);
+					d.add(t1);
+					d.add(t2);
+					d.add(t3);
+					d.add(divide1);
+					d.add(t4);
+					d.add(t5);
+					d.close();
+					File file = new File("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\pdf\\hoadontheodon.pdf");
+					Desktop.getDesktop().open(file);
+				}
+			 	}
 //	public int getNV() {
 //		NhanVien nv = new NhanVien();
 //		String sql = "select tenNV from NhanVien";

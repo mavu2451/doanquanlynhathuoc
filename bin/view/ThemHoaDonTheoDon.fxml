@@ -330,7 +330,7 @@
             <Label layoutX="81.0" layoutY="203.0" text="Giới tính" />
             <Label layoutX="77.0" layoutY="261.0" text="Điện thoại" />
             <Label layoutX="106.0" layoutY="324.0" text="Email" />
-            <TextArea layoutX="155.0" layoutY="384.0" prefHeight="185.0" prefWidth="349.0" />
+            <TextArea fx:id="txtGhiChu" layoutX="155.0" layoutY="384.0" prefHeight="185.0" prefWidth="349.0" />
             <TextField fx:id="txtTenKH" editable="false" layoutX="159.0" layoutY="147.0" prefHeight="27.0" prefWidth="347.0" />
             <TextField fx:id="txtSdt" editable="false" layoutX="154.0" layoutY="256.0" prefHeight="27.0" prefWidth="352.0" />
             <Button layoutX="172.0" layoutY="729.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="46.0" prefWidth="89.0" text="Thanh toán" />
@@ -339,13 +339,14 @@
                   <TableView fx:id="table" prefHeight="813.0" prefWidth="964.0">
                     <columns>
                       <TableColumn fx:id="maCTHD" prefWidth="75.0" text="STT" />
-                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="50.0" prefWidth="20.0" text="Mã thuốc" />
+                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã thuốc" />
                         <TableColumn fx:id="tenThuoc" prefWidth="138.0" text="Tên thuốc" />
                         <TableColumn fx:id="tenLoaiThuoc" prefWidth="119.0" text="Loại sản phẩm" />
                         <TableColumn fx:id="donViTinh" prefWidth="89.0" text="Đơn vị tính" />
                         <TableColumn fx:id="donGia" prefWidth="210.0" text="Đơn giá" />
                         <TableColumn fx:id="soLuong" prefWidth="115.0" text="Số lượng" />
-                        <TableColumn fx:id="tongGiaBan" prefWidth="210.0" text="Tổng giá tiền" />
+                        <TableColumn fx:id="tongGiaBan" prefWidth="217.0" text="Tổng giá tiền" />
+                        <TableColumn fx:id="cachDung" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Cách dùng" />
                     </columns>
                   </TableView>
                </content>

@@ -7,7 +7,11 @@ module QuanLyHieuThuoc {
 	requires java.desktop;
 	requires org.apache.poi.ooxml;
 	requires org.apache.poi.poi;
-	requires jasperreports;
+	requires kernel;
+	requires layout;
+	requires io;
+	requires javafx.graphics;
+
 	
 	opens view to javafx.graphics, javafx.fxml, javafx.base;
 	opens controller to javafx.fxml, javafx.controls;

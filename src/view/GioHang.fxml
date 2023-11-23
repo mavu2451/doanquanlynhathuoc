@@ -336,7 +336,7 @@
                         <TableColumn fx:id="donViTinh" prefWidth="135.0" text="Đơn vị tính" />
                         <TableColumn fx:id="donGia" prefWidth="217.0" text="Đơn giá" />
                         <TableColumn fx:id="soLuong" prefWidth="96.0" text="Số lượng" />
-                        <TableColumn fx:id="soLuong1" prefWidth="213.0" text="Tổng tiền" />
+                        <TableColumn fx:id="tongGiaBan" prefWidth="213.0" text="Tổng tiền" />
                     </columns>
                   </TableView>
                </content>

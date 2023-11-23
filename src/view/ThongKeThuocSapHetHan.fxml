@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -301,7 +300,7 @@
          <content>
             <AnchorPane prefHeight="799.0" prefWidth="1363.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="745.0" layoutX="43.0" layoutY="27.0" stroke="BLACK" strokeType="INSIDE" width="1302.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="870.0" layoutX="52.0" layoutY="37.0" stroke="BLACK" strokeType="INSIDE" width="1615.0" />
                   <Label layoutX="100.0" layoutY="257.0" text="THUỐC SẮP HẾT HẠN">
                      <font>
                         <Font size="24.0" />
@@ -327,27 +326,27 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TableView layoutX="100.0" layoutY="300.0" prefHeight="369.0" prefWidth="1187.0">
+                  <TableView layoutX="100.0" layoutY="300.0" prefHeight="487.0" prefWidth="1519.0">
                     <columns>
                       <TableColumn prefWidth="138.0" text="Mã thuốc" />
                       <TableColumn prefWidth="251.0" text="Tên thuốc" />
                         <TableColumn prefWidth="467.0" text="Hạn sử dụng" />
-                        <TableColumn prefWidth="330.0" text="Trạng thái" />
+                        <TableColumn prefWidth="662.0" text="Trạng thái" />
                     </columns>
                   </TableView>
-                  <Button layoutX="924.0" layoutY="690.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="156.0" text="Thông tin chi tiết">
+                  <Button layoutX="1233.0" layoutY="806.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="156.0" text="Thông tin chi tiết">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button layoutX="1131.0" layoutY="690.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="156.0" text="In thống kê">
+                  <Button layoutX="1432.0" layoutY="806.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="156.0" text="In thống kê">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
                   <Label layoutX="646.0" layoutY="275.0" text="Tìm kiếm" />
-                  <Button layoutX="1131.0" layoutY="271.0" mnemonicParsing="false" text="Button" />
-                  <TextField layoutX="715.0" layoutY="271.0" prefHeight="25.0" prefWidth="386.0" />
+                  <Button layoutX="1562.0" layoutY="262.0" mnemonicParsing="false" text="Button" />
+                  <TextField layoutX="1133.0" layoutY="262.0" prefHeight="25.0" prefWidth="386.0" />
                </children>
             </AnchorPane>
          </content>
