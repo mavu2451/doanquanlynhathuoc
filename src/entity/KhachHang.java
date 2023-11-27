@@ -7,10 +7,10 @@ public class KhachHang {
 	private String hoTen;
 	private String gioiTinh;
 	private Date ngaySinh;
-	private int sdt;
+	private String sdt;
 	private String email;
 	private String diaChi;
-	public KhachHang(int maKH, String hoTen, String gioiTinh, Date ngaySinh, int sdt, String email, String diaChi) {
+	public KhachHang(int maKH, String hoTen, String gioiTinh, Date ngaySinh, String sdt, String email, String diaChi) {
 		super();
 		this.maKH = maKH;
 		this.hoTen = hoTen;
@@ -48,10 +48,10 @@ public class KhachHang {
 	public void setNgaySinh(Date ngaySinh) {
 		this.ngaySinh = ngaySinh;
 	}
-	public int getSdt() {
+	public String getSdt() {
 		return sdt;
 	}
-	public void setSdt(int sdt) {
+	public void setSdt(String sdt) {
 		this.sdt = sdt;
 	}
 	public String getEmail() {

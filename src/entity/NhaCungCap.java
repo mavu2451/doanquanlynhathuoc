@@ -3,16 +3,18 @@ package entity;
 public class NhaCungCap {
 	private int maNCC;
 	private String tenNCC;
-	private int sdt;
+	private String sdt;
 	private String email;
 	private String diaChi;
-	public NhaCungCap(int maNCC, String tenNCC, int sdt, String email, String diaChi) {
+	private String trangThai;
+	public NhaCungCap(int maNCC, String tenNCC, String sdt, String email, String diaChi, String trangThai) {
 		super();
 		this.maNCC = maNCC;
 		this.tenNCC = tenNCC;
 		this.sdt = sdt;
 		this.email = email;
 		this.diaChi = diaChi;
+		this.trangThai = trangThai;
 	}
 	public NhaCungCap() {
 		super();
@@ -30,10 +32,10 @@ public class NhaCungCap {
 	public void setTenNCC(String tenNCC) {
 		this.tenNCC = tenNCC;
 	}
-	public int getSdt() {
+	public String getSdt() {
 		return sdt;
 	}
-	public void setSdt(int sdt) {
+	public void setSdt(String sdt) {
 		this.sdt = sdt;
 	}
 	public String getEmail() {
@@ -48,6 +50,13 @@ public class NhaCungCap {
 	public void setDiaChi(String diaChi) {
 		this.diaChi = diaChi;
 	}
+	public String getTrangThai() {
+		return trangThai;
+	}
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
 
+	
 	
 }

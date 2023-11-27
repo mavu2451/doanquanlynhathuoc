@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +18,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
 
 import database.KetNoiDatabase;
 import entity.CTDonThuocKhamBenh;
@@ -282,7 +296,7 @@ public class ThemDonThuocController implements Initializable{
 					TableColumn ngaySinh = new TableColumn<KhachHang, Integer>("Ngày sinh");
 					ngaySinh.setCellValueFactory(new PropertyValueFactory<KhachHang, Date>("ngaySinh"));
 					TableColumn sdt = new TableColumn<KhachHang, Float>("Số điện thoại");
-					sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, Integer>("sdt"));
+					sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("sdt"));
 					TableColumn email = new TableColumn<KhachHang, String>("Email");
 					email.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("email"));
 					TableColumn diaChi = new TableColumn<KhachHang, Date>("Địa chỉ");	
@@ -312,7 +326,7 @@ public class ThemDonThuocController implements Initializable{
 							kh.setHoTen(rs.getString("tenKH"));
 							kh.setGioiTinh(rs.getString("gioiTinh"));
 							kh.setNgaySinh(rs.getDate("ngaySinh"));
-							kh.setSdt(rs.getInt("sdt"));
+							kh.setSdt(rs.getString("sdt"));
 							kh.setEmail(rs.getString("email"));
 							kh.setDiaChi(rs.getString("diaChi"));
 							Khlist.add(kh);
@@ -374,18 +388,20 @@ public class ThemDonThuocController implements Initializable{
 						alert2.setContentText("Đơn hàng đã được thêm thành công");
 						alert2.setHeaderText(null);
 						alert2.showAndWait();
+						inHD1();
 						txtTenKH.setText("");
 						txtGioiTinh.setText("");
 						txtSdt.setText("");
 						txtEmail.setText("");
 						table.setItems(null);
 						hd = 0;
+		
 					}
 					else if(result.get()==ButtonType.CANCEL) {
 						
 					}
 				}
-			}catch(SQLException e) {
+			}catch(SQLException | IOException e) {
 				e.printStackTrace();
 			}
 			});
@@ -737,7 +753,92 @@ public class ThemDonThuocController implements Initializable{
 	  				e.printStackTrace();
 	  			}
 	  		 }
-	  		 
+	  	 }
+	  		public void inHD1() throws IOException, SQLException {
+		 		int maHD = getMaDonThuoc();
+		 		String s = "select hd.maDonThuoc, bacSiKeDon, chanDoan, loiDan from HoaDon hd left join DonThuocKhamBenh dt on dt.maDonThuoc = hd.maDonThuoc where maHD = '"+maHD+"'";
+		 		ps = con.prepareStatement(s);
+		 		rs = ps.executeQuery();
+		 		DonThuocKhamBenh dt = new DonThuocKhamBenh();
+		 		ObservableList<DonThuocKhamBenh> list = FXCollections.observableArrayList();
+		 		while(rs.next()) {
+		 			dt.setMaDonThuoc(rs.getInt("maDonThuoc"));
+		 			dt.setBacSiKeDon(rs.getString("bacSiKeDon"));
+		 			dt.setChanDoan(rs.getString("chanDoan"));
+		 			dt.setLoiDan(rs.getString("loiDan"));
+		 			list.add(dt);
+				dpNgayNhap.setValue(LocalDate.now());
+				LocalDate ldNgayNhap = dpNgayNhap.getValue();
+				Date dNgayNhap = Date.valueOf(ldNgayNhap);
+				String p = "C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\pdf\\donthuockhambenh.pdf";
+				float tc = 285f;
+				float twocol = tc + 150f;
+				float three = tc + 50f;
+				float twocolwidth[] = {twocol,three,tc};
+				float half[] = {450f};
+				float half2[] = {370f};
+				float full[] = {770f};
+				float sixcolwidth[] = {50f,250f,200f,200f};
+				PdfWriter pdf = new PdfWriter(p);
+				PdfFont pf = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Black.ttf", "Identity-H", true);
+				PdfFont pflight = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Light.ttf", "Identity-H", true);
+				PdfDocument pd = new PdfDocument(pdf);
+				pd.setDefaultPageSize(PageSize.A4);
+				Document d = new Document(pd);
+				Table t = new Table(twocolwidth);
+				t.addCell(new Cell().add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf)).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
+				Table divide = new Table(full);
+				Border g = new SolidBorder(1f/2f);
+				divide.setBorder(g);
+				Table t1 = new Table(full);
+				t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
+				t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Bác sĩ kê đơn: " + dt.getBacSiKeDon()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Chẩn đoán: " + dt.getChanDoan()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Lời dặn: " + dt.getLoiDan()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				
+//				d.add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf));
+//				d.add(new Paragraph("HOÁ ĐƠN BÁN HÀNG").setFont(pflight));
+				Table t2 = new Table(sixcolwidth);
+				t2.addCell(new Cell().add(new Paragraph("STT").setFont(pf)));
+				t2.addCell(new Cell().add(new Paragraph("Tên thuốc").setFont(pf)));
+				t2.addCell(new Cell().add(new Paragraph("Đơn vị tính").setFont(pf)));
+				t2.addCell(new Cell().add(new Paragraph("Số lượng").setFont(pf)));
+				Table t3 = new Table(full);
+				int j = 1;
+				for(int i = 0;i < table.getItems().size();i++) {
+					t2.addCell(new Cell().add(new Paragraph(j++ + "").setFont(pflight).setTextAlignment(TextAlignment.RIGHT)));
+					t2.addCell(new Cell().add(new Paragraph(tenThuoc.getCellData(i)).setFont(pflight)));
+					t2.addCell(new Cell().add(new Paragraph(donViTinh.getCellData(i)).setFont(pflight)));
+					t2.addCell(new Cell().add(new Paragraph(soLuong.getCellData(i).toString()).setFont(pflight)));
+
+				}
+				Table divide1 = new Table(full);
+				divide1.setBorder(g);
+				Table t4 = new Table(half);
+				Table t5 = new Table(half2);
+				t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("Khi mua thuốc xin hãy đem theo đơn thuốc này").setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+				d.add(t);
+				d.add(divide);
+				d.add(t1);
+				d.add(t2);
+				d.add(t3);
+				d.add(divide1);
+				d.add(t4);
+				d.add(t5);
+				d.close();
+				File file = new File("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\pdf\\donthuockhambenh.pdf");
+				Desktop.getDesktop().open(file);
+			}
+
 	  		 
 	  	 }
 	  	 private void themThatBaiMessage1() {

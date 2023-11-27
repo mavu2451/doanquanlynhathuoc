@@ -75,7 +75,7 @@ public class TimKiemNCCController implements Initializable{
 	@FXML
 	private TableColumn<NhaCungCap, String> tenNCC;
 	@FXML
-	private TableColumn<NhaCungCap, Integer> sdt;
+	private TableColumn<NhaCungCap, String> sdt;
 	@FXML
 	private TableColumn<NhaCungCap, String> email;
 	@FXML
@@ -546,7 +546,7 @@ public class TimKiemNCCController implements Initializable{
 			NhaCungCap ncc = new NhaCungCap();
 			ncc.setMaNCC(rs.getInt("maNCC"));
 			ncc.setTenNCC(rs.getString("tenNCC"));
-			ncc.setSdt(rs.getInt("sdt"));
+			ncc.setSdt(rs.getString("sdt"));
 			ncc.setEmail(rs.getString("email"));
 			ncc.setDiaChi(rs.getString("diaChi"));
 			list.add(ncc);
@@ -557,7 +557,7 @@ public class TimKiemNCCController implements Initializable{
 	public void cell() {
 		maNCC.setCellValueFactory(new PropertyValueFactory<NhaCungCap, Integer>("maNCC"));
 		tenNCC.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("tenNCC"));
-		sdt.setCellValueFactory(new PropertyValueFactory<NhaCungCap, Integer>("sdt"));
+		sdt.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("sdt"));
 		email.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("email"));
 		diaChi.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("diaChi"));
 	}

@@ -92,7 +92,7 @@ public class TimKiemNhanVienController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 			reload();
-			edit();
+//			edit();
 			searchByName();
 			setCell();
 //			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
@@ -413,128 +413,128 @@ public class TimKiemNhanVienController implements Initializable{
 	   	}
 
 	//End Navbar
-	public void edit() {
-		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		hoTen.setOnEditCommit(event -> {
-			try {
-//				int n = table.getSelectionModel().getSelectedIndex() + 7;
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setHoTen(event.getNewValue());
-				String query = "update NhanVien set tenNV=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-				
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-		});
-		
-		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		gioiTinh.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setGioiTinh(event.getNewValue());
-				String query = "update NhanVien set gioiTinh=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		cmnd.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		cmnd.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setCmnd(event.getNewValue());
-				String query = "update NhanVien set cmnd=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		sdt.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		sdt.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setSdt(event.getNewValue());
-				String query = "update NhanVien set sdt=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		email.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		email.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setEmail(event.getNewValue());
-	
-				String query = "update NhanVien set email=N'"+event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		vaiTro.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		vaiTro.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setVaiTro(event.getNewValue());
-				String query = "update NhanVien set vaiTro=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		trangThai.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		trangThai.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setTrangThai(event.getNewValue());
-				String query = "update NhanVien set trangThai=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-//				ps.setString(9, null);
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-	}
+//	public void edit() {
+//		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		hoTen.setOnEditCommit(event -> {
+//			try {
+////				int n = table.getSelectionModel().getSelectedIndex() + 7;
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setHoTen(event.getNewValue());
+//				String query = "update NhanVien set tenNV=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//				
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} 
+//		});
+//		
+//		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		gioiTinh.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setGioiTinh(event.getNewValue());
+//				String query = "update NhanVien set gioiTinh=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		cmnd.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		cmnd.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setCmnd(event.getNewValue());
+//				String query = "update NhanVien set cmnd=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		sdt.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		sdt.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setSdt(event.getNewValue());
+//				String query = "update NhanVien set sdt=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		email.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		email.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setEmail(event.getNewValue());
+//	
+//				String query = "update NhanVien set email=N'"+event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		vaiTro.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		vaiTro.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setVaiTro(event.getNewValue());
+//				String query = "update NhanVien set vaiTro=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		trangThai.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		trangThai.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setTrangThai(event.getNewValue());
+//				String query = "update NhanVien set trangThai=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+////				ps.setString(9, null);
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//	}
 	public void reload() {
 		list = getAllNV();
 		// TODO Auto-generated method stub

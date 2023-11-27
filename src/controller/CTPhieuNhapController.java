@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -49,6 +50,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -143,9 +145,10 @@ public class CTPhieuNhapController implements Initializable{
 			TextField txtTimKiem = new TextField();
 			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
 			Button chon = new Button("Chọn sản phẩm");
+
 			HBox h1 = new HBox(2);
 			HBox h2 = new HBox(1);
-			
+			AnchorPane a1 = new AnchorPane();
 			Stage stage = new Stage();
 ;			TableView tableView = new TableView<Thuoc>();
 			TableColumn maThuoc = new TableColumn<Thuoc, Integer>("Mã thuốc");
@@ -176,13 +179,18 @@ public class CTPhieuNhapController implements Initializable{
 			tableView.getColumns().add(trangThai);
 //			tableView.getColumns().add(soLo);
 //			tableView.getColumns().add(hanSuDung);
+			a1.getChildren().addAll(chon);
+			root.getChildren().addAll(a1);
+			chon.setLayoutX(200);
 			root.setCenter(scroll);
 			scroll.setContent(tableView);
 			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
 			h2.getChildren().addAll( chon);
 			root.setTop(h1);
 			root.setBottom(h2);
-			String thuoc = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc";
+			tableView.setPrefWidth(700);
+			
+			String thuoc = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc where trangThai = N'Đang kinh doanh'";
 
 			try {
 				ps = con.prepareStatement(thuoc);
@@ -234,6 +242,7 @@ public class CTPhieuNhapController implements Initializable{
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+
 			Scene scene = new Scene(root,700,300);
 			stage.setScene(scene);
 			stage.setResizable(false);
@@ -783,7 +792,7 @@ public class CTPhieuNhapController implements Initializable{
 			lblGiaNhapQuyDoi.setText(String.valueOf(giaNhap * soLuong + " đồng"));
 			lblGiaBanQuyDoi.setText(String.valueOf(giaBan * soLuong + " đồng"));
 		}
-		String tong = "select sum(GiaNhap * soLuong) as gn, sum(GiaBan * soLuong) as gb from CTPhieuNhap where maPN = '"+mapn+"' and trangThai=N'Đã nhập hàng'";
+		String tong = "select sum(GiaNhap * soLuong) as gn, sum(GiaBan * soLuong) as gb from CTPhieuNhap where maPN = '"+mapn+"'";
 		ps = con.prepareStatement(tong);
 		rs = ps.executeQuery();
 		while(rs.next()) {
@@ -915,7 +924,7 @@ public class CTPhieuNhapController implements Initializable{
 //		
 //	}
 	public void getAllNCC() {
-	String sql = "select * from NhaCungCap";
+	String sql = "select * from NhaCungCap where trangThai = N'Đang hợp tác'";
 	try {
 		ps = con.prepareStatement(sql);
 		rs = ps.executeQuery();

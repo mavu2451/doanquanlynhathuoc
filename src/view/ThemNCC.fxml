@@ -3,10 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -303,7 +303,12 @@
    <center>
       <AnchorPane fx:id="ap" prefHeight="824.0" prefWidth="1374.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="876.0" layoutX="52.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="733.0">
+            <Label fx:id="lblMaNCC" layoutX="232.0" layoutY="141.0" text="0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="876.0" layoutX="42.0" layoutY="27.0" stroke="WHITE" strokeType="INSIDE" width="634.0">
                <effect>
                   <DropShadow>
                      <color>
@@ -312,56 +317,50 @@
                   </DropShadow>
                </effect>
             </Rectangle>
-            <Label layoutX="180.0" layoutY="178.0" text="Tên nhà cung cấp">
+            <Label layoutX="98.0" layoutY="195.0" text="Tên nhà cung cấp">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="238.0" layoutY="377.0" text="Địa chỉ">
+            <Label layoutX="164.0" layoutY="453.0" text="Địa chỉ">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="201.0" layoutY="248.0" text="Số điện thoại">
+            <Label layoutX="117.0" layoutY="248.0" text="Số điện thoại">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="244.0" layoutY="319.0" text="Email">
+            <Label layoutX="141.0" layoutY="393.0" text="Trạng thái">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="txtHoTen" layoutX="317.0" layoutY="175.0" prefHeight="25.0" prefWidth="291.0" promptText="Nhập tên nhà cung cấp" />
-            <TextField fx:id="txtSDT" layoutX="317.0" layoutY="246.0" prefHeight="25.0" prefWidth="293.0" promptText="Nhập số điện thoại" />
-            <TextField fx:id="txtEmail" layoutX="317.0" layoutY="317.0" prefHeight="25.0" prefWidth="294.0" promptText="Nhập email" />
-            <Button layoutX="252.0" layoutY="816.0" mnemonicParsing="false" onAction="#add" prefHeight="41.0" prefWidth="81.0" text="Thêm" />
-            <Button layoutX="367.0" layoutY="818.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="82.0" text="Cập nhật" />
-            <Button layoutX="588.0" layoutY="817.0" mnemonicParsing="false" onAction="#resetField" prefHeight="39.0" prefWidth="81.0" text="Xoá trắng" />
-            <Button layoutX="483.0" layoutY="817.0" mnemonicParsing="false" onAction="#remove" prefHeight="41.0" prefWidth="81.0" text="Xoá" />
-            <Label layoutX="295.0" layoutY="177.0" text="(*)" textFill="RED">
+            <TextField fx:id="txtTenNCC" layoutX="235.0" layoutY="192.0" prefHeight="25.0" prefWidth="291.0" promptText="Nhập tên nhà cung cấp" />
+            <TextField fx:id="txtSDT" layoutX="233.0" layoutY="246.0" prefHeight="25.0" prefWidth="293.0" promptText="Nhập số điện thoại" />
+            <TextField fx:id="txtEmail" layoutX="231.0" layoutY="316.0" prefHeight="25.0" prefWidth="294.0" promptText="Nhập email" />
+            <Button layoutX="172.0" layoutY="814.0" mnemonicParsing="false" onAction="#add" prefHeight="41.0" prefWidth="81.0" text="Thêm" />
+            <Button layoutX="287.0" layoutY="816.0" mnemonicParsing="false" onAction="#capNhat" prefHeight="40.0" prefWidth="82.0" text="Cập nhật" />
+            <Button layoutX="508.0" layoutY="815.0" mnemonicParsing="false" onAction="#resetField" prefHeight="39.0" prefWidth="81.0" text="Xoá trắng" />
+            <Button layoutX="403.0" layoutY="815.0" mnemonicParsing="false" onAction="#remove" prefHeight="41.0" prefWidth="81.0" text="Xoá" />
+            <Label layoutX="213.0" layoutY="194.0" text="(*)" textFill="RED">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <PasswordField fx:id="txtMatKhau" layoutX="318.0" layoutY="374.0" prefHeight="25.0" prefWidth="194.0" promptText="Nhập địa chỉ" />
-            <Label layoutX="292.0" layoutY="248.0" text="(*)" textFill="RED">
+            <Label layoutX="208.0" layoutY="248.0" text="(*)" textFill="RED">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="241.0" layoutY="28.0" text="Thêm Nhà Cung Cấp">
+            <Label layoutX="173.0" layoutY="28.0" text="Thêm Nhà Cung Cấp">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <TextArea layoutX="318.0" layoutY="465.0" prefHeight="326.0" prefWidth="350.0" />
-            <Label layoutX="243.0" layoutY="465.0" text="Mô tả">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="876.0" layoutX="827.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="834.0">
+            <TextArea fx:id="txtDiaChi" layoutX="168.0" layoutY="492.0" prefHeight="297.0" prefWidth="420.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="876.0" layoutX="700.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="966.0">
                <effect>
                   <DropShadow>
                      <color>
@@ -370,14 +369,18 @@
                   </DropShadow>
                </effect>
             </Rectangle>
-            <ScrollPane layoutX="879.0" layoutY="121.0" prefHeight="743.0" prefWidth="747.0">
+            <ScrollPane layoutX="728.0" layoutY="123.0" prefHeight="743.0" prefWidth="902.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="748.0" prefWidth="749.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="902.0">
                      <children>
-                        <TableView prefHeight="736.0" prefWidth="746.0">
+                        <TableView fx:id="table" onMouseClicked="#mouseClicked" prefHeight="747.0" prefWidth="951.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn fx:id="maNCC" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã nhà cung cấp" />
+                            <TableColumn fx:id="tenNCC" prefWidth="171.0" text="Tên nhà cung cấp" />
+                              <TableColumn fx:id="sdt" prefWidth="111.0" text="Số điện thoại" />
+                              <TableColumn fx:id="email" prefWidth="152.0" text="Email" />
+                              <TableColumn fx:id="trangThai" prefWidth="121.0" text="Trạng thái" />
+                              <TableColumn fx:id="diaChi" prefWidth="287.0" text="Địa chỉ" />
                           </columns>
                         </TableView>
                      </children>
@@ -389,6 +392,14 @@
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
+            <TextField fx:id="txtTimKiem" layoutX="1475.0" layoutY="81.0" />
+            <Label layoutX="1330.0" layoutY="86.0" text="Tìm kiếm nhà cung cấp" />
+            <Label layoutX="168.0" layoutY="328.0" text="Email">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cbbTrangThai" layoutX="231.0" layoutY="390.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </center>

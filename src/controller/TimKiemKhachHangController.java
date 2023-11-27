@@ -79,7 +79,7 @@ public class TimKiemKhachHangController implements Initializable{
 	@FXML
 	private TableColumn<KhachHang, Date> ngaySinh;
 	@FXML
-	private TableColumn<KhachHang, Integer> sdt;
+	private TableColumn<KhachHang, String> sdt;
 	@FXML
 	private TableColumn<KhachHang, String> email;
 	@FXML
@@ -551,7 +551,7 @@ public class TimKiemKhachHangController implements Initializable{
 			kh.setHoTen(rs.getString("tenKH"));
 			kh.setGioiTinh(rs.getString("gioiTinh"));
 			kh.setNgaySinh(rs.getDate("ngaySinh"));
-			kh.setSdt(rs.getInt("sdt"));
+			kh.setSdt(rs.getString("sdt"));
 			kh.setEmail(rs.getString("email"));
 			kh.setDiaChi(rs.getString("diaChi"));
 			list.add(kh);
@@ -564,7 +564,7 @@ public class TimKiemKhachHangController implements Initializable{
 		gioiTinh.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("gioiTinh"));
 		ngaySinh.setCellValueFactory(new PropertyValueFactory<KhachHang, Date>("ngaySinh"));
 		diaChi.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("diaChi"));
-		sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, Integer>("sdt"));
+		sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("sdt"));
 		email.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("email"));
 	}
 //	public ObservableList<NhanVien> getAllNV(){

@@ -3,12 +3,14 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.HoaDon;
 import entity.LoaiThuoc;
 import entity.NhaCungCap;
 import entity.NhanVien;
@@ -35,29 +37,22 @@ import javafx.stage.Stage;
 
 public class TimKiemHoaDonController implements Initializable{
 	@FXML
-	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
+	ObservableList<HoaDon> list = FXCollections.observableArrayList();
 	@FXML
-	TableView<Thuoc> table;
+	TableView<HoaDon> table;
 	@FXML
-	private TableColumn<Thuoc, Integer> maThuoc;
+	private TableColumn<HoaDon, Integer> maHD;
 	@FXML
-	private TableColumn<Thuoc, String> tenThuoc;
+	private TableColumn<HoaDon, String> tenNV;
 	@FXML
-	private TableColumn<Thuoc, String> loaiThuoc;
+	private TableColumn<HoaDon, String> tenKH;
 	@FXML
-	private TableColumn<Thuoc, String> ncc;
+	private TableColumn<HoaDon, Date> ngayLapHD;
 	@FXML
-	private TableColumn<Thuoc, String> nsx;
+	private TableColumn<HoaDon, Float> tongTien;
 	@FXML
-	private TableColumn<Thuoc, String> dvt;
-	@FXML
-	private TableColumn<Thuoc, Float> giaNhap;
-	@FXML
-	private TableColumn<Thuoc, Float> giaBan;
-	@FXML
-	private TableColumn<Thuoc, String> cachDung;
-	@FXML
-	private TableColumn<Thuoc, String> trangThai;
+	private ComboBox<String> cbbTKD;
+
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
@@ -71,6 +66,8 @@ public class TimKiemHoaDonController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		reload();
+		getHoaDon();
+		cell();
 		NhanVien dnc = DangNhapController.getNV();
 //		try {
 //			while(rs.next()) {
@@ -378,55 +375,117 @@ public class TimKiemHoaDonController implements Initializable{
         stage.show();
 	}
 	
-//	public void cell() {
-//		maThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("maThuoc"));
-//		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
-//		loaiThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
-//		dvt.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
-//		ncc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("ncc"));
-//		nsx.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("nsx"));
-//		giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
-//		giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));
-//		cachDung.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("cachDung"));
-//		trangThai.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("trangThai"));
-//	}
+	public void cell() {
+		maHD.setCellValueFactory(new PropertyValueFactory<HoaDon, Integer>("maHD"));
+		tenNV.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("tenNV"));
+		tenKH.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("tenKH"));
+		ngayLapHD.setCellValueFactory(new PropertyValueFactory<HoaDon, Date>("ngayLapHD"));
+		tongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, Float>("tongTien"));
+	}
 
-	public ObservableList<Thuoc> getAllThuoc(){
-		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
-		String query = "\r\n"
-				+ "select maThuoc, tenThuoc, loaiThuoc,tenNCC, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
-				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc"
-				;
-		
+	@FXML
+	public ObservableList<HoaDon> getHoaDon(){
+		cbbTKD.setItems(FXCollections.observableArrayList("Tất cả", "Hoá đơn theo đơn", "Hoá đơn không theo đơn"));
+		cbbTKD.getSelectionModel().selectFirst();
+		String sql = "select * from HoaDon hd left join NhanVien nv on nv.maNV = hd.maNV inner join KhachHang kh on kh.maKH = hd.maKH";
 		try {
-			ps = con.prepareStatement(query);
+			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
+			list.clear();
+			table.setItems(list);
 			while(rs.next()) {
-				Thuoc t = new Thuoc();
-				t.setMaThuoc(rs.getInt("maThuoc"));
-				t.setTenThuoc(rs.getString("tenThuoc"));
-				t.setLoaiThuoc(rs.getString("loaiThuoc"));
-				t.setNsx(rs.getString("nuocSanXuat"));
-				t.setDvt(rs.getString("donViTinh"));
-				t.setGiaNhap(rs.getFloat("giaNhap"));
-				t.setGiaBan(rs.getFloat("giaBan"));
-				t.setCachDung(rs.getString("cachDung"));
-				t.setTrangThai(rs.getString("trangThai"));
-				thuocList.add(t);
-				
+				HoaDon t = new HoaDon();
+				t.setMaHD(rs.getInt("maHD"));
+				t.setTenNV(rs.getString("tenNV"));
+				t.setTenKH(rs.getString("tenKH"));
+				t.setNgayLapHD(rs.getDate("ngayLapHD"));
+				t.setTongTien(rs.getFloat("tongTien"));
+				list.add(t);
+				table.setItems(list);
 			}
-		}catch (Exception e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				
 			}
-		return thuocList;
+		cbbTKD.setOnAction(args->{
+		if(cbbTKD.getSelectionModel().getSelectedItem()=="Tất cả") {
+//			list.clear();
+			String sql1 = "select * from HoaDon hd left join NhanVien nv on nv.maNV = hd.maNV  inner join KhachHang kh on kh.maKH = hd.maKH";
+			try {
+				ps = con.prepareStatement(sql1);
+				rs = ps.executeQuery();
+				list.clear();
+				table.setItems(list);
+				while(rs.next()) {
+					HoaDon t = new HoaDon();
+					t.setMaHD(rs.getInt("maHD"));
+					t.setTenNV(rs.getString("tenNV"));
+					t.setTenKH(rs.getString("tenKH"));
+					t.setNgayLapHD(rs.getDate("ngayLapHD"));
+					t.setTongTien(rs.getFloat("tongTien"));
+					list.add(t);
+					table.setItems(list);
+					
+				}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 		}
+		if(cbbTKD.getSelectionModel().getSelectedItem() =="Hoá đơn theo đơn") {
+				String sql1 = "select * from HoaDon hd left join NhanVien nv on nv.maNV = hd.maNV inner join KhachHang kh on kh.maKH = hd.maKH where maDonThuoc is not null";
+				list.clear();
+				table.setItems(list);
+				try {
+					ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						HoaDon t = new HoaDon();
+						t.setMaHD(rs.getInt("maHD"));
+						t.setTenNV(rs.getString("tenNV"));
+						t.setTenKH(rs.getString("tenKH"));
+						t.setNgayLapHD(rs.getDate("ngayLapHD"));
+						t.setTongTien(rs.getFloat("tongTien"));
+						list.add(t);
+						table.setItems(list);
+						
+					}
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+			}
+		if(cbbTKD.getSelectionModel().getSelectedItem() == "Hoá đơn không theo đơn") {
+				String sql1 = "select * from HoaDon hd left join NhanVien nv on nv.maNV = hd.maNV inner join KhachHang kh on kh.maKH = hd.maKH where maDonThuoc is null";
+				list.clear();
+				table.setItems(null);
+				try {
+					ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						HoaDon t = new HoaDon();
+						t.setMaHD(rs.getInt("maHD"));
+						t.setTenNV(rs.getString("tenNV"));
+						t.setTenKH(rs.getString("tenKH"));
+						t.setNgayLapHD(rs.getDate("ngayLapHD"));
+						t.setTongTien(rs.getFloat("tongTien"));
+						list.add(t);
+						table.setItems(list);
+						
+					}
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+			}
+		});
+		return list;
+		}
+
 	public void reload() {
-		thuocList = getAllThuoc();
+		getHoaDon();
 		// TODO Auto-generated method stub
-//		cell();
-		table.setItems(thuocList);
+		cell();
+		table.setItems(list);
 	}
 
 }

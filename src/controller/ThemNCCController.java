@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.KhachHang;
+import entity.NhaCungCap;
 import entity.NhanVien;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,12 +38,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -64,52 +68,43 @@ public class ThemNCCController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private TextField txtHoTen, txtCMND, txtSDT, txtEmail, txtTimKiem;
+	private Label lblMaNCC;
+	@FXML
+	private TextField txtTenNCC, txtSDT, txtEmail, txtTimKiem;
+	@FXML
+	private TextArea txtDiaChi;
 	@FXML
 	private Button chooseImage;
 	@FXML
 	private AnchorPane ap;
 	@FXML
-	private PasswordField txtMatKhau;
-	
-	private String[] gt = {"Nam","Nữ","Khác"};
-	private String[] vt = {"Nhân viên", "Quản lý"};
-	private String[] tt = {"Đang làm việc", "Nghỉ việc"};
-	@FXML
-	private ComboBox<String> cbGioiTinh;
-	@FXML
-	private ComboBox<String> cbVaiTro;
-	@FXML
-	private ComboBox<String> cbTrangThai;
+	private ComboBox<String> cbbTrangThai;
 	@FXML
 	private DatePicker dpNgaySinh = new DatePicker();
 	@FXML
-	TableView<NhanVien> table;
+	TableView<NhaCungCap> table;
 	@FXML
-	private TableColumn<NhanVien, Integer> maNV;
+	private TableColumn<NhaCungCap, Integer> maNCC;
 	@FXML
-	private TableColumn<NhanVien, String> hoTen;
+	private TableColumn<NhaCungCap, String> tenNCC;
 	@FXML
-	private TableColumn<NhanVien, String> gioiTinh;
+	private TableColumn<NhaCungCap, String> sdt;
 	@FXML
-	private TableColumn<NhanVien, String> ngaySinh;
+	private TableColumn<NhaCungCap, String> email;
 	@FXML
-	private TableColumn<NhanVien, String> cmnd;
+	private TableColumn<NhaCungCap, String> diaChi;
 	@FXML
-	private TableColumn<NhanVien, String> sdt;
+	private TableColumn<NhaCungCap, String> trangThai;
 	@FXML
-	private TableColumn<NhanVien, String> email;
-	@FXML
-	private TableColumn<NhanVien, String> vaiTro;
-	@FXML
-	private TableColumn<NhanVien, String> trangThai;
-	@FXML
-	private ObservableList<NhanVien> list = FXCollections.observableArrayList();
+	private ObservableList<NhaCungCap> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-//			reload();
+		cbbTrangThai.setItems(FXCollections.observableArrayList("Đang hợp tác", "Ngừng hợp tác"));
+		cbbTrangThai.getSelectionModel().selectFirst();
+			reload();
 //			edit();
-//			searchByName();
+			cell();
+			searchByName();
 //			setCell();
 ////			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
 //			cbGioiTinh.getItems().addAll(gt);
@@ -433,32 +428,14 @@ public class ThemNCCController implements Initializable{
 	//End Navbar
 	
 	public void add(ActionEvent e) {
-		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,image) values (?,?,?,?,?,?,?,?,?,?)";
-		int id = 1;
+		String query = "insert into NhaCungCap(tenNCC, sdt, email, diaChi, trangThai) values (?,?,?,?,?)";
 		try {	
-			String gTinh = cbGioiTinh.getValue();
-			String vTro = cbVaiTro.getValue();
-			String tThai = cbTrangThai.getValue();
-			LocalDate ld = dpNgaySinh.getValue();
-			LocalDate defaultDate = LocalDate.of(2000, 01, 01);
-			Date date = Date.valueOf(ld);
-//			NhanVien nv = new NhanVien();
 			ps = con.prepareStatement(query);
-			ps.setString(1, txtHoTen.getText());
-			ps.setString(2, txtMatKhau.getText());
-			ps.setString(3, gTinh);
-			ps.setDate(4, date);
-			ps.setString(5, txtCMND.getText());
-			ps.setString(6, txtSDT.getText());
-			ps.setString(7, txtEmail.getText());	
-			ps.setString(8, vTro);
-			ps.setString(9, tThai);
-			fis = new FileInputStream(file);
-//			if(fis==null) {
-//				
-//			}
-			ps.setBinaryStream(10, fis, file.length());
-
+			ps.setString(1, txtTenNCC.getText());
+			ps.setInt(2, Integer.parseInt(txtSDT.getText()));
+			ps.setString(3, txtEmail.getText());
+			ps.setString(4, txtDiaChi.getText());
+			ps.setString(5, cbbTrangThai.getValue());
 			ps.execute();
 			themThanhCongMessage();
 			reload();	
@@ -470,179 +447,189 @@ public class ThemNCCController implements Initializable{
 //		reset();
 //		imageView.setImage("");
 	}
-	public void edit() {
-		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		hoTen.setOnEditCommit(event -> {
-			try {
-//				int n = table.getSelectionModel().getSelectedIndex() + 7;
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setHoTen(event.getNewValue());
-				String query = "update NhanVien set tenNV=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-				
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-		});
-		
-		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		gioiTinh.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setGioiTinh(event.getNewValue());
-				String query = "update NhanVien set gioiTinh=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		cmnd.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		cmnd.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setCmnd(event.getNewValue());
-				String query = "update NhanVien set cmnd=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		sdt.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		sdt.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setSdt(event.getNewValue());
-				String query = "update NhanVien set sdt=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		email.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		email.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setEmail(event.getNewValue());
-	
-				String query = "update NhanVien set email=N'"+event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		vaiTro.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		vaiTro.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setVaiTro(event.getNewValue());
-				String query = "update NhanVien set vaiTro=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		trangThai.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-		trangThai.setOnEditCommit(event -> {
-			try {
-				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-				int n = nv.getMaNV();
-				nv.setTrangThai(event.getNewValue());
-				String query = "update NhanVien set trangThai=N'"+ event.getNewValue()+"' where maNV=" + n ;
-				System.out.println(query);
-//				ps.setString(9, null);
-				ps = con.prepareStatement(query);
-				ps.executeUpdate();
-			}catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-	}
+//	public void edit() {
+//		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		hoTen.setOnEditCommit(event -> {
+//			try {
+////				int n = table.getSelectionModel().getSelectedIndex() + 7;
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setHoTen(event.getNewValue());
+//				String query = "update NhanVien set tenNV=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//				
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} 
+//		});
+//		
+//		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		gioiTinh.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setGioiTinh(event.getNewValue());
+//				String query = "update NhanVien set gioiTinh=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		cmnd.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		cmnd.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setCmnd(event.getNewValue());
+//				String query = "update NhanVien set cmnd=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		sdt.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		sdt.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setSdt(event.getNewValue());
+//				String query = "update NhanVien set sdt=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		email.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		email.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setEmail(event.getNewValue());
+//	
+//				String query = "update NhanVien set email=N'"+event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		vaiTro.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		vaiTro.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setVaiTro(event.getNewValue());
+//				String query = "update NhanVien set vaiTro=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//		
+//		trangThai.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
+//		trangThai.setOnEditCommit(event -> {
+//			try {
+//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
+//				int n = nv.getMaNV();
+//				nv.setTrangThai(event.getNewValue());
+//				String query = "update NhanVien set trangThai=N'"+ event.getNewValue()+"' where maNV=" + n ;
+//				System.out.println(query);
+////				ps.setString(9, null);
+//				ps = con.prepareStatement(query);
+//				ps.executeUpdate();
+//			}catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		});
+//	}
 	public void reload() {
 //		list = getAllNV();
 //		// TODO Auto-generated method stub
-////		cell();
-//		table.setItems(list);
+//		cell();
+		table.setItems(null);
+		list.clear();
+		getAllNCC();
 	}
-//	public void cell() {
-//		maNV.setCellValueFactory(new PropertyValueFactory<NhanVien, Integer>("maNV"));
-//		hoTen.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("hoTen"));
-//		gioiTinh.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("gioiTinh"));
-//		ngaySinh.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
-//		cmnd.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("cmnd"));
-//		sdt.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("sdt"));
-//		email.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("email"));
-//		vaiTro.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("vaiTro"));
-//		trangThai.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("trangThai"));
-//	}
-	public ObservableList<NhanVien> getAllNV(){
-		ObservableList<NhanVien> nvList = FXCollections.observableArrayList();
-		String query = "select * from NhanVien";
+	public void cell() {
+		maNCC.setCellValueFactory(new PropertyValueFactory<NhaCungCap, Integer>("maNCC"));
+		tenNCC.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("tenNCC"));
+		sdt.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("sdt"));
+		email.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("email"));
+		diaChi.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("diaChi"));
+		trangThai.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("trangThai"));
+	}
+	@FXML
+	public void mouseClicked(MouseEvent e) {
+		NhaCungCap kh = table.getSelectionModel().getSelectedItem();
+		lblMaNCC.setText(String.valueOf(kh.getMaNCC()));
+		txtTenNCC.setText(String.valueOf(kh.getTenNCC()));
+		txtSDT.setText(String.valueOf(kh.getSdt()));
+		txtEmail.setText(String.valueOf(kh.getEmail()));
+		txtDiaChi.setText(String.valueOf(kh.getDiaChi()));
+		cbbTrangThai.setValue(String.valueOf(kh.getTrangThai()));
+	}
+	public ObservableList<NhaCungCap> getAllNCC(){
+		String query = "select * from NhaCungCap";
 		
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				nv.setMaNV(rs.getInt("maNV"));
-				nv.setHoTen(rs.getString("tenNV"));
-				nv.setGioiTinh(rs.getString("gioiTinh"));
-				nv.setNgaySinh(rs.getDate("ngaySinh"));
-				nv.setCmnd(rs.getString("cmnd"));
+				NhaCungCap nv = new NhaCungCap();
+				nv.setMaNCC(rs.getInt("maNCC"));
+				nv.setTenNCC(rs.getString("tenNCC"));
 				nv.setSdt(rs.getString("sdt"));
 				nv.setEmail(rs.getString("email"));
-				nv.setVaiTro(rs.getString("vaiTro"));
+				nv.setDiaChi(rs.getString("diaChi"));
 				nv.setTrangThai(rs.getString("trangThai"));
-				nvList.add(nv);
-				
+				list.add(nv);
+				table.setItems(list);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				
 			}
-		return nvList;
+		return list;
+	}
+	@FXML
+	public void capNhat(ActionEvent e) throws SQLException {
+		String query = "update NhaCungCap set tenNCC = N'"+txtTenNCC.getText()+"', trangThai = N'"+cbbTrangThai.getValue()+"', sdt = '"+Integer.parseInt(txtSDT.getText())+"', email = N'"+txtEmail.getText()+"', diaChi = N'"+txtDiaChi.getText()+"' where maNCC = '"+lblMaNCC.getText()+"'";
+		ps = con.prepareStatement(query);
+		ps.execute();
+		capNhatMessage();
+		reload();
 	}
 	public void remove(ActionEvent e) {
 		try {
-			ObservableList<NhanVien> list;
-			list = table.getSelectionModel().getSelectedItems();
-			int i = list.get(0).getMaNV();
-			String query = "delete from NhanVien where maNV="+i;
+			String query = "delete from NhaCungCap where maNCC='"+lblMaNCC.getText()+"'";
 			ps = con.prepareStatement(query);
 			ps.execute();
 			xoaThanhCongMessage();
@@ -652,30 +639,35 @@ public class ThemNCCController implements Initializable{
 			xoaThatBaiMessage();
 		}
 	}
-	public void chooseImage(ActionEvent e) throws FileNotFoundException {
-		Stage stage = (Stage) ap.getScene().getWindow();
-		FileChooser fc = new FileChooser();
-		fc.setTitle("Chọn ảnh");
-		FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg","*.png");
-		file = fc.showOpenDialog(stage);
-		if(file !=null) {
-			Image image  = new Image(file.toURI().toString(),150,200,false,true);
-			imageView.setImage(image);
-			FileInputStream fs = new FileInputStream(file);
-		}
-	}
-	public void images() {
-		
+//	public void chooseImage(ActionEvent e) throws FileNotFoundException {
+//		Stage stage = (Stage) ap.getScene().getWindow();
+//		FileChooser fc = new FileChooser();
+//		fc.setTitle("Chọn ảnh");
+//		FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg","*.png");
+//		file = fc.showOpenDialog(stage);
+//		if(file !=null) {
+//			Image image  = new Image(file.toURI().toString(),150,200,false,true);
+//			imageView.setImage(image);
+//			FileInputStream fs = new FileInputStream(file);
+//		}
+//	}
+	@FXML
+	private void capNhatMessage() {
+		Alert alert = new Alert(AlertType.INFORMATION, "Cập nhật thành công", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
 	}
 	public void resetField(ActionEvent e) {
 		reset();
 	}
 	public void reset() {
-		txtHoTen.setText("");
-		txtMatKhau.setText("");
-		txtCMND.setText("");
+		lblMaNCC.setText(0 + "");
+		txtTenNCC.setText("");
+		txtDiaChi.setText("");
 		txtSDT.setText("");
 		txtEmail.setText("");
+		cbbTrangThai.setValue("Đang hợp tác");
 	}
 //	@FXML
 //	public void getItem(MouseEvent event) {
@@ -718,47 +710,47 @@ public class ThemNCCController implements Initializable{
 		alert.setHeaderText(null);
 		alert.show();
 	}
-	private void setCell() {
-		table.setOnMouseClicked(e->{
-			NhanVien nv = table.getItems().get(table.getSelectionModel().getFocusedIndex());
-			showImage(nv.getMaNV());
-		});
-	}
-	private void showImage(int maNV) {
-		String sql = "select image from NhanVien where maNV = ?";
-		try {
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, maNV);
-			rs = ps.executeQuery();
-			if(rs.next()) {
-				InputStream is = rs.getBinaryStream(1);
-				OutputStream os = new FileOutputStream(new File("data/photo.jpg"));
-				byte[] content = new byte[1024];
-				int size = 0;
-				while((size=is.read(content))!=-1) {
-					os.write(content,0,size);
-				}
-				image = new Image("file:avatar:jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-				imageView.setImage(image);
-//				if(rs.getBinaryStream("image") == null) {
-//						is = new FileInputStream("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png");
-//						image = new Image(is,imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-//						imageView.setImage(image);
+//	private void setCell() {
+//		table.setOnMouseClicked(e->{
+//			NhanVien nv = table.getItems().get(table.getSelectionModel().getFocusedIndex());
+//			showImage(nv.getMaNV());
+//		});
+//	}
+//	private void showImage(int maNV) {
+//		String sql = "select image from NhanVien where maNV = ?";
+//		try {
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, maNV);
+//			rs = ps.executeQuery();
+//			if(rs.next()) {
+//				InputStream is = rs.getBinaryStream(1);
+//				OutputStream os = new FileOutputStream(new File("data/photo.jpg"));
+//				byte[] content = new byte[1024];
+//				int size = 0;
+//				while((size=is.read(content))!=-1) {
+//					os.write(content,0,size);
 //				}
-			}
-		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+//				image = new Image("file:avatar:jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+//				imageView.setImage(image);
+////				if(rs.getBinaryStream("image") == null) {
+////						is = new FileInputStream("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png");
+////						image = new Image(is,imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+////						imageView.setImage(image);
+////				}
+//			}
+//		
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	@FXML
 	private void searchByName() {
 		txtTimKiem.setOnKeyReleased(e->{
@@ -767,20 +759,17 @@ public class ThemNCCController implements Initializable{
 			}
 			else {
 				list.clear();
-				String sql = " select * from NhanVien where tenNV collate SQL_Latin1_General_CP1_CI_AI like N'%" + txtTimKiem.getText() +"%'";
+				String sql = " select * from NhaCungCap where tenNCC like N'%" + txtTimKiem.getText() +"%'";
 				try {
 					ps = con.prepareStatement(sql);
 					rs = ps.executeQuery();
 					while(rs.next()) {
-						NhanVien nv = new NhanVien();
-						nv.setMaNV(rs.getInt("maNV"));
-						nv.setHoTen(rs.getString("tenNV"));
-						nv.setGioiTinh(rs.getString("gioiTinh"));
-						nv.setNgaySinh(rs.getDate("ngaySinh"));
-						nv.setCmnd(rs.getString("cmnd"));
+						NhaCungCap nv = new NhaCungCap();
+						nv.setMaNCC(rs.getInt("maNCC"));
+						nv.setTenNCC(rs.getString("tenNCC"));
 						nv.setSdt(rs.getString("sdt"));
 						nv.setEmail(rs.getString("email"));
-						nv.setVaiTro(rs.getString("vaiTro"));
+						nv.setDiaChi(rs.getString("diaChi"));
 						nv.setTrangThai(rs.getString("trangThai"));
 						list.add(nv);
 						table.setItems(list);

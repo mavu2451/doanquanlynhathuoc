@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.KhachHang;
 import entity.NhanVien;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitMenuButton;
@@ -82,32 +84,37 @@ public class ThemNhanVienController implements Initializable{
 	@FXML
 	private ComboBox<String> cbTrangThai;
 	@FXML
+	private Label lblMaNV;
+	@FXML
 	private DatePicker dpNgaySinh = new DatePicker();
-//	@FXML
-//	TableView<NhanVien> table;
-//	@FXML
-//	private TableColumn<NhanVien, Integer> maNV;
-//	@FXML
-//	private TableColumn<NhanVien, String> hoTen;
-//	@FXML
-//	private TableColumn<NhanVien, String> gioiTinh;
-//	@FXML
-//	private TableColumn<NhanVien, String> ngaySinh;
-//	@FXML
-//	private TableColumn<NhanVien, String> cmnd;
-//	@FXML
-//	private TableColumn<NhanVien, String> sdt;
-//	@FXML
-//	private TableColumn<NhanVien, String> email;
-//	@FXML
-//	private TableColumn<NhanVien, String> vaiTro;
-//	@FXML
-//	private TableColumn<NhanVien, String> trangThai;
-//	@FXML
-//	private ObservableList<NhanVien> list = FXCollections.observableArrayList();
+	@FXML
+	TableView<NhanVien> table;
+	@FXML
+	private TableColumn<NhanVien, Integer> maNV;
+	@FXML
+	private TableColumn<NhanVien, String> hoTen;
+	@FXML
+	private TableColumn<NhanVien, String> gioiTinh;
+	@FXML
+	private TableColumn<NhanVien, String> ngaySinh;
+	@FXML
+	private TableColumn<NhanVien, String> cmnd;
+	@FXML
+	private TableColumn<NhanVien, String> sdt;
+	@FXML
+	private TableColumn<NhanVien, String> email;
+	@FXML
+	private TableColumn<NhanVien, String> vaiTro;
+	@FXML
+	private TableColumn<NhanVien, String> trangThai;
+	@FXML
+	private ObservableList<NhanVien> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-//			reload();
+		dpNgaySinh.setValue(LocalDate.now());
+		LocalDate ld = dpNgaySinh.getValue();
+		Date date = Date.valueOf(ld);
+			reload();
 //			edit();
 //			searchByName();
 //			setCell();
@@ -115,47 +122,55 @@ public class ThemNhanVienController implements Initializable{
 			cbGioiTinh.getItems().addAll(gt);
 			cbVaiTro.getItems().addAll(vt);
 			cbTrangThai.getItems().addAll(tt);
-//			table.setOnMouseClicked(e->{
-//				System.out.println("test");
-//				InputStream is;
-//				
-//				try {
-//					NhanVien nv = (NhanVien)table.getSelectionModel().getSelectedItem();
-//					String query = "select * from NhanVien where maNV = ?";
-//					ps = con.prepareStatement(query);
-//					ps.setInt(1, nv.getMaNV());
-//					rs = ps.executeQuery();
-//					while(rs.next()) {
-//					is = rs.getBinaryStream("image");
-//					if(is==null) {
-//						image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-//						imageView.setImage(image);
-//					}
-//					OutputStream os = new FileOutputStream(new File("photo.jpg"));
-//					byte[] content = new byte[1024];
-//					int size = 0;
-//					while((size = is.read(content))!=-1) {
-//						os.write(content, 0 ,size);
-//					
-//					}
-//					os.close();
-//					is.close();
-//					image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-//					imageView.setImage(image);
-//					
-//					}
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				} catch (FileNotFoundException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				
-//			});
+			table.setOnMouseClicked(e->{
+				InputStream is;
+				try {
+					NhanVien nv = (NhanVien)table.getSelectionModel().getSelectedItem();
+					String query = "select * from NhanVien where maNV = ?";
+					ps = con.prepareStatement(query);
+					lblMaNV.setText(String.valueOf(nv.getMaNV()));
+					txtHoTen.setText(String.valueOf(nv.getHoTen()));
+					txtMatKhau.setText(String.valueOf(nv.getMatKhau()));
+					txtSDT.setText(String.valueOf(nv.getSdt()));
+					cbGioiTinh.setValue(nv.getGioiTinh());
+					dpNgaySinh.setValue(LocalDate.parse(String.valueOf(nv.getNgaySinh())));
+					txtCMND.setText(String.valueOf(nv.getCmnd()));
+					txtEmail.setText(String.valueOf(nv.getEmail()));
+					cbVaiTro.setValue(nv.getVaiTro());
+					cbTrangThai.setValue(nv.getTrangThai());
+					ps.setInt(1, nv.getMaNV());
+					rs = ps.executeQuery();
+					while(rs.next()) {
+					is = rs.getBinaryStream("hinhAnh");
+					if(is==null) {
+						image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+						imageView.setImage(image);
+					}
+					OutputStream os = new FileOutputStream(new File("photo.jpg"));
+					byte[] content = new byte[1024];
+					int size = 0;
+					while((size = is.read(content))!=-1) {
+						os.write(content, 0 ,size);
+					
+					}
+					os.close();
+					is.close();
+					image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+					imageView.setImage(image);
+	
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			});
 
 	}
 	//Start Navbar
@@ -433,14 +448,14 @@ public class ThemNhanVienController implements Initializable{
 	//End Navbar
 	
 	public void add(ActionEvent e) {
-		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,image) values (?,?,?,?,?,?,?,?,?,?)";
+		String query = "insert into NhanVien(tenNV,matKhau,gioiTinh,ngaySinh,cmnd,sdt,email,vaiTro,trangThai,hinhAnh) values (?,?,?,?,?,?,?,?,?,?)";
 		int id = 1;
 		try {	
 			String gTinh = cbGioiTinh.getValue();
 			String vTro = cbVaiTro.getValue();
 			String tThai = cbTrangThai.getValue();
+			dpNgaySinh.setValue(LocalDate.now());
 			LocalDate ld = dpNgaySinh.getValue();
-			LocalDate defaultDate = LocalDate.of(2000, 01, 01);
 			Date date = Date.valueOf(ld);
 //			NhanVien nv = new NhanVien();
 			ps = con.prepareStatement(query);
@@ -461,7 +476,7 @@ public class ThemNhanVienController implements Initializable{
 
 			ps.execute();
 			themThanhCongMessage();
-//			reload();	
+			reload();	
 		}catch (Exception e1) {
 			// TODO: handle exception
 			e1.printStackTrace();
@@ -470,145 +485,25 @@ public class ThemNhanVienController implements Initializable{
 //		reset();
 //		imageView.setImage("");
 	}
-//	public void edit() {
-//		hoTen.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		hoTen.setOnEditCommit(event -> {
-//			try {
-////				int n = table.getSelectionModel().getSelectedIndex() + 7;
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setHoTen(event.getNewValue());
-//				String query = "update NhanVien set tenNV=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//				
-//			} catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} 
-//		});
-//		
-//		gioiTinh.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		gioiTinh.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setGioiTinh(event.getNewValue());
-//				String query = "update NhanVien set gioiTinh=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//		
-//		cmnd.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		cmnd.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setCmnd(event.getNewValue());
-//				String query = "update NhanVien set cmnd=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//		
-//		sdt.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		sdt.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setSdt(event.getNewValue());
-//				String query = "update NhanVien set sdt=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//		
-//		email.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		email.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setEmail(event.getNewValue());
-//	
-//				String query = "update NhanVien set email=N'"+event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//		
-//		vaiTro.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		vaiTro.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setVaiTro(event.getNewValue());
-//				String query = "update NhanVien set vaiTro=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//		
-//		trangThai.setCellFactory(TextFieldTableCell.<NhanVien>forTableColumn());
-//		trangThai.setOnEditCommit(event -> {
-//			try {
-//				NhanVien nv = event.getTableView().getItems().get(event.getTablePosition().getRow());
-//				int n = nv.getMaNV();
-//				nv.setTrangThai(event.getNewValue());
-//				String query = "update NhanVien set trangThai=N'"+ event.getNewValue()+"' where maNV=" + n ;
-//				System.out.println(query);
-////				ps.setString(9, null);
-//				ps = con.prepareStatement(query);
-//				ps.executeUpdate();
-//			}catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		});
-//	}
-//	public void reload() {
-//		list = getAllNV();
-//		// TODO Auto-generated method stub
-//		cell();
-//		table.setItems(list);
-//	}
-//	public void cell() {
-//		maNV.setCellValueFactory(new PropertyValueFactory<NhanVien, Integer>("maNV"));
-//		hoTen.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("hoTen"));
-//		gioiTinh.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("gioiTinh"));
-//		ngaySinh.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
-//		cmnd.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("cmnd"));
-//		sdt.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("sdt"));
-//		email.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("email"));
-//		vaiTro.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("vaiTro"));
-//		trangThai.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("trangThai"));
-//	}
+
+	public void reload() {
+		// TODO Auto-generated method stub
+		cell();
+		list.clear();
+		table.setItems(null);
+		getAllNV();
+	}
+	public void cell() {
+		maNV.setCellValueFactory(new PropertyValueFactory<NhanVien, Integer>("maNV"));
+		hoTen.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("hoTen"));
+		gioiTinh.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("gioiTinh"));
+		ngaySinh.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
+		cmnd.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("cmnd"));
+		sdt.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("sdt"));
+		email.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("email"));
+		vaiTro.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("vaiTro"));
+		trangThai.setCellValueFactory(new PropertyValueFactory<NhanVien, String>("trangThai"));
+	}
 	public ObservableList<NhanVien> getAllNV(){
 		ObservableList<NhanVien> nvList = FXCollections.observableArrayList();
 		String query = "select * from NhanVien";
@@ -628,6 +523,7 @@ public class ThemNhanVienController implements Initializable{
 				nv.setVaiTro(rs.getString("vaiTro"));
 				nv.setTrangThai(rs.getString("trangThai"));
 				nvList.add(nv);
+				table.setItems(nvList);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
@@ -636,21 +532,32 @@ public class ThemNhanVienController implements Initializable{
 			}
 		return nvList;
 	}
-//	public void remove(ActionEvent e) {
-//		try {
-//			ObservableList<NhanVien> list;
-//			list = table.getSelectionModel().getSelectedItems();
-//			int i = list.get(0).getMaNV();
-//			String query = "delete from NhanVien where maNV="+i;
-//			ps = con.prepareStatement(query);
-//			ps.execute();
-//			xoaThanhCongMessage();
-//			reload();
-//		}catch(Exception e1) {
-//			e1.printStackTrace();
-//			xoaThatBaiMessage();
-//		}
-//	}
+
+	@FXML
+	public void capNhat(ActionEvent e) throws SQLException {
+		String query = "update NhanVien set tenNV = N'"+txtHoTen.getText()+"',matKhau = N'"+txtMatKhau.getText()+"', gioiTinh = N'"+cbGioiTinh.getValue()+"', ngaySinh = '"+Date.valueOf(dpNgaySinh.getValue())+"', cmnd='"+txtCMND.getText()+"', sdt ='"+txtSDT.getText()+"', email= N'"+txtEmail.getText()+"', vaiTro = N'"+cbVaiTro.getValue()+"', trangThai = N'"+cbTrangThai.getValue()+"' where maNV = '"+lblMaNV.getText()+"'";
+		ps = con.prepareStatement(query);
+		ps.execute();
+		capNhatMessage();
+		reload();
+	}
+	public void remove(ActionEvent e) {
+		if(table.getSelectionModel().getSelectedIndex() <= -1) {
+			xoaThatBaiMessage();
+		}
+		else {
+			try {
+				String query = "delete from KhachHang where maKH= '"+lblMaNV.getText()+"'";
+				ps = con.prepareStatement(query);
+				ps.execute();
+				xoaThanhCongMessage();
+				reload();
+			}catch(Exception e1) {
+				e1.printStackTrace();
+				xoaThatBaiMessage();
+			}
+		}
+	}
 	public void chooseImage(ActionEvent e) throws FileNotFoundException {
 		Stage stage = (Stage) ap.getScene().getWindow();
 		FileChooser fc = new FileChooser();
@@ -658,7 +565,7 @@ public class ThemNhanVienController implements Initializable{
 		FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg","*.png");
 		file = fc.showOpenDialog(stage);
 		if(file !=null) {
-			Image image  = new Image(file.toURI().toString(),150,200,false,true);
+			Image image  = new Image(file.toURI().toString(),100,130,false,true);
 			imageView.setImage(image);
 			FileInputStream fs = new FileInputStream(file);
 		}
@@ -676,18 +583,14 @@ public class ThemNhanVienController implements Initializable{
 		txtSDT.setText("");
 		txtEmail.setText("");
 	}
-//	@FXML
-//	public void getItem(MouseEvent event) {
-//		int n = table.getSelectionModel().getSelectedIndex();
-//		if(n<=-1) {
-//			return;
-//		}
-//		txtHoTen.setText(hoTen.getCellData(n).toString());
-////		cbGioiTinh.setSelectionModel(gioiTinh.getCellData(n));
-//		txtCMND.setText(cmnd.getCellData(n).toString());
-//		txtSDT.setText(sdt.getCellData(n).toString());
-//		txtEmail.setText(email.getCellData(n).toString());
-//	}
+
+	@FXML
+	private void capNhatMessage() {
+		Alert alert = new Alert(AlertType.INFORMATION, "Cập nhật thành công", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
 	@FXML
 	private void themThanhCongMessage() {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -758,36 +661,39 @@ public class ThemNhanVienController implements Initializable{
 		}
 		
 	}
-//	@FXML
-//	private void searchByName() {
-//		txtTimKiem.setOnKeyReleased(e->{
-//			if(txtTimKiem.getText().equals("")) {
-//				reload();
-//			}
-//			else {
-//				list.clear();
-//				String sql = " select * from NhanVien where tenNV collate SQL_Latin1_General_CP1_CI_AI like N'%" + txtTimKiem.getText() +"%'";
-//				try {
-//					ps = con.prepareStatement(sql);
-//					rs = ps.executeQuery();
-//					while(rs.next()) {
-//						NhanVien nv = new NhanVien();
-//						nv.setMaNV(rs.getInt("maNV"));
-//						nv.setHoTen(rs.getString("tenNV"));
-//						nv.setGioiTinh(rs.getString("gioiTinh"));
-//						nv.setNgaySinh(rs.getDate("ngaySinh"));
-//						nv.setCmnd(rs.getString("cmnd"));
-//						nv.setSdt(rs.getString("sdt"));
-//						nv.setEmail(rs.getString("email"));
-//						nv.setVaiTro(rs.getString("vaiTro"));
-//						nv.setTrangThai(rs.getString("trangThai"));
-//						list.add(nv);
-//						table.setItems(list);
-//					}
-//				}catch (Exception e1) {
-//					// TODO: handle exception
-//				}
-//			}
-//		});
-//	}
+	@FXML
+	private void searchByName() {
+		txtTimKiem.setOnKeyReleased(e->{
+			if(txtTimKiem.getText().equals("")) {
+				reload();
+			}
+			else {
+				list.clear();
+				String sql = " select * from NhanVien where tenNV like N'%" + txtTimKiem.getText() +"%'";
+				try {
+					ps = con.prepareStatement(sql);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						NhanVien nv = new NhanVien();
+						nv.setMaNV(rs.getInt("maNV"));
+						nv.setHoTen(rs.getString("tenNV"));
+						nv.setGioiTinh(rs.getString("gioiTinh"));
+						nv.setNgaySinh(rs.getDate("ngaySinh"));
+						nv.setCmnd(rs.getString("cmnd"));
+						nv.setSdt(rs.getString("sdt"));
+						nv.setEmail(rs.getString("email"));
+						nv.setVaiTro(rs.getString("vaiTro"));
+						nv.setTrangThai(rs.getString("trangThai"));
+						list.add(nv);
+						table.setItems(list);
+					}
+
+					
+				}catch (Exception e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}
+			}
+		});
+	}
 }

@@ -557,7 +557,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 				TableColumn ngaySinh = new TableColumn<KhachHang, Integer>("Ngày sinh");
 				ngaySinh.setCellValueFactory(new PropertyValueFactory<KhachHang, Date>("ngaySinh"));
 				TableColumn sdt = new TableColumn<KhachHang, Float>("Số điện thoại");
-				sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, Integer>("sdt"));
+				sdt.setCellValueFactory(new PropertyValueFactory<KhachHang, String>("sdt"));
 				TableColumn email = new TableColumn<KhachHang, String>("Email");
 				email.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("email"));
 				TableColumn diaChi = new TableColumn<KhachHang, Date>("Địa chỉ");	
@@ -587,7 +587,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 						kh.setHoTen(rs.getString("tenKH"));
 						kh.setGioiTinh(rs.getString("gioiTinh"));
 						kh.setNgaySinh(rs.getDate("ngaySinh"));
-						kh.setSdt(rs.getInt("sdt"));
+						kh.setSdt(rs.getString("sdt"));
 						kh.setEmail(rs.getString("email"));
 						kh.setDiaChi(rs.getString("diaChi"));
 						Khlist.add(kh);
@@ -1073,6 +1073,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 		divide.setBorder(g);
 		Table t1 = new Table(full);
 		t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KHÔNG KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
+		t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));

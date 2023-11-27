@@ -18,9 +18,11 @@ public class Thuoc {
 	private String trangThai;
 	private Date hanSuDung;
 	private String thuocKeDon;
+	private String soDangKy;
+	private int dinhMucSL;
 	public Thuoc(int maThuoc, String tenThuoc, String loaiThuoc, String ncc, String dvt, int soLuong, float giaNhap,
 			float giaBan, String quyCachDongGoi, String nsx, String cachDung, String thongTin, String trangThai,
-			Date hanSuDung, String thuocKeDon) {
+			Date hanSuDung, String thuocKeDon, String soDangKy, int dinhMucSL) {
 		super();
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
@@ -37,6 +39,8 @@ public class Thuoc {
 		this.trangThai = trangThai;
 		this.hanSuDung = hanSuDung;
 		this.thuocKeDon = thuocKeDon;
+		this.soDangKy = soDangKy;
+		this.dinhMucSL = dinhMucSL;
 	}
 	public Thuoc() {
 		super();
@@ -132,5 +136,17 @@ public class Thuoc {
 	public void setThuocKeDon(String thuocKeDon) {
 		this.thuocKeDon = thuocKeDon;
 	}
-
+	public String getSoDangKy() {
+		return soDangKy;
+	}
+	public void setSoDangKy(String soDangKy) {
+		this.soDangKy = soDangKy;
+	}
+	public int getDinhMucSL() {
+		return dinhMucSL;
+	}
+	public void setDinhMucSL(int dinhMucSL) {
+		this.dinhMucSL = dinhMucSL;
+	}
+	
 }

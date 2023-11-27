@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import database.KetNoiDatabase;
+import entity.KhachHang;
 import entity.LoaiThuoc;
 import entity.Thuoc;
 import javafx.application.Platform;
@@ -45,12 +46,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class ThemThuocController implements Initializable{
-	String[] countries = new String[]{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe", "Palestine"};
-	String[] thuocKeDon = new String[] {"Thuốc kê đơn", "Thuốc không kê đơn"};
+	ObservableList<String> countries = FXCollections.observableArrayList("Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe", "Palestine");
+	ObservableList<String> thuocKeDon = FXCollections.observableArrayList("Thuốc kê đơn", "Thuốc không kê đơn");
 	@FXML
 	private Button nhapExcel;
 	@FXML
@@ -58,29 +60,51 @@ public class ThemThuocController implements Initializable{
 	@FXML
 	private TextArea txtThongTin;
 	@FXML
-	private ComboBox<?> cbbThuocKeDon;
+	private ComboBox<String> cbbThuocKeDon;
 	@FXML
-	private TextField txtMaThuoc, txtTenThuoc, txtXemLoai, txtDonViTinh, txtGiaNhap, txtGiaBan, txtQuyCach, txtCachDung, txtDinhMucSL, txtSoDangKy;
+	private TextField  txtTenThuoc, txtXemLoai, txtDonViTinh, txtGiaNhap, txtGiaBan, txtQuyCach, txtCachDung, txtDinhMucSL, txtSoDangKy, txtTimKiem;
 	@FXML
-	private ComboBox<?> cbbLoaiThuoc;
+	private ComboBox<String> cbbLoaiThuoc;
 	@FXML
-	private ComboBox<?> cbbNCC;
+	private Label lblMaThuoc;
 	@FXML
-	private ComboBox<?> cbbNSX;
+	private ComboBox<String> cbbNSX;
 	@FXML
-	private ComboBox<?> cbbTrangThai;
+	private ComboBox<String> cbbTrangThai;
+	@FXML
+	private TableColumn<Thuoc, Integer> maThuoc;
 	@FXML
 	private TableColumn<Thuoc, String> tenThuoc;
+	@FXML
+	private TableColumn<Thuoc, String> loaiThuoc;
+	@FXML
+	private TableColumn<Thuoc, String> dvt;
+	@FXML
+	private TableColumn<Thuoc, String> quyCachDongGoi;
+	@FXML
+	private TableColumn<Thuoc, Float> giaNhap;
+	@FXML
+	private TableColumn<Thuoc, Float> giaBan;
+	@FXML
+	private TableColumn<Thuoc, String> trangThai;
+	@FXML
+	private ComboBox<String> cbbTKD;
+	
 	@FXML
 	private TableView<Thuoc> table;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
 
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		cbb();
+		reload();
+		getAllThuoc();
+		cell();
+		searchByName();
 		nhapExcel.setOnAction(a->{
 			String query = "insert into Thuoc(maThuoc, tenThuoc, donViTinh, nuocSanXuat, giaNhap, giaBan, cachDung, trangThai) values(?,?,?,?,?,?,?,?) select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc";
 			try {
@@ -388,9 +412,7 @@ public class ThemThuocController implements Initializable{
 
 	//End Navbar
 
-	ObservableList<Thuoc> list = FXCollections.observableArrayList(
-		
-			);
+	ObservableList<Thuoc> list = FXCollections.observableArrayList();
 	public int getLT() throws SQLException {
 		int mlt = 0;
 		String sql = "select * from LoaiThuoc where tenLoaiThuoc = N'"+cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString()+"'";
@@ -400,17 +422,16 @@ public class ThemThuocController implements Initializable{
 		mlt = rs.getInt("maLoaiThuoc");
 		return mlt;
 	}
-
-	public void luu() {
-		Thuoc t = new Thuoc();
-		t.setTenThuoc("Thuoc an than");
-//		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
-		list.add(t);
-		table.setItems(list);
-	}
+//
+//	public void luu() {
+//		Thuoc t = new Thuoc();
+////		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
+//		list.add(t);
+//		table.setItems(list);
+//	}
 	public void add() throws SQLException {
 
-		String sql = "insert into Thuoc(tenThuoc, maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into Thuoc(tenThuoc,maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
 		int mlt = getLT();
 //		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
@@ -419,21 +440,25 @@ public class ThemThuocController implements Initializable{
 		System.out.println(mlt);
 		try {
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(txtMaThuoc.getText()));
-			ps.setString(2, txtTenThuoc.getText().toString());
-			ps.setInt(3, mlt);
-			ps.setString(4, txtDonViTinh.getText().toString());
-			ps.setFloat(5, gn);
-			ps.setFloat(6, gb);
-			ps.setString(7, txtQuyCach.getText().toString());
-			ps.setString(8, txtCachDung.getText().toString());
-			ps.setString(9, cbbNSX.getSelectionModel().getSelectedItem().toString());
-			ps.setString(10, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
-			ps.setInt(11, Integer.parseInt(txtDinhMucSL.getText()));
-			ps.setString(12, txtSoDangKy.getText().toString());
-			ps.setString(13, txtThongTin.getText().toString());
-			ps.setString(14, cbbThuocKeDon.getSelectionModel().getSelectedItem().toString());
+			ps.setString(1, txtTenThuoc.getText().toString());
+			ps.setInt(2, mlt);
+			ps.setString(3, txtDonViTinh.getText().toString());
+			ps.setFloat(4, gn);
+			ps.setFloat(5, gb);
+			ps.setString(6, txtQuyCach.getText().toString());
+			ps.setString(7, txtCachDung.getText().toString());
+			ps.setString(8, cbbNSX.getSelectionModel().getSelectedItem().toString());
+			ps.setString(9, cbbTrangThai.getSelectionModel().getSelectedItem().toString());
+			ps.setInt(10, Integer.parseInt(txtDinhMucSL.getText()));
+			ps.setString(11, txtSoDangKy.getText().toString());
+			ps.setString(12, txtThongTin.getText().toString());
+			ps.setString(13, cbbThuocKeDon.getSelectionModel().getSelectedItem().toString());
 			ps.execute();
+			reload();
+			Alert alert = new Alert(AlertType.INFORMATION, "Thêm thành công", ButtonType.OK);
+	  		alert.setTitle("Thông báo");
+	  		alert.setHeaderText(null);
+	  		alert.show();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -480,12 +505,82 @@ public class ThemThuocController implements Initializable{
 //	}
 	public void cbb() {
 		getAllLoaiThuoc();
-		loaiNSX();
+		cbbNSX.setItems(countries);
+		cell();
 		trangThai();
-//		getAllNCC();
+		getAllThuoc();
+		cbbThuocKeDon.setItems(thuocKeDon);
+	}
+	public void cell() {
+		maThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("maThuoc"));
+		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
+		loaiThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
+		dvt.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
+		quyCachDongGoi.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("quyCachDongGoi"));
+		giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
+		giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));
+		trangThai.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("trangThai"));
+	}
+	public void reload() {
+//		list = getAllNV();
+		cbb();
+//		// TODO Auto-generated method stub
+
+	}
+	@FXML
+	public void mouseClicked(MouseEvent e) {
+		Thuoc t = table.getSelectionModel().getSelectedItem();
+		lblMaThuoc.setText(String.valueOf(t.getMaThuoc()));
+		txtTenThuoc.setText(t.getTenThuoc());
+		cbbLoaiThuoc.setValue(t.getLoaiThuoc());
+		txtDonViTinh.setText(t.getDvt());
+		txtQuyCach.setText(t.getQuyCachDongGoi());
+		cbbNSX.setValue(t.getNsx());
+		txtCachDung.setText(t.getCachDung());
+		txtThongTin.setText(t.getThongTin());
+		txtGiaNhap.setText(String.valueOf(t.getGiaNhap()));
+		txtGiaBan.setText(String.valueOf(t.getGiaBan()));
+		cbbThuocKeDon.setValue(t.getThuocKeDon());
+		txtDinhMucSL.setText(String.valueOf(t.getDinhMucSL()));
+		txtSoDangKy.setText(t.getSoDangKy());
+		cbbTrangThai.setValue(t.getTrangThai());
+	}
+	public int getLoaiThuoc() throws SQLException {
+		int i = 0;
+		String s = "select * from LoaiThuoc where tenLoaiThuoc = N'"+cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString()+"'";
+		ps = con.prepareStatement(s);
+		rs = ps.executeQuery();
+		while(rs.next())
+			i = rs.getInt("maLoaiThuoc");
+		System.out.println(i);
+		return i;
+	}
+	public void capNhat(ActionEvent e) throws SQLException {
+		int i = getLoaiThuoc();
+		String sql = "update Thuoc set tenThuoc = N'"+txtTenThuoc.getText()+"', maLoaiThuoc = '"+i+"', donViTinh = N'"+txtDonViTinh.getText()+"', nuocSanXuat = N'"+cbbNSX.getSelectionModel().getSelectedItem()+"', quyCachDongGoi = N'"+txtQuyCach.getText()+"', cachDung = N'"+txtCachDung.getText()+"', giaNhap ='"+Float.parseFloat(txtGiaNhap.getText())+"', giaBan = N'"+Float.parseFloat(txtGiaBan.getText())+"', soDangKy = N'"+txtSoDangKy.getText()+"', dinhMucSL = N'"+Integer.parseInt(txtDinhMucSL.getText())+"', thuocKeDon = N'"+cbbThuocKeDon.getSelectionModel().getSelectedItem()+"', thongTin = N'"+txtThongTin.getText()+"', trangThai = N'"+cbbTrangThai.getSelectionModel().getSelectedItem()+"' where maThuoc = N'"+lblMaThuoc.getText()+"'";
+		ps = con.prepareStatement(sql);
+		ps.execute();
+		capNhatMessage();
+		reload();
+	}
+	public void remove(ActionEvent e) {
+		if(table.getSelectionModel().getSelectedIndex() <= -1) {
+			xoaThatBaiMessage();
+		}
+		else {
+			try {
+				String query = "delete from Thuoc where maThuoc= '"+lblMaThuoc.getText()+"'";
+				ps = con.prepareStatement(query);
+				ps.execute();
+				xoaThanhCongMessage();
+				reload();
+			}catch(Exception e1) {
+				e1.printStackTrace();
+				xoaThatBaiMessage();
+			}
+		}
 	}
 	public void xoaTrang(ActionEvent e) {
-		txtMaThuoc.setText("");
 		txtTenThuoc.setText("");
 		cbbLoaiThuoc.setValue(null);
 		txtDonViTinh.setText("");
@@ -501,7 +596,7 @@ public class ThemThuocController implements Initializable{
 		
 	}
 	public void getAllLoaiThuoc(){
-		String sql = "select * from LoaiThuoc order by tenLoaiThuoc";
+		String sql = "select * from LoaiThuoc";
 		try {
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -517,26 +612,172 @@ public class ThemThuocController implements Initializable{
 		}
 
 	}
-//	public void getAllThuoc() {
-//		String sql = "select * from Thuoc";
-//		try {
-//			ps = con.prepareStatement(sql);
-//			rs = ps.executeQuery();
-//			ObservableList nccList = FXCollections.observableArrayList();
-//			while(rs.next()) {
-//				String ncc = rs.getString("tenNCC");
-//				nccList.add(ncc);
-//			}
-//			cbbNCC.setItems(nccList);
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-//	}
-	public void loaiNSX() {
-		ObservableList list = FXCollections.observableArrayList(countries);
-		cbbNSX.setItems(list);
+	@FXML
+	public ObservableList<Thuoc> getAllThuoc() {
+		cbbTKD.setItems(FXCollections.observableArrayList("Tất cả", "Thuốc kê đơn", "Thuốc không kê đơn"));
+		cbbTKD.getSelectionModel().selectFirst();
+		String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc";
+		try {
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			list.clear();
+			table.setItems(list);
+			while(rs.next()) {
+				Thuoc t = new Thuoc();
+				t.setMaThuoc(rs.getInt("maThuoc"));
+				t.setTenThuoc(rs.getString("tenThuoc"));
+				t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+				t.setDvt(rs.getString("donViTinh"));
+				t.setNsx(rs.getString("nuocSanXuat"));
+				t.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+				t.setCachDung(rs.getString("cachDung"));
+				t.setDinhMucSL(rs.getInt("dinhMucSL"));
+				t.setThongTin(rs.getString("thongTin"));
+				t.setTrangThai(rs.getString("trangThai"));
+				t.setSoDangKy(rs.getString("soDangKy"));
+				t.setGiaNhap(rs.getFloat("giaNhap"));
+				t.setGiaBan(rs.getFloat("giaBan"));
+				t.setThuocKeDon(rs.getString("thuocKeDon"));
+				list.add(t);
+				table.setItems(list);
+			}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		cbbTKD.setOnAction(args->{
+		if(cbbTKD.getSelectionModel().getSelectedItem()=="Tất cả") {
+//			list.clear();
+			String sql1 = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc";
+			try {
+				ps = con.prepareStatement(sql1);
+				rs = ps.executeQuery();
+				list.clear();
+				table.setItems(list);
+				while(rs.next()) {
+					Thuoc t = new Thuoc();
+					t.setMaThuoc(rs.getInt("maThuoc"));
+					t.setTenThuoc(rs.getString("tenThuoc"));
+					t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+					t.setDvt(rs.getString("donViTinh"));
+					t.setNcc(rs.getString("nuocSanXuat"));
+					t.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+					t.setCachDung(rs.getString("cachDung"));
+					t.setDinhMucSL(rs.getInt("dinhMucSL"));
+					t.setThongTin(rs.getString("thongTin"));
+					t.setTrangThai(rs.getString("trangThai"));
+					t.setSoDangKy(rs.getString("soDangKy"));
+					t.setGiaNhap(rs.getFloat("giaNhap"));
+					t.setGiaBan(rs.getFloat("giaBan"));
+					t.setThuocKeDon(rs.getString("thuocKeDon"));
+					list.add(t);
+					table.setItems(list);
+				}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 		}
+		if(cbbTKD.getSelectionModel().getSelectedItem() == "Thuốc kê đơn") {
+				String sql1 = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where thuocKeDon = N'Thuốc kê đơn'";
+				list.clear();
+				table.setItems(list);
+				try {
+					ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Thuoc t = new Thuoc();
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						t.setDvt(rs.getString("donViTinh"));
+						t.setNcc(rs.getString("nuocSanXuat"));
+						t.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+						t.setCachDung(rs.getString("cachDung"));
+						t.setDinhMucSL(rs.getInt("dinhMucSL"));
+						t.setThongTin(rs.getString("thongTin"));
+						t.setTrangThai(rs.getString("trangThai"));
+						t.setSoDangKy(rs.getString("soDangKy"));
+						t.setGiaNhap(rs.getFloat("giaNhap"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						t.setThuocKeDon(rs.getString("thuocKeDon"));
+						list.add(t);
+						table.setItems(list);
+					}
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+			}
+		if(cbbTKD.getSelectionModel().getSelectedItem() == "Thuốc không kê đơn") {
+				String sql1 = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where thuocKeDon = N'Thuốc không kê đơn'";
+				list.clear();
+				table.setItems(null);
+				try {
+					ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Thuoc t = new Thuoc();
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						t.setDvt(rs.getString("donViTinh"));
+						t.setNcc(rs.getString("nuocSanXuat"));
+						t.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+						t.setCachDung(rs.getString("cachDung"));
+						t.setDinhMucSL(rs.getInt("dinhMucSL"));
+						t.setThongTin(rs.getString("thongTin"));
+						t.setTrangThai(rs.getString("trangThai"));
+						t.setSoDangKy(rs.getString("soDangKy"));
+						t.setGiaNhap(rs.getFloat("giaNhap"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						t.setThuocKeDon(rs.getString("thuocKeDon"));
+						list.add(t);
+						table.setItems(list);
+					}
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+			}
+		});
+		return list;
+	}
+	@FXML
+	private void themThanhCongMessage() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Thông báo");
+		alert.setContentText("Thêm thành công");
+		alert.setHeaderText(null);
+		alert.showAndWait();
+	}
+	@FXML
+	private void themThatBaiMessage() {
+		Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, ngày sinh không được bỏ trống", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
+	@FXML
+	private void capNhatMessage() {
+		Alert alert = new Alert(AlertType.INFORMATION, "Cập nhật thành công", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
+	@FXML
+	private void xoaThanhCongMessage() {
+		Alert alert = new Alert(AlertType.INFORMATION, "Xoá thành công", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
+	@FXML
+	private void xoaThatBaiMessage() {
+		Alert alert = new Alert(AlertType.ERROR, "Xoá thất bại, vui lòng kiểm tra lại", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
 
 	public void trangThai() {
 		List trangThai = new ArrayList();
@@ -545,5 +786,41 @@ public class ThemThuocController implements Initializable{
 		ObservableList list = FXCollections.observableArrayList(trangThai);
 		cbbTrangThai.setItems(list);
 	}
-
+	@FXML
+	public void searchByName() {
+		txtTimKiem.setOnKeyReleased(e->{
+			if(txtTimKiem.getText().equals("")) {
+				reload();
+			}
+			else {
+				list.clear();
+				String sql = " select * from Thuoc t left join LoaiThuoc lt on lt.maThuoc = t.maThuoc where tenThuoc like N'%" + txtTimKiem.getText() +"%'";
+				try {
+					ps = con.prepareStatement(sql);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Thuoc t = new Thuoc();
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						t.setDvt(rs.getString("donViTinh"));
+						t.setNcc(rs.getString("nuocSanXuat"));
+						t.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+						t.setCachDung(rs.getString("cachDung"));
+						t.setDinhMucSL(rs.getInt("dinhMucSL"));
+						t.setThongTin(rs.getString("thongTin"));
+						t.setTrangThai(rs.getString("trangThai"));
+						t.setSoDangKy(rs.getString("soDangKy"));
+						t.setGiaNhap(rs.getFloat("giaNhap"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						t.setThuocKeDon(rs.getString("thuocKeDon"));
+						list.add(t);
+						table.setItems(list);
+					}
+				}catch (Exception e1) {
+					// TODO: handle exception
+				}
+			}
+		});
+	}
 }
