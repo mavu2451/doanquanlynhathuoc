@@ -77,6 +77,7 @@ public class DangNhapController implements Initializable{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
+				if(rs.getString("vaiTro").equals("Người quản lý") && rs.getString("trangThai").equals("Đang làm việc")) {
 				thanhCong();
 				getNV();
 				Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -88,6 +89,26 @@ public class DangNhapController implements Initializable{
 		        stage.setX(0);
 		        stage.setY(0);
 		        stage.setScene(scene);
+				}
+				else if(rs.getString("vaiTro").equals("Nhân viên") && rs.getString("trangThai").equals("Đang làm việc")) {
+					thanhCong1();
+					getNV();
+					Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+					FXMLLoader loader = new FXMLLoader();
+			        loader.setLocation(getClass().getResource("/view/TrangChuNV.fxml"));
+			        Parent sampleParent = loader.load();
+			        Scene scene = new Scene(sampleParent);   
+			        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+			        stage.setX(0);
+			        stage.setY(0);
+			        stage.setScene(scene);
+				}
+				else if(rs.getString("trangThai").equals("Nghỉ việc")) {
+					Alert alert = new Alert(AlertType.ERROR, "Nhân viên đã nghỉ việc, không thể đăng nhập", ButtonType.OK);
+					alert.setTitle("Thông báo");
+					alert.setHeaderText(null);
+					alert.show();
+				}
 			}
 //			else if(rs.next() && trangThai.equals("Nghỉ việc")) {
 //				nghiViec();
@@ -132,7 +153,14 @@ public class DangNhapController implements Initializable{
 	}
 	@FXML
 	private void thanhCong() {
-		Alert alert = new Alert(AlertType.INFORMATION, "Đăng nhập thành công", ButtonType.OK);
+		Alert alert = new Alert(AlertType.INFORMATION, "Đăng nhập thành công (Người quản lý)", ButtonType.OK);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.show();
+	}
+	@FXML
+	private void thanhCong1() {
+		Alert alert = new Alert(AlertType.INFORMATION, "Đăng nhập thành công (Nhân viên)", ButtonType.OK);
 		alert.setTitle("Thông báo");
 		alert.setHeaderText(null);
 		alert.show();

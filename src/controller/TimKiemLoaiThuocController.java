@@ -26,7 +26,9 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -39,6 +41,10 @@ public class TimKiemLoaiThuocController implements Initializable {
 	@FXML
 	TableView<LoaiThuoc> table;
 	@FXML
+	private Button btnThemLoaiThuoc;
+	@FXML
+	private TextField txtTimKiem;
+	@FXML
 	private TableColumn<LoaiThuoc, Integer> maLoaiThuoc;
 	@FXML
 	private TableColumn<LoaiThuoc, String> loaiThuoc;
@@ -49,6 +55,7 @@ public class TimKiemLoaiThuocController implements Initializable {
 		// TODO Auto-generated method stub
 		reload();
 		getAllLoaiThuoc();
+		searchByName();
 	}
 	//Start Navbar
 	public void nhanVien(ActionEvent e) throws IOException {
@@ -239,6 +246,15 @@ public class TimKiemLoaiThuocController implements Initializable {
         stage.setScene(scene);
        
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	  public void gioHang(ActionEvent e) throws IOException {
 	    	Stage stage = (Stage) mb.getScene().getWindow();
 	    	FXMLLoader loader = new FXMLLoader();
@@ -297,22 +313,22 @@ public class TimKiemLoaiThuocController implements Initializable {
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -351,5 +367,39 @@ public class TimKiemLoaiThuocController implements Initializable {
 		loaiThuocList = getAllLoaiThuoc();
 		cell();
 		table.setItems(loaiThuocList);
+	}
+	public void themLoaiThuoc(ActionEvent e) throws IOException {
+       	Stage stage = new Stage();
+       	FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThemLoaiThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+        stage.show();
+   	}
+	@FXML
+	private void searchByName() {
+		txtTimKiem.setOnKeyReleased(e->{
+			if(txtTimKiem.getText().equals("")) {
+				reload();
+			}
+			else {
+				loaiThuocList.clear();
+				String sql = " select * from LoaiThuoc where tenLoaiThuoc like N'%" + txtTimKiem.getText() +"%'";
+				try {
+					ps = con.prepareStatement(sql);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						LoaiThuoc l = new LoaiThuoc();
+						l.setMaLoaiThuoc(rs.getInt("maLoaiThuoc"));
+						l.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						loaiThuocList.add(l);
+						table.setItems(loaiThuocList);
+					}
+				}catch (Exception e1) {
+					// TODO: handle exception
+				}
+			}
+		});
 	}
 }

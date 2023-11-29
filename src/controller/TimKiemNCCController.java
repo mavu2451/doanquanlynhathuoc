@@ -65,7 +65,9 @@ public class TimKiemNCCController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private TextField txtTimKiem;
+	private Button btnTimKiem;
+	@FXML
+	private TextField txtNCC, txtEmail, txtSDT;
 	@FXML
 	private AnchorPane ap;
 	@FXML
@@ -80,6 +82,8 @@ public class TimKiemNCCController implements Initializable{
 	private TableColumn<NhaCungCap, String> email;
 	@FXML
 	private TableColumn<NhaCungCap, String> diaChi;
+	@FXML
+	private TableColumn<NhaCungCap, String> trangThai;
 
 	@FXML
 	private ObservableList<NhaCungCap> list = FXCollections.observableArrayList();
@@ -138,6 +142,42 @@ public class TimKiemNCCController implements Initializable{
 //				}
 //				
 //			});
+			btnTimKiem.setOnAction(a -> {
+				String ncc = txtNCC.getText().toString();
+				String sdt = txtSDT.getText().toString();
+				String email = txtEmail.getText().toString();
+				if(ncc == "" && sdt == "" && email == "") {
+					table.getItems().clear();
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Thông báo");
+					alert.setContentText("Không được để trống");
+					alert.setHeaderText(null);
+					alert.showAndWait();
+					getAllNCC();
+				}
+				else {
+				table.getItems().clear();
+				String sql = "select * from NhaCungCap where tenNCC like N'%"+ncc+"%' and sdt like N'%"+sdt+"%' and email like N'%"+email+"%'";
+				try {
+					ps = con.prepareStatement(sql);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						NhaCungCap nc = new NhaCungCap();
+						nc.setMaNCC(rs.getInt("maNCC"));
+						nc.setTenNCC(rs.getString("tenNCC"));
+						nc.setSdt(rs.getString("sdt"));
+						nc.setEmail(rs.getString("email"));
+						nc.setDiaChi(rs.getString("diaChi"));
+						nc.setTrangThai(rs.getString("trangThai"));
+						list.add(nc);
+						table.setItems(list);	
+					}	
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+			});
 
 	}
 	//Start Navbar
@@ -371,6 +411,15 @@ public class TimKiemNCCController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
+	 	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+			Stage stage = (Stage) mb.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+	        Parent sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+	        stage.setScene(scene);
+	       
+		}
 	     public void timKiemNCC(ActionEvent e) throws IOException {
 	      	Stage stage = (Stage) mb.getScene().getWindow();
 	      	FXMLLoader loader = new FXMLLoader();
@@ -387,22 +436,22 @@ public class TimKiemNCCController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -539,19 +588,7 @@ public class TimKiemNCCController implements Initializable{
 //		list = getAllNV();
 		// TODO Auto-generated method stub
 		cell();
-		String sql = "select * from NhaCungCap";
-		ps = con.prepareStatement(sql);
-		rs = ps.executeQuery();
-		while(rs.next()) {
-			NhaCungCap ncc = new NhaCungCap();
-			ncc.setMaNCC(rs.getInt("maNCC"));
-			ncc.setTenNCC(rs.getString("tenNCC"));
-			ncc.setSdt(rs.getString("sdt"));
-			ncc.setEmail(rs.getString("email"));
-			ncc.setDiaChi(rs.getString("diaChi"));
-			list.add(ncc);
-			table.setItems(list);
-		}
+		getAllNCC();
 		
 	}
 	public void cell() {
@@ -560,36 +597,33 @@ public class TimKiemNCCController implements Initializable{
 		sdt.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("sdt"));
 		email.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("email"));
 		diaChi.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("diaChi"));
+		trangThai.setCellValueFactory(new PropertyValueFactory<NhaCungCap, String>("trangThai"));
 	}
 
-//	public ObservableList<NhanVien> getAllNV(){
-//		ObservableList<NhanVien> nvList = FXCollections.observableArrayList();
-//		String query = "select * from NhanVien";
-//		
-//		try {
-//			ps = con.prepareStatement(query);
-//			rs = ps.executeQuery();
-//			while(rs.next()) {
-//				NhanVien nv = new NhanVien();
-//				nv.setMaNV(rs.getInt("maNV"));
-//				nv.setHoTen(rs.getString("tenNV"));
-//				nv.setGioiTinh(rs.getString("gioiTinh"));
-//				nv.setNgaySinh(rs.getDate("ngaySinh"));
-//				nv.setCmnd(rs.getString("cmnd"));
-//				nv.setSdt(rs.getString("sdt"));
-//				nv.setEmail(rs.getString("email"));
-//				nv.setVaiTro(rs.getString("vaiTro"));
-//				nv.setTrangThai(rs.getString("trangThai"));
-//				nvList.add(nv);
-//				
-//			}
-//		}catch (Exception e) {
-//				// TODO: handle exception
-//				e.printStackTrace();
-//				
-//			}
-//		return nvList;
-//	}
+	public ObservableList<NhaCungCap> getAllNCC(){
+		String query = "select * from NhaCungCap";
+		
+		try {
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				NhaCungCap ncc = new NhaCungCap();
+				ncc.setMaNCC(rs.getInt("maNCC"));
+				ncc.setTenNCC(rs.getString("tenNCC"));
+				ncc.setSdt(rs.getString("sdt"));
+				ncc.setEmail(rs.getString("email"));
+				ncc.setDiaChi(rs.getString("diaChi"));
+				ncc.setTrangThai(rs.getString("trangThai"));
+				list.add(ncc);
+				table.setItems(list);
+			}
+		}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}
+		return list;
+	}
 
 	public void chooseImage(ActionEvent e) throws FileNotFoundException {
 		Stage stage = (Stage) ap.getScene().getWindow();

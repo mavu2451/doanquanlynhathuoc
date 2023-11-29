@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThongTinChiTietThuocController">
+  <center>
+      <AnchorPane prefHeight="183.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="563.0" layoutX="25.0" layoutY="14.0" stroke="WHITE" strokeType="INSIDE" width="952.0">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.10000000149011612" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Rectangle>
+            <Label layoutX="331.0" layoutY="14.0" text="THÔNG TIN THUỐC">
+               <font>
+                  <Font name="System Bold Italic" size="32.0" />
+               </font>
+            </Label>
+            <Label layoutX="376.0" layoutY="125.0" text="Tên thuốc:">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+            <Label layoutX="665.0" layoutY="78.0" text="Loại thuốc:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="372.0" layoutY="177.0" text="Đơn vị tính:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="635.0" layoutY="125.0" text="Nước sản xuất:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="664.0" layoutY="177.0" text="Cách dùng:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="662.0" layoutY="232.0" text="Số đăng ký:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="379.0" layoutY="78.0" text="Mã thuốc:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="308.0" layoutY="232.0" text="Quy cách đóng gói:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="673.0" layoutY="279.0" text="Trạng thái:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" layoutX="59.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="lblTrangThai" layoutX="796.0" layoutY="279.0" text="Đang kinh doanh" textFill="RED">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblMaThuoc" layoutX="486.0" layoutY="78.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTenThuoc" layoutX="486.0" layoutY="125.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblDVT" layoutX="487.0" layoutY="177.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblQuyCach" layoutX="487.0" layoutY="232.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblSoDangKy" layoutX="792.0" layoutY="232.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblCachDung" layoutX="792.0" layoutY="177.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblNSX" layoutX="792.0" layoutY="125.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblLoaiThuoc" layoutX="792.0" layoutY="78.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="54.0" layoutY="366.0" text="Thông tin thuốc:">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTT" layoutX="54.0" layoutY="396.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="405.0" layoutY="279.0" text="Giá bán:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblGiaBan" layoutX="487.0" layoutY="279.0" text="0" textFill="#00bbff">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

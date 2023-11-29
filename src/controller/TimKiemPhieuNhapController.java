@@ -7,10 +7,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
 import entity.CTPhieuNhap;
+import entity.CTThuoc;
 import entity.NhanVien;
 import entity.PhieuNhap;
 import entity.Thuoc;
@@ -43,14 +45,13 @@ import javafx.stage.Stage;
 public class TimKiemPhieuNhapController implements Initializable{
 	@FXML
 	private MenuButton mb;
+
 	@FXML
-	private TextField txtMaPN;
+	private ComboBox<String> cbbTrangThai;
 	@FXML
-	private ComboBox<NhanVien> cbNhanVien;
+	private TextField txtNCC, txtNhanVien, txtMaPN;
 	@FXML
-	private TextField txtNCC;
-	@FXML
-	private Button btnXemCT;
+	private Button btnXemCT, btnTimKiem;
 	@FXML
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
@@ -69,6 +70,8 @@ public class TimKiemPhieuNhapController implements Initializable{
 	private TableColumn<PhieuNhap, Date> ngayNhap;
 	@FXML
 	private TableColumn<PhieuNhap, String> tenNCC;
+	@FXML
+	private TableColumn<PhieuNhap, String> trangThai;
 
 	
 	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
@@ -82,8 +85,10 @@ public class TimKiemPhieuNhapController implements Initializable{
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
 
-		cell();
+		dpNgayNhap.setValue(LocalDate.now());
+		reload();
 		getAllPN();
+		cell();
 		btnXemCT.setOnAction(arg->{
 			int index = table.getSelectionModel().getSelectedIndex();
 			if(index<=-1) {
@@ -118,12 +123,12 @@ public class TimKiemPhieuNhapController implements Initializable{
 			TableColumn tongGiaNhap = new TableColumn<CTPhieuNhap, Float>("Tổng giá nhập");
 			tongGiaNhap.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("tongGiaNhap"));
 			TableColumn tongGiaBan = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
-			tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("hanSuDung"));
-			TableColumn soLo = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
-			soLo.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("soLo"));
-			TableColumn hanSuDung = new TableColumn<CTPhieuNhap, Float>("Tổng giá bán");
-			hanSuDung.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("hanSuDung"));
-			TableColumn trangThai = new TableColumn<CTPhieuNhap, Float>("Trạng thái");
+			tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("tongGiaBan"));
+			TableColumn soLo = new TableColumn<CTPhieuNhap, String>("Số lô");
+			soLo.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("soLo"));
+			TableColumn hanSuDung = new TableColumn<CTPhieuNhap, Date>("Hạn sử dụng");
+			hanSuDung.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Date>("hanSuDung"));
+			TableColumn trangThai = new TableColumn<CTPhieuNhap, String>("Trạng thái");
 			trangThai.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("trangThai"));
 			
 			tableView.getColumns().add(maThuoc);
@@ -178,8 +183,13 @@ public class TimKiemPhieuNhapController implements Initializable{
 							alert.showAndWait();
 						}
 						else {
-
+			
 						String sqlMaThuoc = String.valueOf(maThuoc.getCellData(indexCT).toString());
+//						int mThuoc = Integer.parseInt(tableView.getSelectionModel().getSelectedItem().toString());
+						float gn = Float.parseFloat(giaNhap.getCellData(indexCT).toString());
+						float gb = Float.parseFloat(giaBan.getCellData(indexCT).toString());
+						String txtSoLo = String.valueOf(soLo.getCellData(indexCT).toString());
+						Date dhsd = Date.valueOf(hanSuDung.getCellData(indexCT).toString());
 						String update = "update CTPhieuNhap set trangThai = N'Đã nhập hàng' where maPN = '"+sqlMaPN+"'and maThuoc = '"+sqlMaThuoc+"'";
 						try {
 							ps = con.prepareStatement(update);
@@ -188,6 +198,29 @@ public class TimKiemPhieuNhapController implements Initializable{
 							alert1.setHeaderText(null);
 							alert1.setContentText("Cập nhật trạng thái thành công");
 							alert1.showAndWait();
+							String ctt = "select * from CTThuoc where maThuoc = '"+sqlMaThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '" +dhsd+ "'";
+							ps = con.prepareStatement(ctt);
+							rs = ps.executeQuery();
+							CTThuoc k = new CTThuoc();
+							ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
+							String maTh = String.valueOf(sqlMaThuoc);
+							String gNhap = String.valueOf(gn);
+							String gBan = String.valueOf(gb);
+							int sl = Integer.parseInt(soLuong.getCellData(indexCT).toString());
+
+//							String kho1 = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' soLo='"+1+"' and hanSuDung = '" +dhsd+ "'";
+
+								String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
+								ps = con.prepareStatement(nhapThuoc);
+								ps.setInt(1, Integer.parseInt(sqlMaThuoc));
+								ps.setInt(2, sl);
+								ps.setFloat(3, gn);
+								ps.setFloat(4,gb);
+								ps.setDate(5, dhsd);
+//								ps.setInt(7, mapn);
+								ps.execute();
+								
+									
 							String sql1 = "select * from CTPhieuNhap ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPN = '"+sqlMaPN+"'";
 							ps = con.prepareStatement(sql1);
 							rs = ps.executeQuery();
@@ -221,10 +254,51 @@ public class TimKiemPhieuNhapController implements Initializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
-			Scene scene = new Scene(root,900,400);
+			Scene scene = new Scene(root,800,400);
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.show();
+			}
+		});
+		
+		btnTimKiem.setOnAction(a -> {
+			String maPN = txtMaPN.getText().toString();
+			String tenNCC = txtNCC.getText().toString();
+			String tenNV = txtNhanVien.getText().toString();
+
+			LocalDate ldNgayNhap = dpNgayNhap.getValue();
+			Date d = Date.valueOf(ldNgayNhap);
+			
+			if(maPN == "" && tenNCC == "" && tenNV == "" && dpNgayNhap.getValue()==null) {
+				table.getItems().clear();
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Thông báo");
+				alert.setContentText("Không được để trống");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+				getAllPN();
+			}
+			else {
+			table.getItems().clear();
+			String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where maPN like N'%"+maPN+"%' and tenNCC like N'%"+tenNCC+"%' and tenNV like N'%"+tenNV+"%' and ngayNhap like '%"+d+"%'";
+			try {
+				ps = con.prepareStatement(sql);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					PhieuNhap pn = new PhieuNhap();
+		    		  pn.setMaPN(rs.getInt("maPN"));
+		    		  pn.setHoTen(rs.getString("tenNV"));
+		    		  pn.setTenNCC(rs.getString("tenNCC"));
+		    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+		    		  pn.setTrangThai(rs.getString("trangThai"));
+		    		  list.add(pn);
+		    		  table.setItems(list);
+		    	  
+				}	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		});
 	}
@@ -286,6 +360,15 @@ public class TimKiemPhieuNhapController implements Initializable{
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/ThemThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
@@ -485,22 +568,22 @@ public class TimKiemPhieuNhapController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -511,17 +594,23 @@ public class TimKiemPhieuNhapController implements Initializable{
 	   	}
 
 	//End Navbar
-	      public void getAllPN()  {
-	    	  String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC";
+	      @FXML
+	      public ObservableList<PhieuNhap> getAllPN()  {
+	    	  cbbTrangThai.setItems(FXCollections.observableArrayList("Tất cả", "Đã nhập hàng", "Lưu tạm"));
+	    	  cbbTrangThai.getSelectionModel().selectFirst();
+	    	  String sql = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null";
 	    	  try {
 				ps = con.prepareStatement(sql);
 		    	  rs = ps.executeQuery();
+		    	  list.clear();
+					table.setItems(list);
 		    	  while(rs.next()) {
 		    		  PhieuNhap pn = new PhieuNhap();
 		    		  pn.setMaPN(rs.getInt("maPN"));
 		    		  pn.setHoTen(rs.getString("tenNV"));
 		    		  pn.setTenNCC(rs.getString("tenNCC"));
 		    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+		    		  pn.setTrangThai(rs.getString("trangThai"));
 		    		  list.add(pn);
 		    		  table.setItems(list);
 		    	  }
@@ -529,12 +618,83 @@ public class TimKiemPhieuNhapController implements Initializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	    	  cbbTrangThai.setOnAction(args->{
+	    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Tất cả") {
+	    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null";
+	    		    	  try {
+	    					ps = con.prepareStatement(sql1);
+	    			    	  rs = ps.executeQuery();
+	    			    	  list.clear();
+	    						table.setItems(list);
+	    			    	  while(rs.next()) {
+	    			    		  PhieuNhap pn = new PhieuNhap();
+	    			    		  pn.setMaPN(rs.getInt("maPN"));
+	    			    		  pn.setHoTen(rs.getString("tenNV"));
+	    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+	    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+	    			    		  pn.setTrangThai(rs.getString("trangThai"));
+	    			    		  list.add(pn);
+	    			    		  table.setItems(list);
+	    			    	  }
+	    				} catch (SQLException e) {
+	    					// TODO Auto-generated catch block
+	    					e.printStackTrace();
+	    				}
+	    		    	  
+	    			}
+	    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Đã nhập hàng") {
+	    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null and ct.trangThai = N'Đã nhập hàng'";
+	    		    	  try {
+	    		    		  list.clear();
+	    		  			table.setItems(list);
+	    					ps = con.prepareStatement(sql1);
+	    			    	  rs = ps.executeQuery();
+	    			    	  while(rs.next()) {
+	    			    		  PhieuNhap pn = new PhieuNhap();
+	    			    		  pn.setMaPN(rs.getInt("maPN"));
+	    			    		  pn.setHoTen(rs.getString("tenNV"));
+	    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+	    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+	    			    		  pn.setTrangThai(rs.getString("trangThai"));
+	    			    		  list.add(pn);
+	    			    		  table.setItems(list);
+	    			    	  }
+	    				} catch (SQLException e) {
+	    					// TODO Auto-generated catch block
+	    					e.printStackTrace();
+	    				}
+	    			}
+	    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Lưu tạm") {
+	    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null and ct.trangThai = N'Lưu tạm'";
+	    		    	  try {
+	    		    		  list.clear();
+	    		  			table.setItems(list);
+	    					ps = con.prepareStatement(sql1);
+	    			    	  rs = ps.executeQuery();
+	    			    	  while(rs.next()) {
+	    			    		  PhieuNhap pn = new PhieuNhap();
+	    			    		  pn.setMaPN(rs.getInt("maPN"));
+	    			    		  pn.setHoTen(rs.getString("tenNV"));
+	    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+	    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+	    			    		  pn.setTrangThai(rs.getString("trangThai"));
+	    			    		  list.add(pn);
+	    			    		  table.setItems(list);
+	    			    	  }
+	    				} catch (SQLException e) {
+	    					// TODO Auto-generated catch block
+	    					e.printStackTrace();
+	    				}
+	    			}});
+	    			
+	    	  return list;
 	      }
 	      public void cell() {
 	    	maPN.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Integer>("maPN"));
 	  		hoTen.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("hoTen"));
 	  		tenNCC.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("tenNCC"));
 	  		ngayNhap.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Date>("ngayNhap"));
+	  		trangThai.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("trangThai"));
 	      }
 //	public int getNV() {
 //		NhanVien nv = new NhanVien();
@@ -554,15 +714,9 @@ public class TimKiemPhieuNhapController implements Initializable{
 //		}
 //		return nv.getMaNV();
 //	}
-	public void reload() throws SQLException {
-		String sql = "select * from PhieuNhap p left join NhanVien n on p.maNV = n.maNV";
-		ps = con.prepareStatement(sql);
-		rs = ps.executeQuery();
-		while(rs.next()) {
-			PhieuNhap pn = new PhieuNhap();
-			pn.setMaPN(rs.getInt("maPN"));
-			pn.setHoTen(rs.getString("hoTen"));
-//			pn.setMaNCC(rs.getString());
-		}
+	public void reload() {
+		getAllPN();
+		cell();
+		table.setItems(list);
 	}
 }

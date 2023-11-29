@@ -70,13 +70,9 @@
                           <items>
                             <MenuItem mnemonicParsing="false" onAction="#thuoc" text="Thêm thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timThuoc" text="Tìm kiếm thuốc" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatThuoc" text="Cập nhật thông tin thuốc" />
-                              <MenuItem mnemonicParsing="false" onAction="#loaiThuoc" text="Thêm loại thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timLoaiThuoc" text="Tìm kiếm loại thuốc" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatLoaiThuoc" text="Cập nhật thông tin loại thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#nhapThuoc" text="Nhập thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemNhapThuoc" text="Tìm kiếm đơn nhập" />
-                              <MenuItem mnemonicParsing="false" onAction="#thuocTrongKho" text="Thuốc trong kho" />
                           </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -110,9 +106,7 @@
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
-                              <MenuItem mnemonicParsing="false" onAction="#themDonThuocMau" text="Tạo đơn thuốc mẫu" />
-                              <MenuItem mnemonicParsing="false" onAction="#timKiemDonThuocMau" text="Tìm kiếm đơn thuốc mẫu" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatDonThuocMau" text="Cập nhật đơn thuốc mẫu" />
+                              <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -143,7 +137,6 @@
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#themKhachHang" text="Thêm khách hàng" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm khách hàng" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatKhachHang" text="Cập nhật khách hàng" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -174,7 +167,6 @@
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#nhanVien" text="Thêm nhân viên" />
                               <MenuItem mnemonicParsing="false" onAction="#timNhanVien" text="Tìm kiếm nhân viên" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatNhanVien" text="Cập nhật nhân viên" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -205,7 +197,6 @@
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#themNCC" text="Thêm nhà cung cấp" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemNCC" text="Tìm kiếm nhà cung cấp" />
-                              <MenuItem mnemonicParsing="false" onAction="#capNhatNCC" text="Cập nhật nhà cung cấp" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -231,15 +222,14 @@
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
-                           <effect>
-                              <ColorAdjust />
-                           </effect>
+                      
                         </ImageView>
                         <MenuButton fx:id="mb5" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Thống kê" textFill="WHITE">
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#thongKeDoanhThu" text="Thống kê doanh thu" />
-                              <MenuItem mnemonicParsing="false" onAction="#thongKeKhachHang" text="Thống kê khách hàng" />
-                              <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHan" text="Thống kê hoá đơn" />
+                               <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHan" text="Thống kê thuốc sắp hết hạn" />
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHang" text="Thống kê thuốc sắp hết hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#thuocTrongKho" text="Thuốc trong kho" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />

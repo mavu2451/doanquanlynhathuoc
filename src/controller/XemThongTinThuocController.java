@@ -75,8 +75,6 @@ public class XemThongTinThuocController implements Initializable{
 	@FXML
 	private TableColumn<CTThuoc, Float> giaBan;
 	@FXML
-	private TableColumn<CTThuoc, String> soLo;
-	@FXML
 	private TableColumn<CTThuoc, Date> hanSuDung;
 
 	
@@ -381,7 +379,6 @@ public class XemThongTinThuocController implements Initializable{
 		hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc, Date>("hanSuDung"));
 		tenThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenThuoc"));
 		tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenLoaiThuoc"));
-		soLo.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("soLo"));
 		donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
 	}
 	public void getAllThuocTonKho() throws SQLException {
@@ -396,7 +393,6 @@ public class XemThongTinThuocController implements Initializable{
 			k.setSlTonKho(rs.getInt("slTonKho"));
 			k.setDonViTinh(rs.getString("donViTinh"));
 			k.setGiaBan(rs.getFloat("giaBan"));
-			k.setSoLo(rs.getString("soLo"));
 			k.setHanSuDung(rs.getDate("hanSuDung"));
 			list.add(k);
 			table.setItems(list);

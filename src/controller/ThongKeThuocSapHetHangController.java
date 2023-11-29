@@ -51,7 +51,7 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 	@FXML
 	private DatePicker dpHanSuDung;
 	@FXML
-	private TextField txtTenThuoc, txtDonViTinh, txtLoaiThuoc, txtSoLo;
+	private TextField txtTenThuoc, txtDonViTinh, txtLoaiThuoc;
 	@FXML
 	private TableView<CTThuoc> table;
 	@FXML
@@ -66,8 +66,7 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 	private TableColumn<CTThuoc, String> loaiThuoc;
 	@FXML
 	private TableColumn<CTThuoc, Integer> slTon;
-	@FXML
-	private TableColumn<CTThuoc, String> soLo;
+
 	@FXML
 	private TableColumn<CTThuoc, Date> hanSuDung;
 	
@@ -288,7 +287,15 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 	         Scene scene = new Scene(sampleParent);
 	         stage.setScene(scene);
 	 	}
-
+	 	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+			Stage stage = (Stage) mb.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+	        Parent sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+	        stage.setScene(scene);
+	       
+		}
 	     public void capNhatKhachHang(ActionEvent e) throws IOException {
 	     	Stage stage = (Stage) mb.getScene().getWindow();
 	     	FXMLLoader loader = new FXMLLoader();
@@ -321,22 +328,22 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -349,13 +356,13 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 	//End Navbar
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		reload();
 		btnTimKiem.setOnAction(arg->{
 			list.clear();
 			table.setItems(null);
 			LocalDate ld = dpHanSuDung.getValue();
 			Date date = Date.valueOf(ld);
-			String s = "SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and tenThuoc like N'%"+txtTenThuoc.getText().toString()+"%'and donViTinh like N'%"+txtDonViTinh.getText().toString()+"%' and tenLoaiThuoc like N'"+ txtLoaiThuoc.getText().toString()+"%' and soLo like N'%"+txtSoLo.getText().toString()+"%' and hanSuDung = '"+date+"'";
+			String s = "SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and tenThuoc like N'%"+txtTenThuoc.getText().toString()+"%'and donViTinh like N'%"+txtDonViTinh.getText().toString()+"%' and tenLoaiThuoc like N'"+ txtLoaiThuoc.getText().toString()+"%' and hanSuDung = '"+date+"'";
 			try {
 				ps = con.prepareStatement(s);
 				rs = ps.executeQuery();
@@ -367,7 +374,6 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 					ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
 					ct.setDonViTinh(rs.getString("donViTinh"));
 					ct.setSlTonKho(rs.getInt("soLuongCon"));
-					ct.setSoLo(rs.getString("soLo"));
 					ct.setHanSuDung(rs.getDate("hanSuDung"));
 					list.add(ct);
 					table.setItems(list);
@@ -398,7 +404,7 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
+		String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) > 0";
 		try {
 			ps = con.prepareStatement(hh);
 			rs = ps.executeQuery();
@@ -418,15 +424,17 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 		 loaiThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenLoaiThuoc"));
 		 donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
 		 slTon.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("slTonKho"));
-		 soLo.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("soLo"));
+
 		 hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc,Date>("hanSuDung"));
 	}
-	public void thuocSapHetHang() {
-		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
+	public ObservableList<CTThuoc> thuocSapHetHang() {
+		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) > 0";
 			try {
 		PreparedStatement ps1 = con.prepareStatement(sql1);
 			rs = ps1.executeQuery();
 			int i = 1;
+			table.setItems(null);
+			list.clear();
 			while(rs.next()) {
 				CTThuoc ct = new CTThuoc();
 				ct.setMaThuoc(i++);
@@ -434,7 +442,6 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 				ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
 				ct.setDonViTinh(rs.getString("donViTinh"));
 				ct.setSlTonKho(rs.getInt("soLuongCon"));
-				ct.setSoLo(rs.getString("soLo"));
 				ct.setHanSuDung(rs.getDate("hanSuDung"));
 				list.add(ct);
 				table.setItems(list);
@@ -443,5 +450,14 @@ public class ThongKeThuocSapHetHangController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+			return list;
+	}
+	public void reload() {
+		table.setItems(null);
+		list.clear();
+		list = thuocSapHetHang();
+		// TODO Auto-generated method stub
+		cell();
+		table.setItems(list);
 	}
 }

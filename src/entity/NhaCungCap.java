@@ -7,7 +7,8 @@ public class NhaCungCap {
 	private String email;
 	private String diaChi;
 	private String trangThai;
-	public NhaCungCap(int maNCC, String tenNCC, String sdt, String email, String diaChi, String trangThai) {
+	private float tongGiaNhap;
+	public NhaCungCap(int maNCC, String tenNCC, String sdt, String email, String diaChi, String trangThai, float tongGiaNhap) {
 		super();
 		this.maNCC = maNCC;
 		this.tenNCC = tenNCC;
@@ -15,6 +16,7 @@ public class NhaCungCap {
 		this.email = email;
 		this.diaChi = diaChi;
 		this.trangThai = trangThai;
+		this.tongGiaNhap = tongGiaNhap;
 	}
 	public NhaCungCap() {
 		super();
@@ -56,7 +58,13 @@ public class NhaCungCap {
 	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
 	}
-
+	public float getTongGiaNhap() {
+		return tongGiaNhap;
+	}
+	public void setTongGiaNhap(float tongGiaNhap) {
+		this.tongGiaNhap = tongGiaNhap;
+	}
+	
 	
 	
 }

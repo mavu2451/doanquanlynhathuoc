@@ -110,6 +110,8 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 	@FXML
 	private TableColumn<CTHoaDon, Integer> maCTHD;
 	@FXML
+	private TableColumn<CTHoaDon, Integer> maThuoc;
+	@FXML
 	private TableColumn<CTHoaDon, String> tenThuoc;
 	@FXML
 	private TableColumn<CTHoaDon, String> tenLoaiThuoc;
@@ -335,7 +337,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 			root.setTop(h1);
 			root.setBottom(h2);
 
-			String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0  group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
+			String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and thuocKeDon = N'Thuốc không kê đơn' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 			try {
 				taoHD();
 				int maHD = getMaHD();
@@ -392,6 +394,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 								while(rs.next()) {
 									CTHoaDon ct = new CTHoaDon();
 									ct.setMaCTHD(i++);
+									ct.setMaThuoc(rs.getInt("maThuoc"));
 									ct.setTenThuoc(rs.getString("tenThuoc"));
 									ct.setDonViTinh(rs.getString("donViTinh"));
 									ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
@@ -406,8 +409,10 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 									String getsl = "select TOP 1(hanSuDung),soLuongCon from CTThuoc where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"'and soLuongCon > 0 order by hanSuDung";
 									ps = con.prepareStatement(getsl);
 									rs = ps.executeQuery();
+									System.out.println("số lượng nhập:" +sl);
 									while(rs.next())
 									slpn = rs.getInt("soLuongCon");
+									System.out.println("số lượng trong kho ban đầu: " + slpn);
 									sl = sl - slpn; // sl = 5, slpn = 4, sl = 1, slpn = 6 = -5
 									System.out.println(sl);
 									if(sl > 0) { // sl = 1
@@ -423,6 +428,8 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 										ps = con.prepareStatement(update2);
 										ps.execute();
 									}
+									System.out.println("số lượng nhập: " + sl);
+									System.out.println("số lượng tồn kho: " + slpn); //96 tong, lay 73
 									
 									String tongGiaBan = "select sum(thanhTien) as tong from CTHoaDon where maHD ='"+maHD+"'";
 									ps = con.prepareStatement(tongGiaBan);
@@ -621,6 +628,14 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 			}
 		});
 	}
+//	public int getSL() {
+//		String sqlMaThuoc = ma
+//		String getsl = "select TOP 1(hanSuDung),soLuongCon from CTThuoc where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"'and soLuongCon > 0 order by hanSuDung";
+//		ps = con.prepareStatement(getsl);
+//		rs = ps.executeQuery();
+//		while(rs.next())
+//		slpn = rs.getInt("soLuongCon");
+//	}
 	public void getKH(ActionEvent e) throws SQLException, IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/XemThongTinThuoc.fxml"));
 		Parent sampleParent = loader.load();
@@ -665,6 +680,15 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 		}
 
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -674,6 +698,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
         scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
         stage.setScene(scene);
 	}
+	
 	public void thuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -877,30 +902,23 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
+	     public void themDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
+	           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
 	           Parent sampleParent = loader.load();
 	           Scene scene = new Scene(sampleParent);
 	           stage.setScene(scene);
 	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
+	      public void timKiemDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
+	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
 	           Parent sampleParent = loader.load();
 	           Scene scene = new Scene(sampleParent);
 	           stage.setScene(scene);
 	   	}
-	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("/view/CapNhatDonThuocMau.fxml"));
-	        Parent sampleParent = loader.load();
-	        Scene scene = new Scene(sampleParent);
-	        stage.setScene(scene);
-	   	}
+
 	      
 	      private void themThatBaiMessage1() {
 	  		Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm trong kho không đủ", ButtonType.OK);
@@ -963,6 +981,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 	 }
 	 public void cell() throws SQLException {
 		 maCTHD.setCellValueFactory(new PropertyValueFactory<CTHoaDon, Integer>("maCTHD"));
+		 maThuoc.setCellValueFactory(new PropertyValueFactory<CTHoaDon, Integer>("maThuoc"));
 		 tenThuoc.setCellValueFactory(new PropertyValueFactory<CTHoaDon, String>("tenThuoc"));
 		 tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTHoaDon, String>("tenLoaiThuoc"));
 		 donViTinh.setCellValueFactory(new PropertyValueFactory<CTHoaDon, String>("donViTinh"));
@@ -985,7 +1004,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 			 cthd.setTenThuoc(rs.getString("tenThuoc"));
 			 cthd.setDonViTinh(rs.getString("donViTinh"));
 			 cthd.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-			 cthd.setSoLo(rs.getString("soLo"));
+			 
 			 cthd.setDonGia(rs.getFloat("donGia"));
 			 cthd.setSoLuong(rs.getInt("soLuong"));
 			 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
@@ -1036,7 +1055,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 				float tong = rs.getFloat("tong");
 				String tongS = String.valueOf(tong);
 				lblThanhTien.setText(tongS);
-				txtTienNhan.setText(tongS);
+//				txtTienNhan.setText(tongS);
 				float tienThoi = Float.parseFloat(txtTienNhan.getText()) - Float.parseFloat(tongS);
 				lblTienThoi.setText(String.valueOf(tienThoi));
 			}
@@ -1134,7 +1153,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 			float tong = rs.getFloat("tong");
 			String tongS = String.valueOf(tong);
 			lblThanhTien.setText(tongS);
-			txtTienNhan.setText(tongS);
+
 			float tienThoi = Float.parseFloat(txtTienNhan.getText()) - Float.parseFloat(tongS);
 			lblTienThoi.setText(String.valueOf(tienThoi));
 			if(tienThoi < 0) {
@@ -1163,12 +1182,13 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 			System.out.println("ma hoa don" + maHD);
 			String tongTien = "select sum(thanhTien) as tt from CTHoaDon where maHD ='"+maHD+"'";
 			ps = con.prepareStatement(tongTien);
+			float tienNhan = Float.parseFloat(txtTienNhan.getText());
 			rs = ps.executeQuery();
 			while(rs.next()) { 
 				System.out.println(rs.getFloat("tt"));
 				lblThanhTien.setText(tong+ "");
 				System.out.println("in hoá đơn thành công");
-				float tienNhan = Float.parseFloat(txtTienNhan.getText());
+
 				String sql1 = "update HoaDon set maNV='"+dnc.getMaNV()+"', maKH = '"+ma+"', ngayLapHD = '"+dNgayNhap+"'"
 						+ ",tongTien = '"+tong+"', tienNhan = '"+tienNhan+"', tienThua = '"+tienThoi+"' where maHD = '"+maHD+"'";
 				ps = con.prepareStatement(sql1);

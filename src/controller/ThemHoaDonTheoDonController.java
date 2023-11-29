@@ -659,22 +659,22 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -683,7 +683,15 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	           Scene scene = new Scene(sampleParent);
 	           stage.setScene(scene);
 	   	}
-
+	  	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+			Stage stage = (Stage) mb.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+	        Parent sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+	        stage.setScene(scene);
+	       
+		}
 	//End Navbar
 	      public int getTTKhachHang() throws SQLException{
 	  		String getKH1 = "select * from KhachHang where tenKH = N'"+txtTenKH.getText()+"' and gioiTinh = N'"+txtGioiTinh.getText()+"'";
@@ -802,8 +810,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			  		else {
 			    	  int getMaHD = getMaHD();
 			    	  inHD1();
-			    	 
-			    	  
+
 			    	  for(int i = 0; i<table.getItems().size();i++) {
 			    		  String sqlMaThuoc = String.valueOf(maThuoc.getCellData(i));
 			    		  int sl = Integer.parseInt(soLuong.getCellData(i).toString());
@@ -824,14 +831,15 @@ public class ThemHoaDonTheoDonController implements Initializable{
 									t.setSlTonKho(rs.getInt("soLuongCon"));
 									t.setDonViTinh(rs.getString("donViTinh"));
 									t.setGiaBan(rs.getFloat("giaBan"));
-									
-									while(sl > 0) {
+								}
+									while(sl > 0) { //41
 										String getsl = "select TOP 1(hanSuDung),soLuongCon from CTThuoc where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"'and soLuongCon > 0 order by hanSuDung";
 										ps = con.prepareStatement(getsl);
 										rs = ps.executeQuery();
 										while(rs.next())
-										slpn = rs.getInt("soLuongCon");
-										sl = sl - slpn; // sl = 5, slpn = 4, sl = 1, slpn = 6 = -5
+										slpn = rs.getInt("soLuongCon"); // 20
+										
+										sl = sl - slpn; // sl = 5, slpn = 4, sl = 1, slpn = 6 = -5 
 										System.out.println(sl);
 										if(sl > 0) { // sl = 1
 											String update = "update CTThuoc set soLuongCon = 0 where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' and hanSuDung = (select TOP 1(hanSuDung) from CTThuoc where soLuongCon > 0 and maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' order by hanSuDung)"; // slpn = 0
@@ -839,7 +847,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 											ps.execute();
 											
 										}
-										if(sl <= 0) { // -5 < 0
+										else if(sl <= 0) { // -5 < 0
 											int slcl = sl + slpn; // -5 + 6
 											slpn = slpn - slcl;
 											String update2 = "update CTThuoc set soLuongCon = "+slpn+" where maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' and hanSuDung = (select TOP 1(hanSuDung)from CTThuoc where soLuongCon > 0 and maThuoc = '"+Integer.parseInt(sqlMaThuoc)+"' order by hanSuDung)";
@@ -847,7 +855,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 											ps.execute();
 										}
 								}
-								}
+								
 							
 								float tong = Float.parseFloat(lblThanhTien.getText());
 								float tienNhan = Float.parseFloat(txtTienNhan.getText());
@@ -879,6 +887,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 						
 			  		}
 			      }
+			 
 			 	 public void tienThoi() {
 					 float tienNhan = Float.parseFloat(txtTienNhan.getText());
 					 float thanhTien = Float.parseFloat(lblThanhTien.getText());

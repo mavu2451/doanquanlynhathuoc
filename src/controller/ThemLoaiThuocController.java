@@ -27,7 +27,7 @@ public class ThemLoaiThuocController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private TextField txtMaLoaiThuoc, txtLoaiThuoc;
+	private TextField  txtLoaiThuoc;
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
@@ -198,6 +198,15 @@ public class ThemLoaiThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void thongKeKhachHang(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -310,11 +319,10 @@ public class ThemLoaiThuocController implements Initializable{
 
 	//End Navbar
 	public void add(ActionEvent e) {
-		String query ="Insert into LoaiSP(maLoaiSP ,loaiSP) values (?,?)";
+		String query ="Insert into LoaiThuoc(tenLoaiThuoc) values (?)";
 		try {
 			ps = con.prepareStatement(query);
-			ps.setString(1, txtMaLoaiThuoc.getText().toString());
-			ps.setString(2, txtLoaiThuoc.getText().toString());
+			ps.setString(1, txtLoaiThuoc.getText().toString());
 			ps.execute();
 			themThanhCongMessage();
 		} catch (Exception e2) {

@@ -3,7 +3,10 @@ package controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -46,11 +49,20 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class ThemThuocController implements Initializable{
+	@FXML
+	private ImageView imageView;
+	private Image image;
+	private FileInputStream fis;
+	private File file;
 	ObservableList<String> countries = FXCollections.observableArrayList("Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe", "Palestine");
 	ObservableList<String> thuocKeDon = FXCollections.observableArrayList("Thuốc kê đơn", "Thuốc không kê đơn");
 	@FXML
@@ -59,6 +71,8 @@ public class ThemThuocController implements Initializable{
 	private MenuButton mb;
 	@FXML
 	private TextArea txtThongTin;
+	@FXML
+	private AnchorPane ap;
 	@FXML
 	private ComboBox<String> cbbThuocKeDon;
 	@FXML
@@ -191,15 +205,7 @@ public class ThemThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void capNhatThuoc(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
+
 	public void loaiThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		
@@ -237,15 +243,7 @@ public class ThemThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void capNhatLoaiThuoc(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatLoaiThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
+
 	public void timThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -318,97 +316,78 @@ public class ThemThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
-	public void capNhatNhanVien(ActionEvent e) throws IOException {
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatNhanVien.fxml"));
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
        
 	}
-	  public void gioHang(ActionEvent e) throws IOException {
-	    	Stage stage = (Stage) mb.getScene().getWindow();
-	    	FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("/view/GioHang.fxml"));
-	        Parent sampleParent = loader.load();
-	        Scene scene = new Scene(sampleParent);
-	        stage.setScene(scene);
-		}
-	     public void themKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/ThemKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
 
-	     public void timKiemKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/TimKiemKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
+     public void gioHang(ActionEvent e) throws IOException {
+    	Stage stage = (Stage) mb.getScene().getWindow();
+    	FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/GioHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+	}
+     public void themKhachHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/ThemKhachHang.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 
-	     public void capNhatKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/CapNhatKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
-	     public void themNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/ThemNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void timKiemNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/TimKiemNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void capNhatNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/CapNhatNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/CapNhatDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+     public void timKiemKhachHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemKhachHang.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
+
+     public void themNCC(ActionEvent e) throws IOException {
+      	Stage stage = (Stage) mb.getScene().getWindow();
+      	FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("/view/ThemNCC.fxml"));
+          Parent sampleParent = loader.load();
+          Scene scene = new Scene(sampleParent);
+          stage.setScene(scene);
+  	}
+     public void timKiemNCC(ActionEvent e) throws IOException {
+      	Stage stage = (Stage) mb.getScene().getWindow();
+      	FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("/view/TimKiemNCC.fxml"));
+          Parent sampleParent = loader.load();
+          Scene scene = new Scene(sampleParent);
+          stage.setScene(scene);
+  	}
+
+     public void themDonThuoc(ActionEvent e) throws IOException {
+       	Stage stage = (Stage) mb.getScene().getWindow();
+       	FXMLLoader loader = new FXMLLoader();
+           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+           Parent sampleParent = loader.load();
+           Scene scene = new Scene(sampleParent);
+           stage.setScene(scene);
+   	}
+      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+       	Stage stage = (Stage) mb.getScene().getWindow();
+       	FXMLLoader loader = new FXMLLoader();
+           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+           Parent sampleParent = loader.load();
+           Scene scene = new Scene(sampleParent);
+           stage.setScene(scene);
+   	}
+      public void logOut(ActionEvent e){
+    	  System.exit(0);
+      }
 
 	//End Navbar
 
@@ -429,9 +408,9 @@ public class ThemThuocController implements Initializable{
 //		list.add(t);
 //		table.setItems(list);
 //	}
-	public void add() throws SQLException {
+	public void add() throws SQLException, FileNotFoundException {
 
-		String sql = "insert into Thuoc(tenThuoc,maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into Thuoc(tenThuoc,maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon, hinhAnh) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
 		int mlt = getLT();
 //		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
@@ -453,6 +432,12 @@ public class ThemThuocController implements Initializable{
 			ps.setString(11, txtSoDangKy.getText().toString());
 			ps.setString(12, txtThongTin.getText().toString());
 			ps.setString(13, cbbThuocKeDon.getSelectionModel().getSelectedItem().toString());
+			fis = new FileInputStream(file);
+//			if(fis==null) {
+//				
+//			}
+			ps.setBinaryStream(14, fis, file.length());
+
 			ps.execute();
 			reload();
 			Alert alert = new Alert(AlertType.INFORMATION, "Thêm thành công", ButtonType.OK);
@@ -528,7 +513,8 @@ public class ThemThuocController implements Initializable{
 
 	}
 	@FXML
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) throws SQLException, IOException {
+		InputStream is;
 		Thuoc t = table.getSelectionModel().getSelectedItem();
 		lblMaThuoc.setText(String.valueOf(t.getMaThuoc()));
 		txtTenThuoc.setText(t.getTenThuoc());
@@ -544,6 +530,27 @@ public class ThemThuocController implements Initializable{
 		txtDinhMucSL.setText(String.valueOf(t.getDinhMucSL()));
 		txtSoDangKy.setText(t.getSoDangKy());
 		cbbTrangThai.setValue(t.getTrangThai());
+		String query = "select * from Thuoc where maThuoc = '"+lblMaThuoc.getText()+"'";
+		ps = con.prepareStatement(query);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+		is = rs.getBinaryStream("hinhAnh");
+		if(is==null) {
+			image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+			imageView.setImage(image);
+		}
+		OutputStream os = new FileOutputStream(new File("photo.jpg"));
+		byte[] content = new byte[1024];
+		int size = 0;
+		while((size = is.read(content))!=-1) {
+			os.write(content, 0 ,size);
+		
+		}
+		os.close();
+		is.close();
+		image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+		imageView.setImage(image);
+		}
 	}
 	public int getLoaiThuoc() throws SQLException {
 		int i = 0;
@@ -573,6 +580,8 @@ public class ThemThuocController implements Initializable{
 				ps = con.prepareStatement(query);
 				ps.execute();
 				xoaThanhCongMessage();
+				image = new Image("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+				imageView.setImage(image);
 				reload();
 			}catch(Exception e1) {
 				e1.printStackTrace();
@@ -593,7 +602,8 @@ public class ThemThuocController implements Initializable{
 		cbbTrangThai.setValue(null);
 		txtDinhMucSL.setText("");
 		txtSoDangKy.setText("");
-		
+		image = new Image("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+		imageView.setImage(image);
 	}
 	public void getAllLoaiThuoc(){
 		String sql = "select * from LoaiThuoc";
@@ -741,6 +751,19 @@ public class ThemThuocController implements Initializable{
 			}
 		});
 		return list;
+	}
+	@FXML
+	public void chooseImage(ActionEvent e) throws FileNotFoundException {
+		Stage stage = (Stage) ap.getScene().getWindow();
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Chọn ảnh");
+		FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg","*.png");
+		file = fc.showOpenDialog(stage);
+		if(file !=null) {
+			Image image  = new Image(file.toURI().toString(),100,130,false,true);
+			imageView.setImage(image);
+			FileInputStream fs = new FileInputStream(file);
+		}
 	}
 	@FXML
 	private void themThanhCongMessage() {

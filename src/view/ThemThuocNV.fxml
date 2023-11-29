@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemThuocNVController">
+       <left>
+      <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="756.0" prefWidth="226.0" spacing="5.0" styleClass="tab">
+               <children>
+                  <HBox fx:id="hbTrangChu" prefHeight="38.0" prefWidth="199.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/dashboard.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#trangChu" prefHeight="44.0" prefWidth="131.0" style="-fx-background-color: transparent;" text="Trang chủ" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hbTrangChu1" alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/thuoc.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <MenuButton fx:id="mb" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Thuốc" textFill="WHITE">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#thuoc" text="Thêm thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timThuoc" text="Tìm kiếm thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timLoaiThuoc" text="Tìm kiếm loại thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#nhapThuoc" text="Nhập thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemNhapThuoc" text="Tìm kiếm đơn nhập" />
+                          </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <AnchorPane />
+                  <HBox fx:id="hbTrangChu13" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/bill.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Giỏ hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
+                              <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
+                           </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hbTrangChu14" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/customer.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <MenuButton fx:id="mb3" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Khách hàng" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#themKhachHang" text="Thêm khách hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm khách hàng" />
+                           </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hbTrangChu16" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/ncc.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <MenuButton fx:id="mb41" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="185.0" style="-fx-background-color: transparent;" text="Nhà cung cấp" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#themNCC" text="Thêm nhà cung cấp" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemNCC" text="Tìm kiếm nhà cung cấp" />
+                           </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hbTrangChu17" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                   <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/graph.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                      
+                        </ImageView>
+                        <MenuButton fx:id="mb5" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Thống kê" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHan" text="Thống kê thuốc sắp hết hạn" />
+                              <MenuItem mnemonicParsing="false" onAction="#thongKeThuocSapHetHang" text="Thống kê thuốc sắp hết hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#thuocTrongKho" text="Thuốc trong kho" />
+                           </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <ImageView fitHeight="131.0" fitWidth="131.0" layoutX="61.0" layoutY="691.0" opacity="0.3" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/medicine.png" />
+               </image>
+            </ImageView>
+            <HBox fx:id="hbTrangChu11" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </left>
+   <top>
+      <AnchorPane fx:id="navi" prefHeight="70.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="avatar" fitHeight="41.0" fitWidth="55.0" layoutX="1112.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" style="b: 50%;">
+               <image>
+                  <Image url="@../../images/avatar.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lblName" layoutX="1178.0" layoutY="18.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="16.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/logo48.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="73.0" layoutY="18.0" text="NHÀ THUỐC" textFill="#55ffcc" />
+            <Label layoutX="73.0" layoutY="35.0" text="THỊNH VƯỢNG" textFill="#55ffcc">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <MenuButton fx:id="taiKhoan" layoutX="1177.0" layoutY="18.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="177.0" style="-fx-background-color: transparent;">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Thông tin cá nhân" />
+                <MenuItem mnemonicParsing="false" text="Đăng xuất" />
+              </items>
+            </MenuButton>
+         </children></AnchorPane>
+   </top>
+   <center>
+       <AnchorPane fx:id="ap" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lblMaThuoc" layoutX="143.0" layoutY="54.0" text="0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="31.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="707.0">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.10000000149011612" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Rectangle>
+            <Label layoutX="279.0" layoutY="28.0" text="THÊM THUỐC MỚI">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="69.0" layoutY="274.0" text="Tên thuốc" />
+            <Label layoutX="77.0" layoutY="328.0" text="Loại thuốc" />
+            <Label layoutX="75.0" layoutY="378.0" text="Đơn vị tính" />
+            <Label layoutX="85.0" layoutY="434.0" text="Giá nhập" />
+            <Label layoutX="417.0" layoutY="329.0" text="Nước sản xuất" />
+            <ComboBox fx:id="cbbNSX" layoutX="523.0" layoutY="325.0" prefHeight="25.0" prefWidth="171.0" promptText="Chọn nước sản xuất..." />
+            <Label layoutX="85.0" layoutY="539.0" text="Cách dùng" />
+            <Label layoutX="441.0" layoutY="435.0" text="Trạng thái" />
+            <ComboBox fx:id="cbbTrangThai" layoutX="525.0" layoutY="429.0" prefHeight="25.0" prefWidth="172.0" promptText="Chọn trạng thái..." />
+            <Label layoutX="83.0" layoutY="585.0" text="Thông tin lưu ý" />
+            <TextArea fx:id="txtThongTin" layoutX="85.0" layoutY="617.0" prefHeight="200.0" prefWidth="602.0" />
+            <TextField fx:id="txtTenThuoc" layoutX="160.0" layoutY="270.0" prefHeight="25.0" prefWidth="168.0" />
+            <TextField fx:id="txtDonViTinh" layoutX="162.0" layoutY="374.0" prefHeight="25.0" prefWidth="169.0" />
+            <TextField fx:id="txtGiaNhap" layoutX="162.0" layoutY="430.0" prefHeight="25.0" prefWidth="169.0" />
+            <TextField fx:id="txtCachDung" layoutX="162.0" layoutY="535.0" prefHeight="25.0" prefWidth="169.0" />
+            <Button layoutX="85.0" layoutY="835.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
+            <Button layoutX="575.0" layoutY="836.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
+            <TextField fx:id="txtGiaBan" layoutX="525.0" layoutY="480.0" prefHeight="25.0" prefWidth="173.0" />
+            <Label layoutX="456.0" layoutY="485.0" text="Giá bán" />
+            <Label layoutX="41.0" layoutY="485.0" text="Quy cách đóng gói" />
+            <TextField fx:id="txtQuyCach" layoutX="162.0" layoutY="481.0" prefHeight="25.0" prefWidth="169.0" />
+            <ComboBox fx:id="cbbLoaiThuoc" layoutX="162.0" layoutY="324.0" prefHeight="25.0" prefWidth="168.0" promptText="Chọn loại thuốc..." />
+            <Label layoutX="405.0" layoutY="540.0" text="Định mức số lượng" />
+            <Label layoutX="434.0" layoutY="379.0" text="Số đăng ký" />
+            <TextField fx:id="txtDinhMucSL" layoutX="524.0" layoutY="534.0" prefHeight="25.0" prefWidth="170.0" promptText="Thông báo khi thuốc sắp hết" />
+            <TextField fx:id="txtSoDangKy" layoutX="524.0" layoutY="374.0" prefHeight="25.0" prefWidth="170.0" />
+            <Button fx:id="nhapExcel" layoutX="1010.0" layoutY="64.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="113.0" text="Nhập Excel" />
+            <Rectangle fx:id="cbThuocKeDon" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="885.0" layoutX="761.0" layoutY="21.0" stroke="WHITE" strokeType="INSIDE" width="909.0">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color opacity="0.10000000149011612" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Rectangle>
+            <ScrollPane layoutX="797.0" layoutY="102.0" prefHeight="789.0" prefWidth="853.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="788.0" prefWidth="847.0">
+                     <children>
+                        <TableView fx:id="table" layoutX="-1.0" onMouseClicked="#mouseClicked" prefHeight="782.0" prefWidth="837.0">
+                          <columns>
+                            <TableColumn fx:id="maThuoc" prefWidth="67.0" text="Mã thuốc" />
+                            <TableColumn fx:id="tenThuoc" prefWidth="83.0" text="Tên thuốc" />
+                              <TableColumn fx:id="loaiThuoc" prefWidth="75.0" text="Loại thuốc" />
+                              <TableColumn fx:id="dvt" prefWidth="107.0" text="Đơn vị tính" />
+                              <TableColumn fx:id="quyCachDongGoi" prefWidth="149.0" text="Quy cách đóng gói" />
+                              <TableColumn fx:id="giaNhap" prefWidth="95.0" text="Giá nhập" />
+                              <TableColumn fx:id="giaBan" prefWidth="103.0" text="Giá bán" />
+                              <TableColumn fx:id="trangThai" prefWidth="157.0" text="Trạng thái" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <ComboBox fx:id="cbbTKD" layoutX="797.0" layoutY="68.0" prefHeight="27.0" prefWidth="199.0" promptText="Thuốc kê đơn" />
+            <Label layoutX="1090.0" layoutY="45.0" text="THÔNG TIN THUỐC">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button layoutX="246.0" layoutY="835.0" mnemonicParsing="false" onAction="#capNhat" prefHeight="50.0" prefWidth="103.0" text="Cập nhật" />
+            <TextField fx:id="txtTimKiem" layoutX="1489.0" layoutY="68.0" />
+            <Label layoutX="1398.0" layoutY="72.0" text="Tìm kiếm thuốc" />
+            <ComboBox fx:id="cbbThuocKeDon" layoutX="523.0" layoutY="278.0" prefHeight="25.0" prefWidth="171.0" promptText="Chọn" />
+            <Label layoutX="418.0" layoutY="283.0" text="Thuốc kê đơn" />
+            <Button layoutX="414.0" layoutY="835.0" mnemonicParsing="false" onAction="#remove" prefHeight="50.0" prefWidth="103.0" text="Xoá" />
+            <Button layoutX="345.0" layoutY="245.0" mnemonicParsing="false" onAction="#chooseImage" text="Thêm ảnh" />
+            <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="169.0" layoutX="302.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -151,7 +151,7 @@ public class ThemDonThuocController implements Initializable{
 				TextField cachDung = new TextField();
 				Label chonSL = new Label("Chọn số lượng");
 				HBox h1 = new HBox(3);
-				HBox h2 = new HBox(5);
+				HBox h2 = new HBox(3);
 				
 				Stage stage = new Stage();
 
@@ -183,11 +183,57 @@ public class ThemDonThuocController implements Initializable{
 				root.setCenter(scroll);
 				scroll.setContent(tableView);
 				h1.getChildren().addAll( lblTimKiem, txtTimKiem);
-				h2.getChildren().addAll(chonSL, soLuong, chon, lblCachDung, cachDung);
+				h2.getChildren().addAll(chonSL, soLuong, chon);
 				root.setTop(h1);
 				root.setBottom(h2);
+				txtTimKiem.setOnKeyReleased(e->{
+					if(txtTimKiem.getText().equals("")) {
+						Tlist.clear();
+						String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where thuocKeDon = N'Thuốc kê đơn'";
+						try {
+							ps = con.prepareStatement(sql);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								Thuoc t = new Thuoc();
+								t.setMaThuoc(rs.getInt("maThuoc"));
+								t.setTenThuoc(rs.getString("tenThuoc"));
+//								k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setDvt(rs.getString("donViTinh"));
+								t.setNsx(rs.getString("nuocSanXuat"));
+								t.setThuocKeDon(rs.getString("thuocKeDon"));
+								Tlist.add(t);
+								tableView.setItems(Tlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+					else {
+						Tlist.clear();
+						String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where tenThuoc like N'%"+txtTimKiem.getText().toString()+"%'and thuocKeDon = N'Thuốc kê đơn'";
+						try {
+							ps = con.prepareStatement(sql);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								Thuoc t = new Thuoc();
+								t.setMaThuoc(rs.getInt("maThuoc"));
+								t.setTenThuoc(rs.getString("tenThuoc"));
+//								k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setDvt(rs.getString("donViTinh"));
+								t.setNsx(rs.getString("nuocSanXuat"));
+								t.setThuocKeDon(rs.getString("thuocKeDon"));
+								Tlist.add(t);
+								tableView.setItems(Tlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+				});
 
-				String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc";
+				String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where thuocKeDon = N'Thuốc kê đơn'";
 				try {
 					taoDonThuoc();
 					int maDT = getMaDonThuoc();
@@ -260,7 +306,7 @@ public class ThemDonThuocController implements Initializable{
 					e.printStackTrace();
 				}
 
-				Scene scene = new Scene(root,700,400);
+				Scene scene = new Scene(root,400,400);
 				stage.setScene(scene);
 				stage.setResizable(true);
 				stage.show();
@@ -317,6 +363,51 @@ public class ThemDonThuocController implements Initializable{
 					root.setTop(h1);
 					root.setBottom(h2);
 					String sql = "select * from KhachHang";
+					txtTimKiem.setOnKeyReleased(e->{
+						if(txtTimKiem.getText().equals("")) {
+							Khlist.clear();
+							try {
+								ps = con.prepareStatement(sql);
+								rs = ps.executeQuery();
+								while(rs.next()) {
+									KhachHang kh = new KhachHang();
+									kh.setMaKH(rs.getInt("maKH"));
+									kh.setHoTen(rs.getString("tenKH"));
+									kh.setGioiTinh(rs.getString("gioiTinh"));
+									kh.setNgaySinh(rs.getDate("ngaySinh"));
+									kh.setSdt(rs.getString("sdt"));
+									kh.setEmail(rs.getString("email"));
+									kh.setDiaChi(rs.getString("diaChi"));
+									Khlist.add(kh);
+									tableView.setItems(Khlist);
+								}
+							}catch (Exception e1) {
+								// TODO: handle exception
+							}
+						}
+						else {
+							Khlist.clear();
+							String sql1 = "select * from KhachHang where tenKH like '%"+txtTimKiem.getText()+"%'";
+							try {
+								ps = con.prepareStatement(sql1);
+								rs = ps.executeQuery();
+								while(rs.next()) {
+									KhachHang kh = new KhachHang();
+									kh.setMaKH(rs.getInt("maKH"));
+									kh.setHoTen(rs.getString("tenKH"));
+									kh.setGioiTinh(rs.getString("gioiTinh"));
+									kh.setNgaySinh(rs.getDate("ngaySinh"));
+									kh.setSdt(rs.getString("sdt"));
+									kh.setEmail(rs.getString("email"));
+									kh.setDiaChi(rs.getString("diaChi"));
+									Khlist.add(kh);
+									tableView.setItems(Khlist);
+								}
+							}catch (Exception e1) {
+								// TODO: handle exception
+							}
+						}
+					});
 					try {
 						ps = con.prepareStatement(sql);
 						rs = ps.executeQuery();
@@ -380,7 +471,7 @@ public class ThemDonThuocController implements Initializable{
 					Optional<ButtonType> result = alert1.showAndWait();
 					int maDT = getMaDonThuoc();
 					if(result.get()==ButtonType.OK) {
-						String sql = "update DonThuocKhamBenh set bacSiKeDon = '"+txtBacSiKeDon.getText()+"',chanDoan = '"+txtChanDoan.getText()+"',loiDan = '"+txtLoiKhuyen.getText()+"',thongTinChiTiet = '"+txtThongTin.getText()+"' where maDonThuoc = '"+maDT+"'";
+						String sql = "update DonThuocKhamBenh set bacSiKeDon = N'"+txtBacSiKeDon.getText()+"',chanDoan = N'"+txtChanDoan.getText()+"',loiDan = N'"+txtLoiKhuyen.getText()+"',thongTinChiTiet = N'"+txtThongTin.getText()+"' where maDonThuoc = '"+maDT+"'";
 						ps = con.prepareStatement(sql);
 						ps.execute();
 						Alert alert2 = new Alert(AlertType.INFORMATION);
@@ -393,6 +484,10 @@ public class ThemDonThuocController implements Initializable{
 						txtGioiTinh.setText("");
 						txtSdt.setText("");
 						txtEmail.setText("");
+						txtThongTin.setText("");
+						txtBacSiKeDon.setText("");
+						txtChanDoan.setText("");
+						txtLoiKhuyen.setText("");
 						table.setItems(null);
 						hd = 0;
 		
@@ -454,6 +549,15 @@ public class ThemDonThuocController implements Initializable{
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/ThemThuoc.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
         Parent sampleParent = loader.load();
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
@@ -653,22 +757,22 @@ public class ThemDonThuocController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
+	       public void timKiemDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -756,7 +860,7 @@ public class ThemDonThuocController implements Initializable{
 	  	 }
 	  		public void inHD1() throws IOException, SQLException {
 		 		int maHD = getMaDonThuoc();
-		 		String s = "select hd.maDonThuoc, bacSiKeDon, chanDoan, loiDan from HoaDon hd left join DonThuocKhamBenh dt on dt.maDonThuoc = hd.maDonThuoc where maHD = '"+maHD+"'";
+		 		String s = "select hd.maDonThuoc, bacSiKeDon, chanDoan, loiDan from DonThuocKhamBenh hd left join CTDonThuocKhamBenh dt on dt.maDonThuoc = hd.maDonThuoc where hd.maDonThuoc = '"+maHD+"'";
 		 		ps = con.prepareStatement(s);
 		 		rs = ps.executeQuery();
 		 		DonThuocKhamBenh dt = new DonThuocKhamBenh();
@@ -778,7 +882,7 @@ public class ThemDonThuocController implements Initializable{
 				float half[] = {450f};
 				float half2[] = {370f};
 				float full[] = {770f};
-				float sixcolwidth[] = {50f,250f,200f,200f};
+				float sixcolwidth[] = {50f,300f,100f,70f};
 				PdfWriter pdf = new PdfWriter(p);
 				PdfFont pf = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Black.ttf", "Identity-H", true);
 				PdfFont pflight = PdfFontFactory.createFont("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\fonts\\Roboto-Light.ttf", "Identity-H", true);
@@ -787,13 +891,13 @@ public class ThemDonThuocController implements Initializable{
 				Document d = new Document(pd);
 				Table t = new Table(twocolwidth);
 				t.addCell(new Cell().add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf)).setBorder(Border.NO_BORDER));
-				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
+//				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
 				t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
 				Table divide = new Table(full);
 				Border g = new SolidBorder(1f/2f);
 				divide.setBorder(g);
 				Table t1 = new Table(full);
-				t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
+				t1.addCell(new Cell().add(new Paragraph("ĐƠN THUỐC").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
 				t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
 				t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 				t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
@@ -810,22 +914,24 @@ public class ThemDonThuocController implements Initializable{
 				t2.addCell(new Cell().add(new Paragraph("Tên thuốc").setFont(pf)));
 				t2.addCell(new Cell().add(new Paragraph("Đơn vị tính").setFont(pf)));
 				t2.addCell(new Cell().add(new Paragraph("Số lượng").setFont(pf)));
-				Table t3 = new Table(full);
 				int j = 1;
 				for(int i = 0;i < table.getItems().size();i++) {
 					t2.addCell(new Cell().add(new Paragraph(j++ + "").setFont(pflight).setTextAlignment(TextAlignment.RIGHT)));
 					t2.addCell(new Cell().add(new Paragraph(tenThuoc.getCellData(i)).setFont(pflight)));
 					t2.addCell(new Cell().add(new Paragraph(donViTinh.getCellData(i)).setFont(pflight)));
 					t2.addCell(new Cell().add(new Paragraph(soLuong.getCellData(i).toString()).setFont(pflight)));
-
+			
 				}
+				Table t3 = new Table(full);
+				t3.addCell(new Cell().add(new Paragraph("\n\n")).setBorder(Border.NO_BORDER));
 				Table divide1 = new Table(full);
 				divide1.setBorder(g);
 				Table t4 = new Table(half);
 				Table t5 = new Table(half2);
 				t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 				t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
-				t4.addCell(new Cell().add(new Paragraph("Khi mua thuốc xin hãy đem theo đơn thuốc này").setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("Đi mua thuốc kê đơn cần mang theo phiếu này!").setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + txtThongTin.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
 				d.add(t);
 				d.add(divide);
 				d.add(t1);

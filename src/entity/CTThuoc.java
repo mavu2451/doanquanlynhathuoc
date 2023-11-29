@@ -13,10 +13,9 @@ public class CTThuoc {
 	private int soLuong;
 	private float giaNhap;
 	private float giaBan;
-	private String soLo;
 	private Date hanSuDung;
 	public CTThuoc(int maKho, int maThuoc, String tenThuoc, String donViTinh, String tenNCC, String tenLoaiThuoc,
-			int slTonKho, float giaNhap, float giaBan, String soLo, Date hanSuDung, int soLuong) {
+			int slTonKho, float giaNhap, float giaBan, Date hanSuDung, int soLuong) {
 		super();
 		this.maKho = maKho;
 		this.maThuoc = maThuoc;
@@ -27,7 +26,6 @@ public class CTThuoc {
 		this.slTonKho = slTonKho;
 		this.giaNhap = giaNhap;
 		this.giaBan = giaBan;
-		this.soLo = soLo;
 		this.hanSuDung = hanSuDung;
 		this.soLuong = soLuong;
 	}
@@ -89,12 +87,7 @@ public class CTThuoc {
 	public void setGiaBan(float giaBan) {
 		this.giaBan = giaBan;
 	}
-	public String getSoLo() {
-		return soLo;
-	}
-	public void setSoLo(String soLo) {
-		this.soLo = soLo;
-	}
+
 	public Date getHanSuDung() {
 		return hanSuDung;
 	}

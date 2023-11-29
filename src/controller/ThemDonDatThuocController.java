@@ -234,7 +234,7 @@ public class ThemDonDatThuocController implements Initializable{
 				root.setTop(h1);
 				root.setBottom(h2);
 
-				String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0  group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
+				String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and thuocKeDon = N'Thuốc không kê đơn' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 				try {
 					taoHD();
 					int maPDT = getMaPDT();
@@ -570,6 +570,15 @@ public class ThemDonDatThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void capNhatThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -764,22 +773,22 @@ public class ThemDonDatThuocController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
+	       public void timKiemDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -872,7 +881,7 @@ public class ThemDonDatThuocController implements Initializable{
 			 cthd.setTenThuoc(rs.getString("tenThuoc"));
 			 cthd.setDonViTinh(rs.getString("donViTinh"));
 			 cthd.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-			 cthd.setSoLo(rs.getString("soLo"));
+//			 cthd.setSoLo(rs.getString("soLo"));
 			 cthd.setDonGia(rs.getFloat("donGia"));
 			 cthd.setSoLuong(rs.getInt("soLuong"));
 			 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
@@ -979,6 +988,7 @@ public class ThemDonDatThuocController implements Initializable{
 		divide.setBorder(g);
 		Table t1 = new Table(full);
 		t1.addCell(new Cell().add(new Paragraph("PHIẾU ĐẶT THUỐC").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
+		t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));

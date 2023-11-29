@@ -96,6 +96,7 @@ public class CTPhieuNhapController implements Initializable{
 	private TableColumn<CTPhieuNhap, Float> tongGiaBan;
 	@FXML
 	private ComboBox<String> cbbTrangThai;
+	ObservableList<CTPhieuNhap> pnlist = FXCollections.observableArrayList();
 	public PhieuNhap p;
 	ActionEvent e;
 	Connection con = KetNoiDatabase.getConnection();
@@ -523,22 +524,22 @@ public class CTPhieuNhapController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
+	       public void timKiemDonThuoc(ActionEvent e) throws IOException {
+	        	Stage stage = (Stage) mb.getScene().getWindow();
+	        	FXMLLoader loader = new FXMLLoader();
+	            loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+	            Parent sampleParent = loader.load();
+	            Scene scene = new Scene(sampleParent);
+	            stage.setScene(scene);
+	    	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -547,7 +548,15 @@ public class CTPhieuNhapController implements Initializable{
 	           Scene scene = new Scene(sampleParent);
 	           stage.setScene(scene);
 	   	}
-
+	  	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+			Stage stage = (Stage) mb.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+	        Parent sampleParent = loader.load();
+	        Scene scene = new Scene(sampleParent);
+	        stage.setScene(scene);
+	       
+		}
 
 	//End Navbar
 	@FXML
@@ -707,67 +716,53 @@ public class CTPhieuNhapController implements Initializable{
 				luuThanhCong();
 			}
 			else {
-			String ctt = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and soLo='"+txtSoLo.getText()+"' and hanSuDung = '" +dhsd+ "'";
-			ps = con.prepareStatement(ctt);
-			rs = ps.executeQuery();
-			CTThuoc k = new CTThuoc();
-			ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
-			String maTh = String.valueOf(mThuoc);
-			String gNhap = String.valueOf(gn);
-			String gBan = String.valueOf(gb);
-			while(rs.next()) {
-				k.setMaThuoc(rs.getInt("maThuoc"));
-//				k.setTenThuoc(rs.getString("tenThuoc"));
-				k.setGiaNhap(rs.getFloat("giaNhap"));
-				k.setGiaBan(rs.getFloat("giaBan"));
-				k.setSlTonKho(rs.getInt("soLuongCon"));
-				k.setSoLo(rs.getString("soLo"));
-				k.setHanSuDung(rs.getDate("hanSuDung"));
-				khoList.add(k);
-				int tongsl = rs.getInt("soLuongCon") + sl;
-				System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
-				String maThuocS = String.valueOf(k.getMaThuoc());
-				System.out.println(maTh);
-				System.out.println(maThuocS);
-//				&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
-				if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
-					String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"'";
-					ps = con.prepareStatement(themSl);
-					ps.execute();
-					System.out.println(themSl);
-				}
-			}
-				if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
-				
-			}
-			
-//			String kho1 = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' soLo='"+1+"' and hanSuDung = '" +dhsd+ "'";
-
-				String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, soLo, hanSuDung) values (?,?,?,?,?,?)";
-				ps = con.prepareStatement(nhapThuoc);
-				ps.setInt(1, mThuoc);
-				ps.setInt(2, sl);
-				ps.setFloat(3, gn);
-				ps.setFloat(4,gb);
-				ps.setString(5, txtSoLo.getText());
-				ps.setDate(6, dhsd);
-//				ps.setInt(7, mapn);
-				ps.execute();
-				
-				String count = "SELECT COUNT(*) as maThuoc FROM CTThuoc GROUP BY maThuoc, giaNhap, giaBan, soLo, hanSuDung HAVING COUNT(*) > 1";
-				ps = con.prepareStatement(count);
-				rs = ps.executeQuery();
-				while(rs.next()) {
-					int c = rs.getInt("maThuoc");
-					for(int i = c;i> 1;i--) {
-						String drop = "delete from CTThuoc where maCTThuoc = (select max(maCTThuoc) from CTThuoc where maThuoc = "+mThuoc+")";
-						ps = con.prepareStatement(drop);
-						ps.execute();
-						System.out.println(drop);
+					String ctt = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '" +dhsd+ "'";
+					ps = con.prepareStatement(ctt);
+					rs = ps.executeQuery();
+					CTThuoc k = new CTThuoc();
+					ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
+					String maTh = String.valueOf(mThuoc);
+					String gNhap = String.valueOf(gn);
+					String gBan = String.valueOf(gb);
+					while(rs.next()) {
+						k.setMaThuoc(rs.getInt("maThuoc"));
+//						k.setTenThuoc(rs.getString("tenThuoc"));
+						k.setGiaNhap(rs.getFloat("giaNhap"));
+						k.setGiaBan(rs.getFloat("giaBan"));
+						k.setSlTonKho(rs.getInt("soLuongCon"));
+						k.setHanSuDung(rs.getDate("hanSuDung"));
+						khoList.add(k);
+						int tongsl = rs.getInt("soLuongCon") + sl;
+						System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
+						String maThuocS = String.valueOf(k.getMaThuoc());
+						System.out.println(maTh);
+						System.out.println(maThuocS);
+//						&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+						if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
+							String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"' and hanSuDung = '"+dhsd+"'";
+							ps = con.prepareStatement(themSl);
+							ps.execute();
+							System.out.println(themSl);
 						}
 					}
+						if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
+						
+					}
+//				String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
+//				PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
+//				ps1.setInt(1, mThuoc);
+//				ps1.setInt(2, sl);
+//				ps1.setFloat(3, gn);
+//				ps1.setFloat(4,gb);
+////				ps1.setString(5, txtSoLo.getText());
+//				ps1.setDate(5, dhsd);
+////				ps.setInt(7, mapn);
+//				ps1.execute();
+//				
+
 				luuThanhCong1();
 			}
+			
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -842,12 +837,14 @@ public class CTPhieuNhapController implements Initializable{
 //		int ma = Integer.parseInt(maPN);
 //		int text = Integer.parseInt(i);
 ////	int i = p.getMaPN();
-		ObservableList<CTPhieuNhap> pnlist = FXCollections.observableArrayList();
+		pnlist.clear();
+		table.setItems(null);
 //		String query = "select * from CTPhieuNhap";
 		String getCTPN = "select * from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN inner join Thuoc t on t.maThuoc = ct.maThuoc where p.maPN = '"+mapn+"'";
 		ps = con.prepareStatement(getCTPN);
 		rs = ps.executeQuery();
 		while(rs.next()) {
+			ctpn.setMaThuoc(rs.getInt("maThuoc"));
 			ctpn.setTenThuoc(rs.getString("tenThuoc"));
 			ctpn.setDonViTinh(rs.getString("donViTinh"));
 			ctpn.setGiaNhap(rs.getFloat("giaNhap"));

@@ -55,16 +55,7 @@ public class TrangChuKHController{
         stage.setScene(scene);
        
 	}
-	public void timLoaiThuoc(ActionEvent e) throws IOException {
-//		Stage stage = (Stage) mb.getScene().getWindow();
-		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/TimKiemLoaiThuocKH.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
+
 	public void timKiemNhapThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -76,6 +67,8 @@ public class TrangChuKHController{
 	}
 	public void dangNhap(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		stage.close();
+		stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/DangNhap.fxml"));
         Parent sampleParent = loader.load();

@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
 import entity.NhanVien;
+import entity.Thuoc;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -62,7 +63,11 @@ public class TimKiemNhanVienController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	@FXML
+	private TextField txtHoTen, txtEmail, txtCMND, txtSDT;
+	@FXML
 	private MenuButton mb;
+	@FXML
+	private Button btnTimKiem, btnTT;
 	@FXML
 	private TextField txtTimKiem;
 	@FXML
@@ -88,55 +93,95 @@ public class TimKiemNhanVienController implements Initializable{
 	@FXML
 	private TableColumn<NhanVien, String> trangThai;
 	@FXML
-	private ObservableList<NhanVien> list = FXCollections.observableArrayList();
+	ObservableList<NhanVien> list = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 			reload();
 //			edit();
-			searchByName();
-			setCell();
+			cell();
+//			setCell();
 //			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
 
-			table.setOnMouseClicked(e->{
-				System.out.println("test");
-				InputStream is;
-				
+//			table.setOnMouseClicked(e->{
+//				System.out.println("test");
+//				InputStream is;
+//				
+//				try {
+//					NhanVien nv = (NhanVien)table.getSelectionModel().getSelectedItem();
+//					String query = "select * from NhanVien where maNV = ?";
+//					ps = con.prepareStatement(query);
+//					ps.setInt(1, nv.getMaNV());
+//					rs = ps.executeQuery();
+//					while(rs.next()) {
+//					is = rs.getBinaryStream("image");
+//					if(is==null) {
+//						image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+//						imageView.setImage(image);
+//					}
+//					OutputStream os = new FileOutputStream(new File("photo.jpg"));
+//					byte[] content = new byte[1024];
+//					int size = 0;
+//					while((size = is.read(content))!=-1) {
+//						os.write(content, 0 ,size);
+//					
+//					}
+//					os.close();
+//					is.close();
+//					image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+//					imageView.setImage(image);
+//					
+//					}
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				} catch (FileNotFoundException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//				
+//			});
+			btnTimKiem.setOnAction(a -> {
+				String hoTen = txtHoTen.getText().toString();
+				String sdt = txtSDT.getText().toString();
+				String email = txtEmail.getText().toString();
+				String cmnd = txtCMND.getText().toString();
+				if(hoTen == "" && sdt == "" && email == "" && cmnd == "") {
+					table.getItems().clear();
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Thông báo");
+					alert.setContentText("Không được để trống");
+					alert.setHeaderText(null);
+					alert.showAndWait();
+					getAllNV();
+				}
+				else {
+				table.getItems().clear();
+				String sql = "select * from NhanVien where tenNV like N'%"+hoTen+"%' and sdt like N'%"+sdt+"%' and email like N'%"+email+"%' and cmnd like N'%"+cmnd+"%'";
 				try {
-					NhanVien nv = (NhanVien)table.getSelectionModel().getSelectedItem();
-					String query = "select * from NhanVien where maNV = ?";
-					ps = con.prepareStatement(query);
-					ps.setInt(1, nv.getMaNV());
+					ps = con.prepareStatement(sql);
 					rs = ps.executeQuery();
 					while(rs.next()) {
-					is = rs.getBinaryStream("image");
-					if(is==null) {
-						image = new Image("file:\\images\\avatar.png",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-						imageView.setImage(image);
-					}
-					OutputStream os = new FileOutputStream(new File("photo.jpg"));
-					byte[] content = new byte[1024];
-					int size = 0;
-					while((size = is.read(content))!=-1) {
-						os.write(content, 0 ,size);
-					
-					}
-					os.close();
-					is.close();
-					image = new Image("file:photo.jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-					imageView.setImage(image);
-					
-					}
-				} catch (SQLException e1) {
+						NhanVien nv = new NhanVien();
+						nv.setMaNV(rs.getInt("maNV"));
+						nv.setHoTen(rs.getString("tenNV"));
+						nv.setGioiTinh(rs.getString("gioiTinh"));
+						nv.setNgaySinh(rs.getDate("ngaySinh"));
+						nv.setCmnd(rs.getString("cmnd"));
+						nv.setSdt(rs.getString("sdt"));
+						nv.setEmail(rs.getString("email"));
+						nv.setVaiTro(rs.getString("vaiTro"));
+						nv.setTrangThai(rs.getString("trangThai"));
+						list.add(nv);
+						table.setItems(list);	
+					}	
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
-				
+				}
 			});
 
 	}
@@ -173,7 +218,7 @@ public class TimKiemNhanVienController implements Initializable{
 			// TODO: handle exception
 			e2.printStackTrace();
 		}
-
+		
 	}
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -329,6 +374,15 @@ public class TimKiemNhanVienController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	  public void gioHang(ActionEvent e) throws IOException {
 	    	Stage stage = (Stage) mb.getScene().getWindow();
 	    	FXMLLoader loader = new FXMLLoader();
@@ -387,22 +441,22 @@ public class TimKiemNhanVienController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -571,7 +625,7 @@ public class TimKiemNhanVienController implements Initializable{
 				nv.setVaiTro(rs.getString("vaiTro"));
 				nv.setTrangThai(rs.getString("trangThai"));
 				nvList.add(nv);
-				
+				table.setItems(nvList);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
@@ -652,77 +706,58 @@ public class TimKiemNhanVienController implements Initializable{
 		alert.setHeaderText(null);
 		alert.show();
 	}
-	private void setCell() {
-		table.setOnMouseClicked(e->{
-			NhanVien nv = table.getItems().get(table.getSelectionModel().getFocusedIndex());
-			showImage(nv.getMaNV());
-		});
-	}
-	private void showImage(int maNV) {
-		String sql = "select image from NhanVien where maNV = ?";
-		try {
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, maNV);
-			rs = ps.executeQuery();
-			if(rs.next()) {
-				InputStream is = rs.getBinaryStream(1);
-				OutputStream os = new FileOutputStream(new File("data/photo.jpg"));
-				byte[] content = new byte[1024];
-				int size = 0;
-				while((size=is.read(content))!=-1) {
-					os.write(content,0,size);
-				}
-				image = new Image("file:avatar:jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-				imageView.setImage(image);
-//				if(rs.getBinaryStream("image") == null) {
-//						is = new FileInputStream("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png");
-//						image = new Image(is,imageView.getFitWidth(),imageView.getFitHeight(),true,true);
-//						imageView.setImage(image);
+//	private void setCell() {
+//		table.setOnMouseClicked(e->{
+//			NhanVien nv = table.getItems().get(table.getSelectionModel().getFocusedIndex());
+//			showImage(nv.getMaNV());
+//		});
+//	}
+//	private void showImage(int maNV) {
+//		String sql = "select image from NhanVien where maNV = ?";
+//		try {
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, maNV);
+//			rs = ps.executeQuery();
+//			if(rs.next()) {
+//				InputStream is = rs.getBinaryStream(1);
+//				OutputStream os = new FileOutputStream(new File("data/photo.jpg"));
+//				byte[] content = new byte[1024];
+//				int size = 0;
+//				while((size=is.read(content))!=-1) {
+//					os.write(content,0,size);
 //				}
-			}
+//				image = new Image("file:avatar:jpg",imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+//				imageView.setImage(image);
+////				if(rs.getBinaryStream("image") == null) {
+////						is = new FileInputStream("C:\\Users\\mavuv\\Desktop\\QuanLyHieuThuoc\\QuanLyHieuThuoc\\images\\avatar.png");
+////						image = new Image(is,imageView.getFitWidth(),imageView.getFitHeight(),true,true);
+////						imageView.setImage(image);
+////				}
+//			}
+//		
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	@FXML
-	private void searchByName() {
-		txtTimKiem.setOnKeyReleased(e->{
-			if(txtTimKiem.getText().equals("")) {
-				reload();
-			}
-			else {
-				list.clear();
-				String sql = " select * from NhanVien where tenNV collate SQL_Latin1_General_CP1_CI_AI like N'%" + txtTimKiem.getText() +"%'";
-				try {
-					ps = con.prepareStatement(sql);
-					rs = ps.executeQuery();
-					while(rs.next()) {
-						NhanVien nv = new NhanVien();
-						nv.setMaNV(rs.getInt("maNV"));
-						nv.setHoTen(rs.getString("tenNV"));
-						nv.setGioiTinh(rs.getString("gioiTinh"));
-						nv.setNgaySinh(rs.getDate("ngaySinh"));
-						nv.setCmnd(rs.getString("cmnd"));
-						nv.setSdt(rs.getString("sdt"));
-						nv.setEmail(rs.getString("email"));
-						nv.setVaiTro(rs.getString("vaiTro"));
-						nv.setTrangThai(rs.getString("trangThai"));
-						list.add(nv);
-						table.setItems(list);
-					}
-				}catch (Exception e1) {
-					// TODO: handle exception
-				}
-			}
-		});
+//	}
+
+	public void thongTin(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+		Parent parent = loader.load();
+		Scene scene = new Scene(parent);
+		ThongTinChiTietNVController c = loader.getController();
+		NhanVien nv = table.getSelectionModel().getSelectedItem();
+		c.getMaNV(nv);
+		stage.setScene(scene);
+		stage.show();
 	}
 }

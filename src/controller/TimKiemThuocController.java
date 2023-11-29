@@ -274,6 +274,15 @@ public class TimKiemThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
+	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
+		Stage stage = (Stage) mb.getScene().getWindow();
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHang.fxml"));
+        Parent sampleParent = loader.load();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+       
+	}
 	public void capNhatThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -468,22 +477,22 @@ public class TimKiemThuocController implements Initializable{
 	          Scene scene = new Scene(sampleParent);
 	          stage.setScene(scene);
 	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
+	     public void themDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/ThemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
+		      public void timKiemDonThuoc(ActionEvent e) throws IOException {
+		       	Stage stage = (Stage) mb.getScene().getWindow();
+		       	FXMLLoader loader = new FXMLLoader();
+		           loader.setLocation(getClass().getResource("/view/TimKiemDonThuoc.fxml"));
+		           Parent sampleParent = loader.load();
+		           Scene scene = new Scene(sampleParent);
+		           stage.setScene(scene);
+		   	}
 	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
 	       	FXMLLoader loader = new FXMLLoader();
@@ -495,16 +504,6 @@ public class TimKiemThuocController implements Initializable{
 
 	//End Navbar
 
-	
-	public void boLocThuoc(ActionEvent e) throws IOException {
-		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/LocThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-        stage.show();
-	}
 	
 	public void cell() {
 		maThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("maThuoc"));
@@ -524,7 +523,7 @@ public class TimKiemThuocController implements Initializable{
 				+ "select maThuoc, tenThuoc, tenLoaiThuoc, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
 				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc order by maThuoc, trangThai"
 				;
-		String test = "";
+
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -555,5 +554,16 @@ public class TimKiemThuocController implements Initializable{
 		cell();
 		table.setItems(thuocList);
 	}
-
+	public void thongTin(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/view/ThongTinChiTietThuoc.fxml"));
+		Parent parent = loader.load();
+		Scene scene = new Scene(parent);
+		ThongTinChiTietThuocController c = loader.getController();
+		Thuoc t  = table.getSelectionModel().getSelectedItem();
+		c.getMaThuoc(t);
+		stage.setScene(scene);
+		stage.show();
+	}
 }

@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -8,7 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import database.KetNoiDatabase;
+import entity.CTThuoc;
 import entity.LoaiThuoc;
 import entity.NhaCungCap;
 import entity.NhanVien;
@@ -23,17 +30,28 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TimKiemThuocKHController implements Initializable{
+	@FXML
+	private Button btnTimKiem, xuatExcel, btnTTCT;
+	@FXML
+	private TextField txtTimThuoc, txtTimLoaiThuoc, txtTimDVT, txtTimNSX;
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 	@FXML
@@ -44,8 +62,7 @@ public class TimKiemThuocKHController implements Initializable{
 	private TableColumn<Thuoc, String> tenThuoc;
 	@FXML
 	private TableColumn<Thuoc, String> loaiThuoc;
-	@FXML
-	private TableColumn<Thuoc, String> ncc;
+
 	@FXML
 	private TableColumn<Thuoc, String> nsx;
 	@FXML
@@ -70,6 +87,7 @@ public class TimKiemThuocKHController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
 		reload();
 //		NhanVien dnc = DangNhapController.getNV();
 ////		try {
@@ -82,6 +100,54 @@ public class TimKiemThuocKHController implements Initializable{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+			
+
+			
+	
+				btnTimKiem.setOnAction(a -> {
+					String timThuoc = txtTimThuoc.getText().toString();
+					String timLoaiThuoc = txtTimLoaiThuoc.getText().toString();
+					String timNSX = txtTimNSX.getText().toString();
+					String timDVT = txtTimDVT.getText().toString();
+					if(timThuoc == "" && timLoaiThuoc == "" && timNSX == "" && timDVT == "") {
+						table.getItems().clear();
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Thông báo");
+						alert.setContentText("Không được để trống");
+						alert.setHeaderText(null);
+						alert.showAndWait();
+						getAllThuoc();
+					}
+					else {
+					table.getItems().clear();
+					String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, t.nuocSanXuat, t.donViTinh, t.giaNhap, t.giaBan, t.cachDung, t.trangThai from Thuoc t left join LoaiThuoc lt on "
+							+ "lt.maLoaiThuoc = t.maLoaiThuoc where tenThuoc like N'%"+timThuoc+"%' "
+									+ "and tenLoaiThuoc like N'%"+timLoaiThuoc+"%'"
+									+ "and nuocSanXuat like N'%"+timNSX+"%'"
+									+ "and donViTinh like N'%"+timDVT+"%'";
+					try {
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							Thuoc t = new Thuoc();
+							t.setMaThuoc(rs.getInt("maThuoc"));
+							t.setTenThuoc(rs.getString("tenThuoc"));
+							t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+							t.setNsx(rs.getString("nuocSanXuat"));
+							t.setDvt(rs.getString("donViTinh"));
+							t.setGiaNhap(rs.getFloat("giaNhap"));
+							t.setGiaBan(rs.getFloat("giaBan"));
+							t.setCachDung(rs.getString("cachDung"));
+							t.setTrangThai(rs.getString("trangThai"));
+							thuocList.add(t);
+							table.setItems(thuocList);	
+						}	
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+				});
 	}
 //	public void thuoc(ActionEvent e) throws IOException {
 ////		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -95,7 +161,6 @@ public class TimKiemThuocKHController implements Initializable{
 ////        stage.show();
 //	}
 	//Start Navbar
-
 	public void trangChu(ActionEvent e) throws IOException {
 //		Stage stage = (Stage) mb.getScene().getWindow();
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -106,7 +171,6 @@ public class TimKiemThuocKHController implements Initializable{
         stage.setScene(scene);
        
 	}
-	
 	public void timThuoc(ActionEvent e) throws IOException {
 //		Stage stage = (Stage) mb.getScene().getWindow();
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -138,6 +202,8 @@ public class TimKiemThuocKHController implements Initializable{
 	}
 	public void dangNhap(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		stage.close();
+		stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/DangNhap.fxml"));
         Parent sampleParent = loader.load();
@@ -145,170 +211,15 @@ public class TimKiemThuocKHController implements Initializable{
         stage.setScene(scene);
         stage.show();
 	}
-	public void lapHoaDonKhongKeDon(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThemHoaDonKhongTheoDon.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void lapHoaDonKeDon(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThemHoaDonTheoDon.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void timKiemHoaDon(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/TimKiemHoaDon.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void thongKeDoanhThu(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeDoanhThu.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void thongKeKhachHang(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeKhachHang.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void thongKeThuocSapHetHan(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/ThongKeThuocSapHetHan.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	public void capNhatNhanVien(ActionEvent e) throws IOException {
-		Stage stage = (Stage) mb.getScene().getWindow();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/CapNhatNhanVien.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-       
-	}
-	  public void gioHang(ActionEvent e) throws IOException {
-	    	Stage stage = (Stage) mb.getScene().getWindow();
-	    	FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("/view/GioHang.fxml"));
-	        Parent sampleParent = loader.load();
-	        Scene scene = new Scene(sampleParent);
-	        stage.setScene(scene);
-		}
-	     public void themKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/ThemKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
-
-	     public void timKiemKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/TimKiemKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
-
-	     public void capNhatKhachHang(ActionEvent e) throws IOException {
-	     	Stage stage = (Stage) mb.getScene().getWindow();
-	     	FXMLLoader loader = new FXMLLoader();
-	         loader.setLocation(getClass().getResource("/view/CapNhatKhachHang.fxml"));
-	         Parent sampleParent = loader.load();
-	         Scene scene = new Scene(sampleParent);
-	         stage.setScene(scene);
-	 	}
-	     public void themNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/ThemNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void timKiemNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/TimKiemNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void capNhatNCC(ActionEvent e) throws IOException {
-	      	Stage stage = (Stage) mb.getScene().getWindow();
-	      	FXMLLoader loader = new FXMLLoader();
-	          loader.setLocation(getClass().getResource("/view/CapNhatNCC.fxml"));
-	          Parent sampleParent = loader.load();
-	          Scene scene = new Scene(sampleParent);
-	          stage.setScene(scene);
-	  	}
-	     public void themDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/ThemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void timKiemDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/TimKiemDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
-	      public void capNhatDonThuocMau(ActionEvent e) throws IOException {
-	       	Stage stage = (Stage) mb.getScene().getWindow();
-	       	FXMLLoader loader = new FXMLLoader();
-	           loader.setLocation(getClass().getResource("/view/CapNhatDonThuocMau.fxml"));
-	           Parent sampleParent = loader.load();
-	           Scene scene = new Scene(sampleParent);
-	           stage.setScene(scene);
-	   	}
 
 	//End Navbar
-	
-	public void boLocThuoc(ActionEvent e) throws IOException {
-		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/LocThuoc.fxml"));
-        Parent sampleParent = loader.load();
-        Scene scene = new Scene(sampleParent);
-        stage.setScene(scene);
-        stage.show();
-	}
+
 	
 	public void cell() {
 		maThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, Integer>("maThuoc"));
 		tenThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("tenThuoc"));
 		loaiThuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
 		dvt.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
-		ncc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("ncc"));
 		nsx.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("nsx"));
 		giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
 		giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));
@@ -319,10 +230,10 @@ public class TimKiemThuocKHController implements Initializable{
 	public ObservableList<Thuoc> getAllThuoc(){
 		ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 		String query = "\r\n"
-				+ "select maThuoc, tenThuoc, loaiThuoc,tenNCC, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
-				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc inner join NhaCungCap n on"
-				+ " n.maNCC = t.maNCC";
-		
+				+ "select maThuoc, tenThuoc, tenLoaiThuoc, donViTinh, giaNhap, giaBan, nuocSanXuat,cachDung, trangThai "
+				+ "from Thuoc t inner join LoaiThuoc l on t.maLoaiThuoc = l.maLoaiThuoc order by maThuoc, trangThai"
+				;
+
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -330,8 +241,7 @@ public class TimKiemThuocKHController implements Initializable{
 				Thuoc t = new Thuoc();
 				t.setMaThuoc(rs.getInt("maThuoc"));
 				t.setTenThuoc(rs.getString("tenThuoc"));
-				t.setLoaiThuoc(rs.getString("loaiThuoc"));
-				t.setNcc(rs.getString("tenNCC"));
+				t.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
 				t.setNsx(rs.getString("nuocSanXuat"));
 				t.setDvt(rs.getString("donViTinh"));
 				t.setGiaNhap(rs.getFloat("giaNhap"));
@@ -339,7 +249,7 @@ public class TimKiemThuocKHController implements Initializable{
 				t.setCachDung(rs.getString("cachDung"));
 				t.setTrangThai(rs.getString("trangThai"));
 				thuocList.add(t);
-				
+				table.setItems(thuocList);
 			}
 		}catch (Exception e) {
 				// TODO: handle exception
@@ -354,5 +264,16 @@ public class TimKiemThuocKHController implements Initializable{
 		cell();
 		table.setItems(thuocList);
 	}
-
+	public void thongTin(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/view/ThongTinChiTietThuoc.fxml"));
+		Parent parent = loader.load();
+		Scene scene = new Scene(parent);
+		ThongTinChiTietThuocController c = loader.getController();
+		Thuoc t  = table.getSelectionModel().getSelectedItem();
+		c.getMaThuoc(t);
+		stage.setScene(scene);
+		stage.show();
+	}
 }

@@ -7,12 +7,14 @@ public class PhieuNhap {
 	private String hoTen;
 	private Date ngayNhap;
 	private String tenNCC;
-	public PhieuNhap(int maPN, String hoTen, Date ngayNhap, String maNCC) {
+	private String trangThai;
+	public PhieuNhap(int maPN, String hoTen, Date ngayNhap, String maNCC, String trangThai) {
 		super();
 		this.maPN = maPN;
 		this.hoTen = hoTen;
 		this.ngayNhap = ngayNhap;
 		this.tenNCC = tenNCC;
+		this.trangThai = trangThai;
 	}
 	public PhieuNhap() {
 		super();
@@ -41,6 +43,12 @@ public class PhieuNhap {
 	}
 	public void setTenNCC(String tenNCC) {
 		this.tenNCC = tenNCC;
+	}
+	public String getTrangThai() {
+		return trangThai;
+	}
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
 	}
 	
 }

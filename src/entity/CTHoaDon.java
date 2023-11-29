@@ -14,12 +14,12 @@ public class CTHoaDon {
 	private String donViTinh;
 	private float donGia;
 	private int soLuong;
-	private String soLo;
+//	private String soLo;
 	private Date hanSuDung;
-	private String cachDung;
+	private String thuocKeDon;
 	private float tongGiaBan;
 	public CTHoaDon(int maCTHD,int maThuoc, int maHD, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
-			int soLuong, String soLo, Date hanSuDung, String cachDung, float tongGiaBan) {
+			int soLuong, Date hanSuDung, String thuocKeDon, float tongGiaBan) {
 		super();
 		this.maCTHD = maCTHD;
 		this.maHD = maHD;
@@ -28,9 +28,9 @@ public class CTHoaDon {
 		this.donViTinh = donViTinh;
 		this.donGia = donGia;
 		this.soLuong = soLuong;
-		this.soLo = soLo;
+//		this.soLo = soLo;
 		this.hanSuDung = hanSuDung;
-		this.cachDung = cachDung;
+		this.thuocKeDon = thuocKeDon;
 		this.tongGiaBan = tongGiaBan;
 	}
 	public CTHoaDon(String tenThuoc, String donViTinh, int soLuong, float donGia, float tongGiaBan) {
@@ -89,23 +89,18 @@ public class CTHoaDon {
 	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
 	}
-	public String getSoLo() {
-		return soLo;
-	}
-	public void setSoLo(String soLo) {
-		this.soLo = soLo;
-	}
+
 	public Date getHanSuDung() {
 		return hanSuDung;
 	}
 	public void setHanSuDung(Date hanSuDung) {
 		this.hanSuDung = hanSuDung;
 	}
-	public String getCachDung() {
-		return cachDung;
+	public String getThuocKeDon() {
+		return thuocKeDon;
 	}
-	public void setCachDung(String cachDung) {
-		this.cachDung = cachDung;
+	public void setThuocKeDon(String thuocKeDon) {
+		this.thuocKeDon= thuocKeDon;
 	}
 	public float getTongGiaBan() {
 		return tongGiaBan;
