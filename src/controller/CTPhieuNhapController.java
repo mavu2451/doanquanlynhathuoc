@@ -79,7 +79,9 @@ public class CTPhieuNhapController implements Initializable{
 	private MenuButton mb;
 	public NhanVien dnc = DangNhapController.getNV();
 	@FXML
-	private TableColumn<CTPhieuNhap, Integer> tenThuoc;
+	private TableColumn<CTPhieuNhap, Integer> maThuoc; 
+	@FXML
+	private TableColumn<CTPhieuNhap, String> tenThuoc;
 	@FXML
 	private TableColumn<CTPhieuNhap, String> dvt;
 	@FXML
@@ -89,6 +91,8 @@ public class CTPhieuNhapController implements Initializable{
 	@FXML
 	private TableColumn<CTPhieuNhap, Integer> soLuong;
 	@FXML
+	private TableColumn<CTPhieuNhap, String> soLo;
+	@FXML
 	private TableColumn<CTPhieuNhap, Date> hsd;
 	@FXML
 	private TableColumn<CTPhieuNhap, Float> tongGiaNhap;
@@ -96,6 +100,8 @@ public class CTPhieuNhapController implements Initializable{
 	private TableColumn<CTPhieuNhap, Float> tongGiaBan;
 	@FXML
 	private ComboBox<String> cbbTrangThai;
+	@FXML
+	private TableColumn<CTPhieuNhap, String> trangThai;
 	ObservableList<CTPhieuNhap> pnlist = FXCollections.observableArrayList();
 	public PhieuNhap p;
 	ActionEvent e;
@@ -616,10 +622,18 @@ public class CTPhieuNhapController implements Initializable{
 //		return true;
 //	}
 	@FXML
-	public void themPN(ActionEvent e) throws SQLException{
-		int maNCC = maNCC();
+	public void themPN(ActionEvent e) {
+		try {
 
-		if(dpNgayNhap.getValue()!=null) {
+		if(table.getItems().isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setContentText("Không có thông tin");
+			alert.showAndWait();
+		}
+		else if(dpNgayNhap.getValue()!=null) {
+			int maNCC;
+			maNCC = maNCC();
 			System.out.println(dpNgayNhap.getValue());
 			String sql = "insert into PhieuNhap(maNV, ngayNhap, maNCC) values (?,?,?)";
 			ps = con.prepareStatement(sql);
@@ -630,8 +644,95 @@ public class CTPhieuNhapController implements Initializable{
 			ps.setInt(3, maNCC);
 			ps.execute();
 			maPN();
-			table.setItems(null);
-	}	
+			int maPN = maPN();
+			for(int i = 0; i < table.getItems().size();i++) {
+				String sql1 = "insert into CTPhieuNhap(maPN, maThuoc, giaNhap, giaBan, soLuong, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?)";
+				ps = con.prepareStatement(sql1);
+				int mThuoc = maThuoc.getCellData(i);
+				float gn = giaNhap.getCellData(i);
+				float gb = giaBan.getCellData(i);
+				int sl = soLuong.getCellData(i);
+				Date dhsd = hsd.getCellData(i);
+				ps.setInt(1, maPN);
+				ps.setInt(2, mThuoc);
+				ps.setFloat(3, gn);
+				ps.setFloat(4, gb);
+				ps.setInt(5, sl);
+				ps.setString(6, soLo.getCellData(i));
+				ps.setDate(7, dhsd);
+				ps.setFloat(8, tongGiaNhap.getCellData(i));
+				ps.setFloat(9, tongGiaBan.getCellData(i));
+				ps.setString(10, trangThai.getCellData(i));
+				ps.execute();
+				if(trangThai.getCellData(i).contains("Lưu tạm")) {
+					luuThanhCong();
+				}
+				else {
+				String ctt1 = "select * from CTThuoc where maThuoc = "+mThuoc+" and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '"+dhsd+"'";
+				System.out.println(ctt1);
+				PreparedStatement ps2 = con.prepareStatement(ctt1);
+				ResultSet rs2 = ps2.executeQuery();
+				System.out.println(rs2);
+				CTThuoc k = new CTThuoc();
+				ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
+				String maTh = String.valueOf(mThuoc);
+				String gNhap = String.valueOf(gn);
+				String gBan = String.valueOf(gb);
+				String hs = String.valueOf(dhsd);
+				int count = 0;
+				while(rs2.next()) {
+					k.setMaThuoc(rs2.getInt("maThuoc"));
+//					k.setTenThuoc(rs.getString("tenThuoc"));
+					k.setGiaNhap(rs2.getFloat("giaNhap"));
+					k.setGiaBan(rs2.getFloat("giaBan"));
+					k.setSlTonKho(rs2.getInt("soLuongCon"));
+					k.setHanSuDung(rs2.getDate("hanSuDung"));
+					khoList.add(k);
+					int tongsl = rs2.getInt("soLuongCon") + sl;
+
+					System.out.println(tongsl);
+					System.out.println("han su dung nhap: " + hs);
+					System.out.println("han su dung trong db: " + k.getHanSuDung());
+//					String maThuocS = String.valueOf(k.getMaThuoc());
+//					&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+					if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))&& hs.equals(String.valueOf(k.getHanSuDung()))) {
+						String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"' and hanSuDung = '"+dhsd+"'";
+						System.out.println(themSl);
+						ps = con.prepareStatement(themSl);
+						ps.execute();
+					}
+					count++;
+				}if(count < 1) {
+					String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
+					PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
+					System.out.println(nhapThuoc);
+					ps1.setInt(1, mThuoc);
+					ps1.setInt(2, sl);
+					ps1.setFloat(3, gn);
+					ps1.setFloat(4,gb);
+//			ps1.setString(5, txtSoLo.getText());
+					ps1.setDate(5, dhsd);
+//			ps.setInt(7, mapn);
+					ps1.execute();
+			}
+				
+				}
+				luuThanhCong1();
+			}
+
+			table.getItems().clear();
+			}	
+		
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setContentText("Thuốc đã có sẳn, bạn hãy xoá thông tin thuốc đó trước");
+			alert.showAndWait();
+		}
+
+		
 	}
 	
 	public int maNCC() throws SQLException {
@@ -667,110 +768,147 @@ public class CTPhieuNhapController implements Initializable{
 //		return maThuoc;
 //	}
 
-	public void insert(ActionEvent e){
-//		LocalDate nsx = dpNSX.getValue();
-//		Date dnsx = Date.valueOf(nsx);
-			try {
-			LocalDate hsd = dpHSD.getValue();
-			Date dhsd = Date.valueOf(hsd);
-			int mapn;
-			mapn = maPN();
-			float gb = Float.parseFloat(txtGiaBan.getText());
+//	public void insert(ActionEvent e){
+////		LocalDate nsx = dpNSX.getValue();
+////		Date dnsx = Date.valueOf(nsx);
+//			try {
+//			LocalDate hsd = dpHSD.getValue();
+//			Date dhsd = Date.valueOf(hsd);
+//			int mapn;
+//			mapn = maPN();
+//			float gb = Float.parseFloat(txtGiaBan.getText());
+//			float gn = Float.parseFloat(txtGiaNhap.getText());
+//			int mt = Integer.parseInt(txtMaThuoc.getText());
+//			int sl = Integer.parseInt(txtSoLuong.getText());
+////			float tonggianhap = gn * sl;
+////			float tonggiaban = gb * sl;
+////			ctpn = new CTPhieuNhap(mt,sl, String.valueOf(cbbThuoc.getSelectionModel().getSelectedItem().toString()),txtLoaiThuoc.getText(),txtDonViTinh.getText(),txtNSX.getText(),gn,gb,sl,null, null, null, null, tonggianhap,tonggiaban);
+////			ctpn.setMaPN(mapn);
+////			ctpn.setMaThuoc(mt);
+////			ctpn.setTenThuoc(cbbThuoc.getSelectionModel().getSelectedItem().toString());
+////			ctpn.setGiaNhap(gn);
+////			ctpn.setGiaBan(gb);
+////			ctpn.setSl(sl);
+//			ctpn.setTongGiaNhap(gn * sl);
+//			ctpn.setTongGiaBan(gb * sl);
+//			
+////			pn.setHoTen(dnc.getHoTen());
+////			System.out.println(pn.getHoTen());
+//			int mThuoc = Integer.parseInt(txtMaThuoc.getText());
+//			String tt = cbbTrangThai.getValue();
+//			
+//			String sql = "insert into CTPhieuNhap(maPN, maThuoc, giaNhap, giaBan, soLuong, thongTin, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?,?)";
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, mapn);
+//			ps.setInt(2, mThuoc);
+//			ps.setFloat(3, gn);
+//			ps.setFloat(4, gb);
+//			ps.setInt(5, sl);
+//			ps.setString(6, taGhiChu.getText());
+//			ps.setString(7, txtSoLo.getText());
+//			ps.setDate(8, dhsd);
+//			ps.setFloat(9, gn * sl);
+//			ps.setFloat(10, gb * sl);
+//			ps.setString(11, tt);
+//			ps.execute();
+//			getAllCTPN(mapn);
+//			tinhTong(mapn);
+//			if(tt.contains("Lưu tạm")) {
+//				luuThanhCong();
+//			}
+//			else {
+//					String ctt = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '" +dhsd+ "'";
+//					ps = con.prepareStatement(ctt);
+//					rs = ps.executeQuery();
+//					CTThuoc k = new CTThuoc();
+//					ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
+//					String maTh = String.valueOf(mThuoc);
+//					String gNhap = String.valueOf(gn);
+//					String gBan = String.valueOf(gb);
+//					while(rs.next()) {
+//						k.setMaThuoc(rs.getInt("maThuoc"));
+////						k.setTenThuoc(rs.getString("tenThuoc"));
+//						k.setGiaNhap(rs.getFloat("giaNhap"));
+//						k.setGiaBan(rs.getFloat("giaBan"));
+//						k.setSlTonKho(rs.getInt("soLuongCon"));
+//						k.setHanSuDung(rs.getDate("hanSuDung"));
+//						khoList.add(k);
+//						int tongsl = rs.getInt("soLuongCon") + sl;
+//						System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
+//						String maThuocS = String.valueOf(k.getMaThuoc());
+//						System.out.println(maTh);
+//						System.out.println(maThuocS);
+////						&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+//						if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
+//							String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"' and hanSuDung = '"+dhsd+"'";
+//							ps = con.prepareStatement(themSl);
+//							ps.execute();
+//							System.out.println(themSl);
+//						}
+//					}
+//						if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
+//						
+//					}
+////				String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
+////				PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
+////				ps1.setInt(1, mThuoc);
+////				ps1.setInt(2, sl);
+////				ps1.setFloat(3, gn);
+////				ps1.setFloat(4,gb);
+//////				ps1.setString(5, txtSoLo.getText());
+////				ps1.setDate(5, dhsd);
+//////				ps.setInt(7, mapn);
+////				ps1.execute();
+////				
+//
+//				luuThanhCong1();
+//			}
+//			
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//
+//			}
+//		}
+	float tgn = 0;
+	float tgb = 0;
+		public void insert(ActionEvent e) {
 			float gn = Float.parseFloat(txtGiaNhap.getText());
-			int mt = Integer.parseInt(txtMaThuoc.getText());
+			float gb = Float.parseFloat(txtGiaBan.getText());
 			int sl = Integer.parseInt(txtSoLuong.getText());
-//			float tonggianhap = gn * sl;
-//			float tonggiaban = gb * sl;
-//			ctpn = new CTPhieuNhap(mt,sl, String.valueOf(cbbThuoc.getSelectionModel().getSelectedItem().toString()),txtLoaiThuoc.getText(),txtDonViTinh.getText(),txtNSX.getText(),gn,gb,sl,null, null, null, null, tonggianhap,tonggiaban);
-//			ctpn.setMaPN(mapn);
-//			ctpn.setMaThuoc(mt);
-//			ctpn.setTenThuoc(cbbThuoc.getSelectionModel().getSelectedItem().toString());
-//			ctpn.setGiaNhap(gn);
-//			ctpn.setGiaBan(gb);
-//			ctpn.setSl(sl);
-			ctpn.setTongGiaNhap(gn * sl);
-			ctpn.setTongGiaBan(gb * sl);
-			
-//			pn.setHoTen(dnc.getHoTen());
-//			System.out.println(pn.getHoTen());
-			int mThuoc = Integer.parseInt(txtMaThuoc.getText());
-			String tt = cbbTrangThai.getValue();
-			
-			String sql = "insert into CTPhieuNhap(maPN, maThuoc, giaNhap, giaBan, soLuong, thongTin, soLo, hanSuDung, tongGiaNhap, tongGiaBan, trangThai ) values(?,?,?,?,?,?,?,?,?,?,?)";
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, mapn);
-			ps.setInt(2, mThuoc);
-			ps.setFloat(3, gn);
-			ps.setFloat(4, gb);
-			ps.setInt(5, sl);
-			ps.setString(6, taGhiChu.getText());
-			ps.setString(7, txtSoLo.getText());
-			ps.setDate(8, dhsd);
-			ps.setFloat(9, gn * sl);
-			ps.setFloat(10, gb * sl);
-			ps.setString(11, tt);
-			ps.execute();
-			getAllCTPN(mapn);
-			tinhTong(mapn);
-			if(tt.contains("Lưu tạm")) {
-				luuThanhCong();
-			}
-			else {
-					String ctt = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '" +dhsd+ "'";
-					ps = con.prepareStatement(ctt);
-					rs = ps.executeQuery();
-					CTThuoc k = new CTThuoc();
-					ObservableList<CTThuoc> khoList = FXCollections.observableArrayList();
-					String maTh = String.valueOf(mThuoc);
-					String gNhap = String.valueOf(gn);
-					String gBan = String.valueOf(gb);
-					while(rs.next()) {
-						k.setMaThuoc(rs.getInt("maThuoc"));
-//						k.setTenThuoc(rs.getString("tenThuoc"));
-						k.setGiaNhap(rs.getFloat("giaNhap"));
-						k.setGiaBan(rs.getFloat("giaBan"));
-						k.setSlTonKho(rs.getInt("soLuongCon"));
-						k.setHanSuDung(rs.getDate("hanSuDung"));
-						khoList.add(k);
-						int tongsl = rs.getInt("soLuongCon") + sl;
-						System.out.println(gNhap.equals(String.valueOf(k.getGiaNhap())));
-						String maThuocS = String.valueOf(k.getMaThuoc());
-						System.out.println(maTh);
-						System.out.println(maThuocS);
-//						&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
-						if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))) {
-							String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+mThuoc+"' and hanSuDung = '"+dhsd+"'";
-							ps = con.prepareStatement(themSl);
-							ps.execute();
-							System.out.println(themSl);
-						}
-					}
-						if(maTh.equals(String.valueOf(k.getMaThuoc()))|| gNhap.equals(String.valueOf(k.getGiaNhap()))|| gBan.equals(String.valueOf(k.getGiaBan()))){
-						
-					}
-//				String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
-//				PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
-//				ps1.setInt(1, mThuoc);
-//				ps1.setInt(2, sl);
-//				ps1.setFloat(3, gn);
-//				ps1.setFloat(4,gb);
-////				ps1.setString(5, txtSoLo.getText());
-//				ps1.setDate(5, dhsd);
-////				ps.setInt(7, mapn);
-//				ps1.execute();
-//				
+			float tong = 0;
+			CTPhieuNhap ct = new CTPhieuNhap();
+			ct.setMaThuoc(Integer.parseInt(txtMaThuoc.getText()));
+			ct.setTenThuoc(txtTenThuoc.getText());
+			ct.setDonViTinh(txtDonViTinh.getText());
+//			ct.setLoaiThuoc(txtLoaiThuoc.getText());
+			ct.setGiaNhap(gn);
+			ct.setGiaBan(gb);
+			ct.setSoLo(txtSoLo.getText());
+			ct.setHanSuDung(Date.valueOf(dpHSD.getValue()));
+			ct.setSl(sl);
+			ct.setTongGiaNhap(gn * sl);
+			ct.setTongGiaBan(gb * sl);
+			ct.setTrangThai(cbbTrangThai.getValue());
+			lblGiaNhapQuyDoi.setText(String.valueOf(gn * sl));
+			lblGiaBanQuyDoi.setText(String.valueOf(gb* sl)); 
+			tgn = tgn + (gn* sl);
+			tgb = tgb + (gb* sl);
+			lblTongGiaNhap.setText(String.valueOf(tgn));
+			lblTongGiaBan.setText(String.valueOf(tgb));
+			list.add(ct);
+			table.setItems(list);
 
-				luuThanhCong1();
-			}
-			
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-
-			}
+		}
+		public void remove(ActionEvent e) {
+			int select = table.getSelectionModel().getSelectedIndex();
+			table.getItems().remove(select);
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setHeaderText(null);
+			alert.setContentText("Thuốc đã được xoá");
+			alert.showAndWait();
 		}
 		
-			
 //			String reset = "DBCC CHECKIDENT('Tu', RESEED, 0)";
 //			ps = con.prepareStatement(reset);
 //			ps.execute();
@@ -818,14 +956,17 @@ public class CTPhieuNhapController implements Initializable{
 //	}
 //	}
 	public void cell() {
-		tenThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Integer>("tenThuoc"));
+		maThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Integer>("maThuoc"));
+		tenThuoc.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("tenThuoc"));
 		dvt.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("donViTinh"));
 		giaNhap.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("giaNhap"));
 		giaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("giaBan"));
 		soLuong.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Integer>("sl"));
+		soLo.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("soLo"));
 		hsd.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Date>("hanSuDung"));
 		tongGiaNhap.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("tongGiaNhap"));
 		tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, Float>("tongGiaBan"));
+		trangThai.setCellValueFactory(new PropertyValueFactory<CTPhieuNhap, String>("trangThai"));
 	}
 	public void reload() {
 //		list = getAllCTPN();

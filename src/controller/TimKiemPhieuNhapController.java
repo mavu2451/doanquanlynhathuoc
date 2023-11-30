@@ -183,7 +183,7 @@ public class TimKiemPhieuNhapController implements Initializable{
 							alert.showAndWait();
 						}
 						else {
-			
+							int mThuoc = (int) maThuoc.getCellData(indexCT);
 						String sqlMaThuoc = String.valueOf(maThuoc.getCellData(indexCT).toString());
 //						int mThuoc = Integer.parseInt(tableView.getSelectionModel().getSelectedItem().toString());
 						float gn = Float.parseFloat(giaNhap.getCellData(indexCT).toString());
@@ -210,15 +210,50 @@ public class TimKiemPhieuNhapController implements Initializable{
 
 //							String kho1 = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' soLo='"+1+"' and hanSuDung = '" +dhsd+ "'";
 
+							String ctt1 = "select * from CTThuoc where maThuoc = "+sqlMaThuoc+" and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '"+dhsd+"'";
+							System.out.println(ctt1);
+							PreparedStatement ps2 = con.prepareStatement(ctt1);
+							ResultSet rs2 = ps2.executeQuery();
+							System.out.println(rs2);
+
+
+							String hs = String.valueOf(dhsd);
+							int count = 0;
+							while(rs2.next()) {
+								k.setMaThuoc(rs2.getInt("maThuoc"));
+//								k.setTenThuoc(rs.getString("tenThuoc"));
+								k.setGiaNhap(rs2.getFloat("giaNhap"));
+								k.setGiaBan(rs2.getFloat("giaBan"));
+								k.setSlTonKho(rs2.getInt("soLuongCon"));
+								k.setHanSuDung(rs2.getDate("hanSuDung"));
+								khoList.add(k);
+								int tongsl = rs2.getInt("soLuongCon") + sl;
+
+								System.out.println(tongsl);
+								System.out.println("han su dung nhap: " + hs);
+								System.out.println("han su dung trong db: " + k.getHanSuDung());
+//								String maThuocS = String.valueOf(k.getMaThuoc());
+//								&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+								if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))&& hs.equals(String.valueOf(k.getHanSuDung()))) {
+									String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+sqlMaThuoc+"' and hanSuDung = '"+dhsd+"'";
+									System.out.println(themSl);
+									ps = con.prepareStatement(themSl);
+									ps.execute();
+								}
+								count++;
+							}if(count < 1) {
 								String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
-								ps = con.prepareStatement(nhapThuoc);
-								ps.setInt(1, Integer.parseInt(sqlMaThuoc));
-								ps.setInt(2, sl);
-								ps.setFloat(3, gn);
-								ps.setFloat(4,gb);
-								ps.setDate(5, dhsd);
-//								ps.setInt(7, mapn);
-								ps.execute();
+								PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
+								System.out.println(nhapThuoc);
+								ps1.setInt(1, mThuoc);
+								ps1.setInt(2, sl);
+								ps1.setFloat(3, gn);
+								ps1.setFloat(4,gb);
+//						ps1.setString(5, txtSoLo.getText());
+								ps1.setDate(5, dhsd);
+//						ps.setInt(7, mapn);
+								ps1.execute();
+						}
 								
 									
 							String sql1 = "select * from CTPhieuNhap ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPN = '"+sqlMaPN+"'";

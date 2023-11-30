@@ -13,7 +13,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -314,14 +313,17 @@
                <content>
                   <TableView fx:id="table" prefHeight="686.0" prefWidth="1016.0">
                     <columns>
-                        <TableColumn fx:id="tenThuoc" prefWidth="76.0" text="Tên thuốc" />
-                        <TableColumn fx:id="dvt" prefWidth="81.0" text="Đơn vị tính" />
-                        <TableColumn fx:id="giaNhap" prefWidth="79.0" text="Giá nhập" />
-                        <TableColumn fx:id="giaBan" prefWidth="91.0" text="Giá bán" />
-                        <TableColumn fx:id="soLuong" prefWidth="140.0" text="Số lượng" />
-                        <TableColumn fx:id="hsd" prefWidth="144.0" text="Hạn sử dụng" />
-                        <TableColumn fx:id="tongGiaNhap" prefWidth="153.0" text="Tổng giá nhập" />
-                        <TableColumn fx:id="tongGiaBan" prefWidth="246.0" text="Tổng giá bán" />
+                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã thuốc" />
+                        <TableColumn fx:id="tenThuoc" prefWidth="110.0" text="Tên thuốc" />
+                        <TableColumn fx:id="dvt" prefWidth="85.0" text="Đơn vị tính" />
+                        <TableColumn fx:id="giaNhap" prefWidth="108.0" text="Giá nhập" />
+                        <TableColumn fx:id="giaBan" prefWidth="89.0" text="Giá bán" />
+                        <TableColumn fx:id="soLuong" prefWidth="75.0" text="Số lượng" />
+                        <TableColumn fx:id="soLo" prefWidth="75.0" text="Số lô" />
+                        <TableColumn fx:id="hsd" prefWidth="133.0" text="Hạn sử dụng" />
+                        <TableColumn fx:id="tongGiaNhap" prefWidth="117.0" text="Tổng giá nhập" />
+                        <TableColumn fx:id="tongGiaBan" prefWidth="127.0" text="Tổng giá bán" />
+                        <TableColumn fx:id="trangThai" prefWidth="88.0" text="Trạng thái" />
                     </columns>
                   </TableView>
                </content>
@@ -384,8 +386,8 @@
             <TextField fx:id="txtGiaNhap" editable="false" layoutX="141.0" layoutY="334.0" />
             <DatePicker fx:id="dpHSD" layoutX="426.0" layoutY="399.0" prefHeight="25.0" prefWidth="146.0" />
             <TextField fx:id="txtSoLuong" layoutX="139.0" layoutY="472.0" />
-            <Button layoutX="437.0" layoutY="114.0" mnemonicParsing="false" onAction="#themPN" prefHeight="43.0" prefWidth="107.0" text="Tạo phiếu nhập" />
-            <Button layoutX="296.0" layoutY="794.0" mnemonicParsing="false" onAction="#insert" prefHeight="63.0" prefWidth="91.0" text="Lưu" />
+            <Button layoutX="130.0" layoutY="798.0" mnemonicParsing="false" onAction="#themPN" prefHeight="62.0" prefWidth="118.0" text="Tạo phiếu nhập" />
+            <Button layoutX="283.0" layoutY="794.0" mnemonicParsing="false" onAction="#insert" prefHeight="63.0" prefWidth="91.0" text="Lưu" />
             <Label layoutX="366.0" layoutY="337.0" text="Giá bán" />
             <TextField fx:id="txtGiaBan" editable="false" layoutX="425.0" layoutY="333.0" />
             <Label layoutX="69.0" layoutY="74.0" text="Ngày nhập" />
@@ -429,6 +431,7 @@
             <Label layoutX="348.0" layoutY="531.0" text="Trạng thái" />
             <TextField fx:id="txtTenThuoc" editable="false" layoutX="424.0" layoutY="194.0" />
             <Button fx:id="btnThemThuoc" layoutX="551.0" layoutY="194.0" mnemonicParsing="false" text="+" />
+            <Button layoutX="409.0" layoutY="794.0" mnemonicParsing="false" onAction="#remove" prefHeight="63.0" prefWidth="91.0" text="Xoá" />
          </children>
       </AnchorPane>
    </center>

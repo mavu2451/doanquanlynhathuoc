@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
@@ -44,14 +45,13 @@ import javafx.stage.Stage;
 public class TimKiemPhieuNhapNVController implements Initializable{
 	@FXML
 	private MenuButton mb;
+
 	@FXML
-	private TextField txtMaPN;
+	private ComboBox<String> cbbTrangThai;
 	@FXML
-	private ComboBox<NhanVien> cbNhanVien;
+	private TextField txtNCC, txtNhanVien, txtMaPN;
 	@FXML
-	private TextField txtNCC;
-	@FXML
-	private Button btnXemCT;
+	private Button btnXemCT, btnTimKiem;
 	@FXML
 	private DatePicker dpNgayNhap;
 	Connection con = KetNoiDatabase.getConnection();
@@ -85,8 +85,10 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
 
-		cell();
+		dpNgayNhap.setValue(LocalDate.now());
+		reload();
 		getAllPN();
+		cell();
 		btnXemCT.setOnAction(arg->{
 			int index = table.getSelectionModel().getSelectedIndex();
 			if(index<=-1) {
@@ -181,7 +183,7 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 							alert.showAndWait();
 						}
 						else {
-			
+							int mThuoc = (int) maThuoc.getCellData(indexCT);
 						String sqlMaThuoc = String.valueOf(maThuoc.getCellData(indexCT).toString());
 //						int mThuoc = Integer.parseInt(tableView.getSelectionModel().getSelectedItem().toString());
 						float gn = Float.parseFloat(giaNhap.getCellData(indexCT).toString());
@@ -208,15 +210,50 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 
 //							String kho1 = "select * from CTThuoc where maThuoc = '"+mThuoc+"' and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' soLo='"+1+"' and hanSuDung = '" +dhsd+ "'";
 
+							String ctt1 = "select * from CTThuoc where maThuoc = "+sqlMaThuoc+" and giaNhap ='"+gn+ "'and giaBan = '"+gb+"' and hanSuDung = '"+dhsd+"'";
+							System.out.println(ctt1);
+							PreparedStatement ps2 = con.prepareStatement(ctt1);
+							ResultSet rs2 = ps2.executeQuery();
+							System.out.println(rs2);
+
+
+							String hs = String.valueOf(dhsd);
+							int count = 0;
+							while(rs2.next()) {
+								k.setMaThuoc(rs2.getInt("maThuoc"));
+//								k.setTenThuoc(rs.getString("tenThuoc"));
+								k.setGiaNhap(rs2.getFloat("giaNhap"));
+								k.setGiaBan(rs2.getFloat("giaBan"));
+								k.setSlTonKho(rs2.getInt("soLuongCon"));
+								k.setHanSuDung(rs2.getDate("hanSuDung"));
+								khoList.add(k);
+								int tongsl = rs2.getInt("soLuongCon") + sl;
+
+								System.out.println(tongsl);
+								System.out.println("han su dung nhap: " + hs);
+								System.out.println("han su dung trong db: " + k.getHanSuDung());
+//								String maThuocS = String.valueOf(k.getMaThuoc());
+//								&&dnsx.equals(k.getNgaySanXuat())  &&dhsd.equals(k.getHanSuDung())
+								if(maTh.equals(String.valueOf(k.getMaThuoc()))&& gNhap.equals(String.valueOf(k.getGiaNhap()))&&gBan.equals(String.valueOf(k.getGiaBan()))&& hs.equals(String.valueOf(k.getHanSuDung()))) {
+									String themSl = "update CTThuoc set soLuongCon = '"+tongsl+"' where maThuoc ='"+sqlMaThuoc+"' and hanSuDung = '"+dhsd+"'";
+									System.out.println(themSl);
+									ps = con.prepareStatement(themSl);
+									ps.execute();
+								}
+								count++;
+							}if(count < 1) {
 								String nhapThuoc = "insert into CTThuoc(maThuoc, soLuongCon, giaNhap, giaBan, hanSuDung) values (?,?,?,?,?)";
-								ps = con.prepareStatement(nhapThuoc);
-								ps.setInt(1, Integer.parseInt(sqlMaThuoc));
-								ps.setInt(2, sl);
-								ps.setFloat(3, gn);
-								ps.setFloat(4,gb);
-								ps.setDate(5, dhsd);
-//								ps.setInt(7, mapn);
-								ps.execute();
+								PreparedStatement ps1 = con.prepareStatement(nhapThuoc);
+								System.out.println(nhapThuoc);
+								ps1.setInt(1, mThuoc);
+								ps1.setInt(2, sl);
+								ps1.setFloat(3, gn);
+								ps1.setFloat(4,gb);
+//						ps1.setString(5, txtSoLo.getText());
+								ps1.setDate(5, dhsd);
+//						ps.setInt(7, mapn);
+								ps1.execute();
+						}
 								
 									
 							String sql1 = "select * from CTPhieuNhap ct left join Thuoc t on t.maThuoc = ct.maThuoc where maPN = '"+sqlMaPN+"'";
@@ -256,6 +293,47 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.show();
+			}
+		});
+		
+		btnTimKiem.setOnAction(a -> {
+			String maPN = txtMaPN.getText().toString();
+			String tenNCC = txtNCC.getText().toString();
+			String tenNV = txtNhanVien.getText().toString();
+
+			LocalDate ldNgayNhap = dpNgayNhap.getValue();
+			Date d = Date.valueOf(ldNgayNhap);
+			
+			if(maPN == "" && tenNCC == "" && tenNV == "" && dpNgayNhap.getValue()==null) {
+				table.getItems().clear();
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Thông báo");
+				alert.setContentText("Không được để trống");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+				getAllPN();
+			}
+			else {
+			table.getItems().clear();
+			String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where maPN like N'%"+maPN+"%' and tenNCC like N'%"+tenNCC+"%' and tenNV like N'%"+tenNV+"%' and ngayNhap like '%"+d+"%'";
+			try {
+				ps = con.prepareStatement(sql);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					PhieuNhap pn = new PhieuNhap();
+		    		  pn.setMaPN(rs.getInt("maPN"));
+		    		  pn.setHoTen(rs.getString("tenNV"));
+		    		  pn.setTenNCC(rs.getString("tenNCC"));
+		    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+		    		  pn.setTrangThai(rs.getString("trangThai"));
+		    		  list.add(pn);
+		    		  table.setItems(list);
+		    	  
+				}	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		});
 	}
@@ -435,58 +513,129 @@ public class TimKiemPhieuNhapNVController implements Initializable{
     	  System.exit(0);
       }
 	//End Navbar
-	      public void getAllPN()  {
-	    	  String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC";
-	    	  try {
-				ps = con.prepareStatement(sql);
-		    	  rs = ps.executeQuery();
-		    	  while(rs.next()) {
-		    		  PhieuNhap pn = new PhieuNhap();
-		    		  pn.setMaPN(rs.getInt("maPN"));
-		    		  pn.setHoTen(rs.getString("tenNV"));
-		    		  pn.setTenNCC(rs.getString("tenNCC"));
-		    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
-		    		  list.add(pn);
-		    		  table.setItems(list);
-		    	  }
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	      }
-	      public void cell() {
-	    	maPN.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Integer>("maPN"));
-	  		hoTen.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("hoTen"));
-	  		tenNCC.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("tenNCC"));
-	  		ngayNhap.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Date>("ngayNhap"));
-	      }
-//	public int getNV() {
-//		NhanVien nv = new NhanVien();
-//		String sql = "select tenNV from NhanVien";
-//		PreparedStatement ps;
-//		try {
-//			ps = con.prepareStatement(sql);
-//			ResultSet rs = ps.executeQuery();
-//			while(rs.next()) {
-//				nv.setMaNV(rs.getInt("maNV"));
-//				nv.setHoTen(rs.getString("tenNV"));
-//				return nv.getMaNV();
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return nv.getMaNV();
-//	}
-	public void reload() throws SQLException {
-		String sql = "select * from PhieuNhap p left join NhanVien n on p.maNV = n.maNV";
-		ps = con.prepareStatement(sql);
-		rs = ps.executeQuery();
-		while(rs.next()) {
-			PhieuNhap pn = new PhieuNhap();
-			pn.setMaPN(rs.getInt("maPN"));
-			pn.setHoTen(rs.getString("hoTen"));
-//			pn.setMaNCC(rs.getString());
+      @FXML
+      public ObservableList<PhieuNhap> getAllPN()  {
+    	  cbbTrangThai.setItems(FXCollections.observableArrayList("Tất cả", "Đã nhập hàng", "Lưu tạm"));
+    	  cbbTrangThai.getSelectionModel().selectFirst();
+    	  String sql = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null";
+    	  try {
+			ps = con.prepareStatement(sql);
+	    	  rs = ps.executeQuery();
+	    	  list.clear();
+				table.setItems(list);
+	    	  while(rs.next()) {
+	    		  PhieuNhap pn = new PhieuNhap();
+	    		  pn.setMaPN(rs.getInt("maPN"));
+	    		  pn.setHoTen(rs.getString("tenNV"));
+	    		  pn.setTenNCC(rs.getString("tenNCC"));
+	    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+	    		  pn.setTrangThai(rs.getString("trangThai"));
+	    		  list.add(pn);
+	    		  table.setItems(list);
+	    	  }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
+    	  cbbTrangThai.setOnAction(args->{
+    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Tất cả") {
+    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null";
+    		    	  try {
+    					ps = con.prepareStatement(sql1);
+    			    	  rs = ps.executeQuery();
+    			    	  list.clear();
+    						table.setItems(list);
+    			    	  while(rs.next()) {
+    			    		  PhieuNhap pn = new PhieuNhap();
+    			    		  pn.setMaPN(rs.getInt("maPN"));
+    			    		  pn.setHoTen(rs.getString("tenNV"));
+    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+    			    		  pn.setTrangThai(rs.getString("trangThai"));
+    			    		  list.add(pn);
+    			    		  table.setItems(list);
+    			    	  }
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    		    	  
+    			}
+    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Đã nhập hàng") {
+    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null and ct.trangThai = N'Đã nhập hàng'";
+    		    	  try {
+    		    		  list.clear();
+    		  			table.setItems(list);
+    					ps = con.prepareStatement(sql1);
+    			    	  rs = ps.executeQuery();
+    			    	  while(rs.next()) {
+    			    		  PhieuNhap pn = new PhieuNhap();
+    			    		  pn.setMaPN(rs.getInt("maPN"));
+    			    		  pn.setHoTen(rs.getString("tenNV"));
+    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+    			    		  pn.setTrangThai(rs.getString("trangThai"));
+    			    		  list.add(pn);
+    			    		  table.setItems(list);
+    			    	  }
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+    			if(cbbTrangThai.getSelectionModel().getSelectedItem()=="Lưu tạm") {
+    				 String sql1 = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where ct.trangThai is not null and ct.trangThai = N'Lưu tạm'";
+    		    	  try {
+    		    		  list.clear();
+    		  			table.setItems(list);
+    					ps = con.prepareStatement(sql1);
+    			    	  rs = ps.executeQuery();
+    			    	  while(rs.next()) {
+    			    		  PhieuNhap pn = new PhieuNhap();
+    			    		  pn.setMaPN(rs.getInt("maPN"));
+    			    		  pn.setHoTen(rs.getString("tenNV"));
+    			    		  pn.setTenNCC(rs.getString("tenNCC"));
+    			    		  pn.setNgayNhap(rs.getDate("ngayNhap"));
+    			    		  pn.setTrangThai(rs.getString("trangThai"));
+    			    		  list.add(pn);
+    			    		  table.setItems(list);
+    			    	  }
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}});
+    			
+    	  return list;
+      }
+      public void cell() {
+    	maPN.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Integer>("maPN"));
+  		hoTen.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("hoTen"));
+  		tenNCC.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("tenNCC"));
+  		ngayNhap.setCellValueFactory(new PropertyValueFactory<PhieuNhap, Date>("ngayNhap"));
+  		trangThai.setCellValueFactory(new PropertyValueFactory<PhieuNhap, String>("trangThai"));
+      }
+//public int getNV() {
+//	NhanVien nv = new NhanVien();
+//	String sql = "select tenNV from NhanVien";
+//	PreparedStatement ps;
+//	try {
+//		ps = con.prepareStatement(sql);
+//		ResultSet rs = ps.executeQuery();
+//		while(rs.next()) {
+//			nv.setMaNV(rs.getInt("maNV"));
+//			nv.setHoTen(rs.getString("tenNV"));
+//			return nv.getMaNV();
+//		}
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	return nv.getMaNV();
+//}
+public void reload() {
+	getAllPN();
+	cell();
+	table.setItems(list);
+}
 }
