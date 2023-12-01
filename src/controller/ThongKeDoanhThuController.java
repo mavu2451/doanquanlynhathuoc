@@ -376,7 +376,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			e2.printStackTrace();
 		}
 		
-		String ngayChi = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where ngayNhap = cast(getdate() as Date) and trangThai = N'Đã nhập hàng'";
+		String ngayChi = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where ngayNhap = cast(getdate() as Date) and trangThai = N'Đã nhập hàng'";
 		try {
 			ps = con.prepareStatement(ngayChi);
 			rs = ps.executeQuery();
@@ -387,7 +387,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		String thangChi = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where month(ngayNhap) = '"+d+"' and trangThai = N'Đã nhập hàng'";
+		String thangChi = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where month(ngayNhap) = '"+d+"' and trangThai = N'Đã nhập hàng'";
 		try {
 			ps = con.prepareStatement(thangChi);
 			rs = ps.executeQuery();
@@ -398,7 +398,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		String tongChi = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where trangThai = N'Đã nhập hàng'";
+		String tongChi = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where trangThai = N'Đã nhập hàng'";
 		try {
 			ps = con.prepareStatement(tongChi);
 			rs = ps.executeQuery();
@@ -447,7 +447,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			}
 		});
 		dpChiNgay.setOnAction(args -> {
-			String dtngay = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where ngayNhap = '"+dpChiNgay.getValue()+"' and trangThai = N'Đã nhập hàng'";
+			String dtngay = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where ngayNhap = '"+dpChiNgay.getValue()+"' and trangThai = N'Đã nhập hàng'";
 			try {
 				ps = con.prepareStatement(dtngay);
 				rs = ps.executeQuery();
@@ -462,7 +462,7 @@ public class ThongKeDoanhThuController implements Initializable{
 		cbbChiThang.setItems(thang);
 		cbbChiThang.getSelectionModel().selectFirst();
 		cbbChiThang.setOnAction(args -> {
-			String sql = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where month(ngayNhap) = '"+cbbChiThang.getSelectionModel().getSelectedItem()+"' and year(ngayNhap) = '"+cbbChiNam.getSelectionModel().getSelectedItem()+"' and trangThai = N'Đã nhập hàng'";
+			String sql = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where month(ngayNhap) = '"+cbbChiThang.getSelectionModel().getSelectedItem()+"' and year(ngayNhap) = '"+cbbChiNam.getSelectionModel().getSelectedItem()+"' and trangThai = N'Đã nhập hàng'";
 			try {
 				ps = con.prepareStatement(sql);
 				rs = ps.executeQuery();
@@ -501,7 +501,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			}
 		});
 		cbbChiNam.setOnAction(args -> {
-			String sql = "select isNull(sum(tongGiaBan),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where year(ngayNhap) = '"+cbbChiNam.getSelectionModel().getSelectedItem()+"'and trangThai = N'Đã nhập hàng'";
+			String sql = "select isNull(sum(tongGiaNhap),0) as tongTien from CTPhieuNhap ct left join PhieuNhap p on p.maPN = ct.maPN where year(ngayNhap) = '"+cbbChiNam.getSelectionModel().getSelectedItem()+"'and trangThai = N'Đã nhập hàng'";
 			try {
 				ps = con.prepareStatement(sql);
 				rs = ps.executeQuery();

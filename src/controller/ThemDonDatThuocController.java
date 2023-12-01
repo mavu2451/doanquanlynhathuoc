@@ -330,7 +330,7 @@ public class ThemDonDatThuocController implements Initializable{
 										thanhTien1 = thanhTien1 + tong1;
 										System.out.println("thanh tien: " + thanhTien1);
 										lblThanhTien.setText(String.format("%.0f",thanhTien1)+"");
-										txtTienNhan.setText(String.format("%.0f",thanhTien1)+"");
+//										txtTienNhan.setText(String.format("%.0f",thanhTien1)+"");
 									}
 								}
 //								try {
@@ -451,20 +451,20 @@ public class ThemDonDatThuocController implements Initializable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				try {
-					int maPDT = getMaPDT();
-					String tongGiaBan = "select sum(thanhTien) as tong from CTDonDatThuoc where maPDT ='"+maPDT+"'";
-					ps = con.prepareStatement(tongGiaBan);
-					rs = ps.executeQuery();
-					while(rs.next()) {
-						float tong = rs.getFloat("tong");
-						String tongS = String.valueOf(tong);
-						lblThanhTien.setText(tongS);
-					}
-				} catch (Exception e) {
-		// TODO: handle exception
-					e.printStackTrace();
-					}
+//				try {
+//					int maPDT = getMaPDT();
+//					String tongGiaBan = "select sum(thanhTien) as tong from CTDonDatThuoc where maPDT ='"+maPDT+"'";
+//					ps = con.prepareStatement(tongGiaBan);
+//					rs = ps.executeQuery();
+//					while(rs.next()) {
+//						float tong = rs.getFloat("tong");
+//						String tongS = String.valueOf(tong);
+//						lblThanhTien.setText(tongS);
+//					}
+//				} catch (Exception e) {
+//		// TODO: handle exception
+//					e.printStackTrace();
+//					}
 				
 				Scene scene = new Scene(root,400,300);
 				stage.setScene(scene);
@@ -946,7 +946,7 @@ public class ThemDonDatThuocController implements Initializable{
 //			 cthd.setSoLo(rs.getString("soLo"));
 			 cthd.setDonGia(rs.getFloat("donGia"));
 			 cthd.setSoLuong(rs.getInt("soLuong"));
-			 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
+//			 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
 			 cthdList.add(cthd);
 			 table.setItems(cthdList);
 		 }

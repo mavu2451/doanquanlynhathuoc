@@ -166,7 +166,7 @@ public class CTPhieuNhapController implements Initializable{
 			loaithuoc.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("loaiThuoc"));
 			TableColumn donViTinh = new TableColumn<Thuoc, String>("Đơn vị tính");
 			donViTinh.setCellValueFactory(new PropertyValueFactory<Thuoc, String>("dvt"));
-			TableColumn giaNhap = new TableColumn<Thuoc, Float>("Giá bán");
+			TableColumn giaNhap = new TableColumn<Thuoc, Float>("Giá nhập");
 			giaNhap.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaNhap"));
 			TableColumn giaBan = new TableColumn<Thuoc, Float>("Giá bán");
 			giaBan.setCellValueFactory(new PropertyValueFactory<Thuoc, Float>("giaBan"));

@@ -422,6 +422,7 @@ public class ThemThuocController implements Initializable{
 		String sql = "insert into Thuoc(tenThuoc,maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon, hinhAnh) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		int mlt = getLT();
+		gn = Float.parseFloat(txtGiaNhap.getText());
 		gb = Float.parseFloat(txtGiaBan.getText());
 		System.out.println(mlt);
 		try {
