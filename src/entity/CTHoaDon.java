@@ -1,6 +1,7 @@
 package entity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -107,6 +108,21 @@ public class CTHoaDon {
 	}
 	public void setTongGiaBan(float tongGiaBan) {
 		this.tongGiaBan = tongGiaBan;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(maThuoc);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CTHoaDon other = (CTHoaDon) obj;
+		return maThuoc == other.maThuoc;
 	}
 	
 }

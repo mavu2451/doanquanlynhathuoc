@@ -1,6 +1,7 @@
 package entity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +19,7 @@ public class CTPhieuDatThuoc {
 	private Date hanSuDung;
 	private String cachDung;
 	private float tongGiaBan;
-	public CTPhieuDatThuoc( int maPDT, int maThuoc, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
+	public CTPhieuDatThuoc(int maPDT, int maThuoc, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
 			int soLuong,  Date hanSuDung, String cachDung, float tongGiaBan) {
 		super();
 		this.maThuoc = maThuoc;
@@ -29,6 +30,7 @@ public class CTPhieuDatThuoc {
 		this.donGia = donGia;
 		this.soLuong = soLuong;
 //		this.soLo = soLo;
+
 		this.hanSuDung = hanSuDung;
 		this.cachDung = cachDung;
 		this.tongGiaBan = tongGiaBan;
@@ -105,5 +107,21 @@ public class CTPhieuDatThuoc {
 	public void setTongGiaBan(float tongGiaBan) {
 		this.tongGiaBan = tongGiaBan;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(maThuoc);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CTPhieuDatThuoc other = (CTPhieuDatThuoc) obj;
+		return maThuoc == other.maThuoc;
+	}
+	
 	
 }

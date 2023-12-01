@@ -531,13 +531,14 @@ public class CTPhieuNhapNVController implements Initializable{
 			int maNCC;
 			maNCC = maNCC();
 			System.out.println(dpNgayNhap.getValue());
-			String sql = "insert into PhieuNhap(maNV, ngayNhap, maNCC) values (?,?,?)";
+			String sql = "insert into PhieuNhap(maNV, ngayNhap, maNCC, thongTin) values (?,?,?,?)";
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, dnc.getMaNV());
 			LocalDate ld = dpNgayNhap.getValue();
 			Date date = Date.valueOf(ld);
 			ps.setDate(2, date);
 			ps.setInt(3, maNCC);
+			ps.setString(4, taGhiChu.getText());
 			ps.execute();
 			maPN();
 			int maPN = maPN();

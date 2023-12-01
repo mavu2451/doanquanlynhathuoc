@@ -340,7 +340,7 @@ public class ThongKeDoanhThuController implements Initializable{
 		LocalDate date = LocalDate.now();
 		int d = date.getMonthValue();
 		System.out.println(date);
-		String ngay = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD = cast(getdate() as Date)";
+		String ngay = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD = cast(getdate() as Date)";
 		try {
 			ps = con.prepareStatement(ngay);
 			rs = ps.executeQuery();
@@ -351,7 +351,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-			String thangnay = "select sum(tongTien) as tongTien from hoaDon where month(ngayLapHD) = '"+d+"'";
+			String thangnay = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where month(ngayLapHD) = '"+d+"'";
 			System.out.println(date.getMonth());
 			try {
 				ps = con.prepareStatement(thangnay);
@@ -364,7 +364,7 @@ public class ThongKeDoanhThuController implements Initializable{
 				e2.printStackTrace();
 			}
 		
-		String tong = "select sum(tongTien) as tongTien from hoaDon";
+		String tong = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD";
 		try {
 			ps = con.prepareStatement(tong);
 			rs = ps.executeQuery();
@@ -435,7 +435,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			e1.printStackTrace();
 		}
 		dpNgay.setOnAction(args -> {
-			String dtngay = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD = '"+dpNgay.getValue()+"'";
+			String dtngay = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD = '"+dpNgay.getValue()+"'";
 			try {
 				ps = con.prepareStatement(dtngay);
 				rs = ps.executeQuery();
@@ -477,7 +477,7 @@ public class ThongKeDoanhThuController implements Initializable{
 		cbbThang.setItems(thang);
 		cbbThang.getSelectionModel().selectFirst();
 		cbbThang.setOnAction(args -> {
-			String sql = "select sum(tongTien) as tongTien from hoaDon where month(ngayLapHD) = '"+cbbThang.getSelectionModel().getSelectedItem()+"' and year(ngayLapHD) = '"+cbbNam.getSelectionModel().getSelectedItem()+"'";
+			String sql = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where month(ngayLapHD) = '"+cbbThang.getSelectionModel().getSelectedItem()+"' and year(ngayLapHD) = '"+cbbNam.getSelectionModel().getSelectedItem()+"'";
 			try {
 				ps = con.prepareStatement(sql);
 				rs = ps.executeQuery();
@@ -489,7 +489,7 @@ public class ThongKeDoanhThuController implements Initializable{
 			}
 		});
 		cbbNam.setOnAction(args -> {
-			String sql = "select sum(tongTien) as tongTien from hoaDon where year(ngayLapHD) = '"+cbbNam.getSelectionModel().getSelectedItem()+"'";
+			String sql = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where year(ngayLapHD) = '"+cbbNam.getSelectionModel().getSelectedItem()+"'";
 			try {
 				ps = con.prepareStatement(sql);
 				rs = ps.executeQuery();
@@ -580,7 +580,7 @@ public class ThongKeDoanhThuController implements Initializable{
 	}
 	public float tongGiaBan(int i) throws SQLException {
 		float tongGia = 0;
-		String sqlchi = "select sum(tongTien) as tongTien from HoaDon where month(ngayLapHD)='"+i+"'";
+		String sqlchi = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where month(ngayLapHD)='"+i+"'";
 		ps = con.prepareCall(sqlchi);
 		rs = ps.executeQuery();
 		while(rs.next()) 

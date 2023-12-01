@@ -366,7 +366,7 @@ public class TrangChuController implements Initializable{
 		e.printStackTrace();
 	}
 	LocalDate d = LocalDate.now();
-	String dt = "select sum(tongTien) as tongTien from hoaDon where month(ngayLapHD) = '"+d.getMonthValue()+"'";
+	String dt = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where month(ngayLapHD) = '"+d.getMonthValue()+"'";
 	try {
 		ps = con.prepareStatement(dt);
 		rs = ps.executeQuery();
@@ -376,7 +376,7 @@ public class TrangChuController implements Initializable{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	String dtngay = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d.minusDays(2)+"'";
+	String dtngay = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d.minusDays(2)+"'";
 	try {
 		ps = con.prepareStatement(dtngay);
 		rs = ps.executeQuery();
@@ -391,7 +391,7 @@ public class TrangChuController implements Initializable{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	String dtngay1 = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d.minusDays(1)+"'";
+	String dtngay1 = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d.minusDays(1)+"'";
 	try {
 		ps = con.prepareStatement(dtngay1);
 		rs = ps.executeQuery();
@@ -406,7 +406,7 @@ public class TrangChuController implements Initializable{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	String dtngay2 = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d+"'";
+	String dtngay2 = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d+"'";
 	try {
 		ps = con.prepareStatement(dtngay2);
 		rs = ps.executeQuery();

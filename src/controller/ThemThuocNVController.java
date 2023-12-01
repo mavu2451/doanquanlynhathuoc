@@ -109,11 +109,17 @@ public class ThemThuocNVController implements Initializable{
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
-
+	float gn = 0;
+	float gb = 0;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
+		txtGiaNhap.setOnKeyReleased(arg-> {
+			Float t = Float.parseFloat(txtGiaNhap.getText());
+
+			txtGiaBan.setText((String.format("%.0f", t + (t*10/100))));
+		});
 		cbb();
 		reload();
 		getAllThuoc();
@@ -458,8 +464,7 @@ public class ThemThuocNVController implements Initializable{
 //		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
 		int mlt = getLT();
 //		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
-		float gn = Float.parseFloat(txtGiaNhap.getText());
-		float gb = Float.parseFloat(txtGiaBan.getText());
+		gb = Float.parseFloat(txtGiaBan.getText());
 		System.out.println(mlt);
 		try {
 			ps = con.prepareStatement(sql);

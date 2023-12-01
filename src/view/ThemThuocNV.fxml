@@ -293,7 +293,7 @@
             <TextField fx:id="txtCachDung" layoutX="162.0" layoutY="535.0" prefHeight="25.0" prefWidth="169.0" />
             <Button layoutX="85.0" layoutY="835.0" mnemonicParsing="false" onAction="#add" prefHeight="50.0" prefWidth="103.0" text="Thêm" />
             <Button layoutX="575.0" layoutY="836.0" mnemonicParsing="false" onAction="#xoaTrang" prefHeight="49.0" prefWidth="98.0" text="Xoá trắng" />
-            <TextField fx:id="txtGiaBan" layoutX="525.0" layoutY="480.0" prefHeight="25.0" prefWidth="173.0" />
+            <TextField fx:id="txtGiaBan" editable="false" layoutX="525.0" layoutY="480.0" prefHeight="25.0" prefWidth="173.0" />
             <Label layoutX="456.0" layoutY="485.0" text="Giá bán" />
             <Label layoutX="41.0" layoutY="485.0" text="Quy cách đóng gói" />
             <TextField fx:id="txtQuyCach" layoutX="162.0" layoutY="481.0" prefHeight="25.0" prefWidth="169.0" />

@@ -3,7 +3,7 @@ package entity;
 import java.sql.Date;
 
 public class CTThuoc {
-	private int maKho;
+	private int maCT;
 	private int maThuoc;
 	private String tenThuoc;
 	private String donViTinh;
@@ -14,10 +14,10 @@ public class CTThuoc {
 	private float giaNhap;
 	private float giaBan;
 	private Date hanSuDung;
-	public CTThuoc(int maKho, int maThuoc, String tenThuoc, String donViTinh, String tenNCC, String tenLoaiThuoc,
+	public CTThuoc(int maCT, int maThuoc, String tenThuoc, String donViTinh, String tenNCC, String tenLoaiThuoc,
 			int slTonKho, float giaNhap, float giaBan, Date hanSuDung, int soLuong) {
 		super();
-		this.maKho = maKho;
+		this.maCT = maCT;
 		this.maThuoc = maThuoc;
 		this.tenThuoc = tenThuoc;
 		this.donViTinh = donViTinh;
@@ -33,11 +33,11 @@ public class CTThuoc {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public int getMaKho() {
-		return maKho;
+	public int getMaCT() {
+		return maCT;
 	}
-	public void setMaKho(int maKho) {
-		this.maKho = maKho;
+	public void setMaCT(int maCT) {
+		this.maCT = maCT;
 	}
 	public int getMaThuoc() {
 		return maThuoc;

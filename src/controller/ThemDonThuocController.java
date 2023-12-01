@@ -102,6 +102,8 @@ public class ThemDonThuocController implements Initializable{
 	@FXML
 	TableView<CTDonThuocKhamBenh> table;
 	@FXML
+	private TableColumn<CTDonThuocKhamBenh, Integer> maCT;
+	@FXML
 	private TableColumn<CTDonThuocKhamBenh, Integer> maThuoc;
 	@FXML
 	private TableColumn<CTDonThuocKhamBenh, String> tenThuoc;
@@ -111,9 +113,8 @@ public class ThemDonThuocController implements Initializable{
 	private TableColumn<CTDonThuocKhamBenh, String> donViTinh;
 	@FXML
 	private TableColumn<CTDonThuocKhamBenh, Integer> soLuong;
-	@FXML
-	private TableColumn<CTDonThuocKhamBenh, String> cachDung;
 
+	int i= 1;
 	int hd = 0;
 	private ObservableList<CTDonThuocKhamBenh> list = FXCollections.observableArrayList();
 	@Override
@@ -235,8 +236,6 @@ public class ThemDonThuocController implements Initializable{
 
 				String sql = "select * from Thuoc t left join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where thuocKeDon = N'Thuốc kê đơn'";
 				try {
-					taoDonThuoc();
-					int maDT = getMaDonThuoc();
 					ps = con.prepareStatement(sql);
 					rs = ps.executeQuery();
 					while(rs.next()) {
@@ -262,39 +261,51 @@ public class ThemDonThuocController implements Initializable{
 								int sl = Integer.parseInt(soLuong.getText());
 								table.setItems(null);
 								String sqlMaThuoc = String.valueOf(maThuoc.getCellData(index).toString());
+								System.out.println(sqlMaThuoc);
 								String sqlTenThuoc = String.valueOf(tenThuoc.getCellData(index).toString());
 								String sqlDVT = String.valueOf(donViTinh.getCellData(index).toString());
-								int slpn=0;
-								
-								try {
-									String hd = "insert into CTDonThuocKhamBenh(maDonThuoc,maThuoc,soLuong, cachDung) values (?,?,?,?)";
-									ps = con.prepareStatement(hd);
-									ps.setInt(1, maDT);
-									ps.setInt(2, Integer.parseInt(sqlMaThuoc));
-									ps.setInt(3, sl);
-									ps.setString(4, cachDung.getText());
-									ps.execute();
-									
-									String get = "select * from CTDonThuocKhamBenh ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maDonThuoc = '"+maDT+"'";
-									ps = con.prepareStatement(get);
-									rs = ps.executeQuery();
-									int i = 1;
-									ObservableList<CTDonThuocKhamBenh> ctDonThuoc = FXCollections.observableArrayList();
-									while(rs.next()) {
-										CTDonThuocKhamBenh ct = new CTDonThuocKhamBenh();
-										ct.setMaCT(i++);
-										ct.setTenThuoc(rs.getString("tenThuoc"));
-										ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-										ct.setDonViTinh(rs.getString("donViTinh"));
-										ct.setSoLuong(rs.getInt("soLuong"));
-										ct.setCachDung(rs.getString("cachDung"));
-										ctDonThuoc.add(ct);
-										table.setItems(ctDonThuoc);
-									}	
-								} catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+								String sqlLoaiThuoc = String.valueOf(loaiThuoc.getCellData(index).toString());
+
+								CTDonThuocKhamBenh ct = new CTDonThuocKhamBenh();
+								int mt = Integer.parseInt(sqlMaThuoc);
+								System.out.println(mt);
+								ct.setMaCT(i++);
+								ct.setMaThuoc(mt);
+								ct.setTenThuoc(sqlTenThuoc);
+								ct.setTenLoaiThuoc(sqlLoaiThuoc);
+								ct.setDonViTinh(sqlDVT);
+								ct.setSoLuong(Integer.parseInt(soLuong.getText()));
+								list.add(ct);
+								table.setItems(list);
+//								try {
+//									String hd = "insert into CTDonThuocKhamBenh(maDonThuoc,maThuoc,soLuong, cachDung) values (?,?,?,?)";
+//									ps = con.prepareStatement(hd);
+//									ps.setInt(1, maDT);
+//									ps.setInt(2, Integer.parseInt(sqlMaThuoc));
+//									ps.setInt(3, sl);
+//									ps.setString(4, cachDung.getText());
+//									ps.execute();
+//									
+//									String get = "select * from CTDonThuocKhamBenh ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maDonThuoc = '"+maDT+"'";
+//									ps = con.prepareStatement(get);
+//									rs = ps.executeQuery();
+//									int i = 1;
+//									ObservableList<CTDonThuocKhamBenh> ctDonThuoc = FXCollections.observableArrayList();
+//									while(rs.next()) {
+//										CTDonThuocKhamBenh ct = new CTDonThuocKhamBenh();
+//										ct.setMaCT(i++);
+//										ct.setTenThuoc(rs.getString("tenThuoc"));
+//										ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+//										ct.setDonViTinh(rs.getString("donViTinh"));
+//										ct.setSoLuong(rs.getInt("soLuong"));
+//										ct.setCachDung(rs.getString("cachDung"));
+//										ctDonThuoc.add(ct);
+//										table.setItems(ctDonThuoc);
+//									}	
+//								} catch (SQLException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
 								stage.close();
 								
 							}
@@ -469,17 +480,34 @@ public class ThemDonThuocController implements Initializable{
 					alert1.setHeaderText(null);
 					alert1.showAndWait();
 					Optional<ButtonType> result = alert1.showAndWait();
-					int maDT = getMaDonThuoc();
+
 					if(result.get()==ButtonType.OK) {
+						taoDonThuoc();
+						int maDT = getMaDonThuoc();
 						String sql = "update DonThuocKhamBenh set bacSiKeDon = N'"+txtBacSiKeDon.getText()+"',chanDoan = N'"+txtChanDoan.getText()+"',loiDan = N'"+txtLoiKhuyen.getText()+"',thongTinChiTiet = N'"+txtThongTin.getText()+"' where maDonThuoc = '"+maDT+"'";
 						ps = con.prepareStatement(sql);
 						ps.execute();
+						try {
+							String hd = "insert into CTDonThuocKhamBenh(maDonThuoc,maThuoc,soLuong) values (?,?,?)";
+							ps = con.prepareStatement(hd);
+							ps.setInt(1, maDT);
+							for(int i = 0; i<table.getItems().size();i++) {
+								int sqlMaThuoc = maThuoc.getCellData(i);
+								ps.setInt(2, sqlMaThuoc);
+								ps.setInt(3, soLuong.getCellData(i));
+								ps.execute();
+							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						Alert alert2 = new Alert(AlertType.INFORMATION);
 						alert2.setTitle("Thông báo");
 						alert2.setContentText("Đơn hàng đã được thêm thành công");
 						alert2.setHeaderText(null);
 						alert2.showAndWait();
 						inHD1();
+						table.getItems().clear();
 						txtTenKH.setText("");
 						txtGioiTinh.setText("");
 						txtSdt.setText("");
@@ -488,9 +516,8 @@ public class ThemDonThuocController implements Initializable{
 						txtBacSiKeDon.setText("");
 						txtChanDoan.setText("");
 						txtLoiKhuyen.setText("");
-						table.setItems(null);
+//						table.setItems(null);
 						hd = 0;
-		
 					}
 					else if(result.get()==ButtonType.CANCEL) {
 						
@@ -808,15 +835,23 @@ public class ThemDonThuocController implements Initializable{
 //	  		 lblTienThoi.setText(String.valueOf(tienNhan - thanhTien));
 //	  	 }
 			 public void cell(){
-				 maThuoc.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, Integer>("maCT"));
+				 maCT.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, Integer>("maCT"));
+				 maThuoc.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, Integer>("maThuoc"));
 				 tenThuoc.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, String>("tenThuoc"));
 				 tenLoaiThuoc.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, String>("tenLoaiThuoc"));
 				 donViTinh.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, String>("donViTinh"));
 				 soLuong.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, Integer>("soLuong"));
-				 cachDung.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, String>("cachDung"));
 //				 tongGiaBan.setCellValueFactory(new PropertyValueFactory<CTDonThuocKhamBenh, Float>("tongGiaBan"));
 
 			 }
+				public void remove(ActionEvent e) {
+					int select = table.getSelectionModel().getSelectedIndex();
+					table.getItems().remove(select);
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setHeaderText(null);
+					alert.setContentText("Thuốc đã được xoá");
+					alert.showAndWait();
+				}
 	  	 public void getCTDonThuocKhamBenh() throws SQLException {
 	  		 int maDT = getMaDonThuoc();
 	  		 String sql = "select * from CTDonThuocKhamBenh cthd left join Thuoc t on t.maThuoc = cthd.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maDonThuoc = '"+maDT+"'";

@@ -180,6 +180,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					TextField txtTimKiem = new TextField();
 					Label lblTimKiem = new Label("Tìm kiếm đơn thuốc");
 					Button chon = new Button("Chọn sản phẩm");
+
 					HBox h1 = new HBox(3);
 					HBox h2 = new HBox(1);
 					
@@ -197,10 +198,12 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					loiDan.setCellValueFactory(new PropertyValueFactory<DonThuocKhamBenh, String>("loiDan"));
 					TableColumn thongTin = new TableColumn<DonThuocKhamBenh, String>("Thông tin chi tiết");
 					thongTin.setCellValueFactory(new PropertyValueFactory<DonThuocKhamBenh, String>("thongTin"));
+					thongTin.setPrefWidth(300);
 
 					
 					tableView.getColumns().add(maDonThuoc);
 					tableView.getColumns().add(bacSiKeDon);
+					tableView.getColumns().add(chanDoan);
 					tableView.getColumns().add(loiDan);
 					tableView.getColumns().add(ngayNhap);
 					tableView.getColumns().add(thongTin);
@@ -238,7 +241,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 								}
 								else {
 									String sqlMaDonThuoc = String.valueOf(maDonThuoc.getCellData(index).toString());
-									String getDT = "select ct.maThuoc, t.tenThuoc, ct.soLuong, ct.cachDung from CTDonThuocKhamBenh ct left join Thuoc t on ct.maThuoc = t.maThuoc where maDonThuoc = '"+sqlMaDonThuoc+"' group by ct.maThuoc, t.tenThuoc,ct.soLuong,ct.cachDung";
+									String getDT = "select ct.maThuoc, t.tenThuoc, ct.soLuong from CTDonThuocKhamBenh ct left join Thuoc t on ct.maThuoc = t.maThuoc where maDonThuoc = '"+sqlMaDonThuoc+"' group by ct.maThuoc, t.tenThuoc,ct.soLuong";
 									try {
 										String updateDonThuoc = "update HoaDon set maDonThuoc = '"+maDT+"'where maHD ='"+maHD+"'";
 										PreparedStatement psUpdate = con.prepareStatement(updateDonThuoc);
@@ -253,7 +256,6 @@ public class ThemHoaDonTheoDonController implements Initializable{
 											ct1.setTenThuoc(rs1.getString("tenThuoc"));
 											ct1.setSoLuong(rs1.getInt("soLuong"));
 											int slDonThuoc = rs1.getInt("soLuong");
-											ct1.setCachDung(rs1.getString("cachDung"));
 											String getCTThuoc = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and t.maThuoc = '"+maThuocCoDon+"'  group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 											PreparedStatement psd = con.prepareStatement(getCTThuoc);
 											ResultSet rs2 = psd.executeQuery();
@@ -311,7 +313,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					Scene scene = new Scene(root,700,400);
+					Scene scene = new Scene(root,500,400);
 					stage.setScene(scene);
 					stage.setResizable(true);
 					stage.show();

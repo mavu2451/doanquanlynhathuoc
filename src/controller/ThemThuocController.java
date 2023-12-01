@@ -30,6 +30,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,6 +52,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -109,10 +112,16 @@ public class ThemThuocController implements Initializable{
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	ResultSet rs;
-
+	float gn = 0;
+	float gb = 0;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		txtGiaNhap.setOnKeyReleased(arg-> {
+			Float t = Float.parseFloat(txtGiaNhap.getText());
+
+			txtGiaBan.setText((String.format("%.0f", t + (t*10/100))));
+		});
 		// TODO Auto-generated method stub
 		cbb();
 		reload();
@@ -411,11 +420,9 @@ public class ThemThuocController implements Initializable{
 	public void add() throws SQLException, FileNotFoundException {
 
 		String sql = "insert into Thuoc(tenThuoc,maLoaiThuoc, donViTinh, giaNhap, giaBan, quyCachDongGoi, cachDung, nuocSanXuat, trangThai, dinhMucSL, soDangKy, thongTin, thuocKeDon, hinhAnh) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
+
 		int mlt = getLT();
-//		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
-		float gn = Float.parseFloat(txtGiaNhap.getText());
-		float gb = Float.parseFloat(txtGiaBan.getText());
+		gb = Float.parseFloat(txtGiaBan.getText());
 		System.out.println(mlt);
 		try {
 			ps = con.prepareStatement(sql);

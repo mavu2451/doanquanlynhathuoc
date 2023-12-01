@@ -12,7 +12,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -323,6 +322,7 @@
                   <TableView fx:id="table" prefHeight="801.0" prefWidth="894.0">
                     <columns>
                       <TableColumn fx:id="maPDT" prefWidth="75.0" text="STT" />
+                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã thuốc" />
                         <TableColumn fx:id="tenThuoc" prefWidth="143.0" text="Tên thuốc" />
                         <TableColumn fx:id="donViTinh" prefWidth="135.0" text="Đơn vị tính" />
                         <TableColumn fx:id="donGia" prefWidth="217.0" text="Đơn giá" />
@@ -353,7 +353,7 @@
                </font>
             </Label>
             <Label layoutX="47.0" layoutY="417.0" text="Thông tin lưu ý" />
-            <Button fx:id="btnThemPhieu" layoutX="369.0" layoutY="776.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="214.0" text="Lập phiếu đặt thuốc" />
+            <Button fx:id="btnThemPhieu" layoutX="370.0" layoutY="776.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="214.0" text="Lập phiếu đặt thuốc" />
             <Button fx:id="btnThemTenThuoc" layoutX="726.0" layoutY="38.0" mnemonicParsing="false" text="Thêm thuốc" />
             <TextField fx:id="txtTenKH" layoutX="167.0" layoutY="186.0" prefHeight="25.0" prefWidth="399.0" />
             <Button fx:id="btnThemKH" layoutX="545.0" layoutY="186.0" mnemonicParsing="false" text="+" />
@@ -362,6 +362,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <Button layoutX="165.0" layoutY="776.0" mnemonicParsing="false" onAction="#remove" prefHeight="54.0" prefWidth="125.0" text="Xoá" />
          </children>
       </AnchorPane>
    </center>
