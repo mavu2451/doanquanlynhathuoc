@@ -40,7 +40,9 @@ import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 
 import database.KetNoiDatabase;
+import entity.CTDonThuocKhamBenh;
 import entity.CTHoaDon;
+import entity.CTPhieuDatThuoc;
 import entity.KhachHang;
 import entity.CTThuoc;
 import entity.DonDatThuoc;
@@ -216,9 +218,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 						stage.setScene(scene);
 						stage.setResizable(false);
 						stage.show();
-						String sql = "select * from DonDatThuoc d left join NhanVien nv on nv.maNV = d.maNV inner join KhachHang kh on kh.maKH = d.maKH where d.maKH = '"+maKH+"'and d.trangThai = N'Phiếu tạm'";
-						taoHD();
-						int maHD = getMaHD();
+						String sql = "select * from DonDatThuoc d left join NhanVien nv on nv.maNV = d.maNV inner join KhachHang kh on kh.maKH = d.maKH where d.maKH = '"+maKH+"'";
 						ps = con.prepareStatement(sql);
 						rs = ps.executeQuery();
 						while(rs.next()) {
@@ -226,7 +226,7 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 							d.setMaPDT(rs.getInt("maPDT"));
 							d.setTenNV(rs.getString("tenNV"));
 							d.setNgayLapDon(rs.getDate("ngayLapDon"));
-							d.setTongTien(rs.getFloat("tongTien"));
+//							d.setTongTien(rs.getFloat("tongTien"));
 							Tlist.add(d);
 							tableView.setItems(Tlist);
 							chon.setOnAction(arg02 ->{
@@ -240,50 +240,125 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 								}
 								else {
 									String sqlMaThuoc = String.valueOf(maPDT.getCellData(index).toString());
-									String s = "select * from CTDonDatThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maPDT = '"+sqlMaThuoc+"'";
+									String sqlMaDonThuoc = String.valueOf(maPDT.getCellData(index).toString());
+									String getDT = "select ct.maThuoc, t.tenThuoc, ct.soLuong, ct.donGia from CTDonDatThuoc ct left join Thuoc t on ct.maThuoc = t.maThuoc where maPDT = '"+sqlMaDonThuoc+"' group by ct.maThuoc, t.tenThuoc,ct.soLuong, ct.donGia";
 									try {
-										ps = con.prepareStatement(s);
-										rs = ps.executeQuery();
-//										ObservableList<CTHoaDon> cthoaDonList = FXCollections.observableArrayList();
-										int i = 1;
-										while(rs.next()) {
-											CTHoaDon ct = new CTHoaDon();
-											ct.setMaCTHD(i++);
-											ct.setMaThuoc(rs.getInt("maThuoc"));
-											ct.setTenThuoc(rs.getString("tenThuoc"));
-											ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
-											ct.setDonViTinh(rs.getString("donViTinh"));
-											ct.setDonGia(rs.getFloat("donGia"));
-											ct.setSoLuong(rs.getInt("soLuong"));
-											ct.setTongGiaBan(rs.getFloat("thanhTien"));
-											cthoaDonList.add(ct);
-											table.setItems(cthoaDonList);
-											String insert = "insert into CTHoaDon(maHD, maThuoc, soLuong, donGia, thanhTien) values(?,?,?,?,?)";
-											ps = con.prepareStatement(insert);
-											ps.setInt(1, maHD);
-											ps.setInt(2, ct.getMaThuoc());
-											ps.setInt(3, ct.getSoLuong());
-											ps.setFloat(4, ct.getDonGia());
-											float thanhTien = ct.getDonGia() * ct.getSoLuong();
-											ps.setFloat(5, thanhTien);
-											ps.execute();		
-											String update = "update DonDatThuoc set trangThai = N'Đã thanh toán' where maPDT='"+sqlMaThuoc+"'";
-											ps = con.prepareStatement(update);
-											ps.execute();
+										PreparedStatement ps1 = con.prepareStatement(getDT);
+										ResultSet rs1 = ps1.executeQuery();
+										while(rs1.next()) {
+											CTPhieuDatThuoc ct1 = new CTPhieuDatThuoc();
+											ct1.setMaThuoc(rs1.getInt("maThuoc"));
+											int maThuocCoDon = rs1.getInt("maThuoc");
+											System.out.println(maThuocCoDon);
+											ct1.setTenThuoc(rs1.getString("tenThuoc"));
+											ct1.setSoLuong(rs1.getInt("soLuong"));
+											ct1.setDonGia(rs1.getFloat("donGia"));
+											int slDonThuoc = rs1.getInt("soLuong");
+											String getCTThuoc = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and t.maThuoc = '"+maThuocCoDon+"'  group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
+											PreparedStatement psd = con.prepareStatement(getCTThuoc);
+											ResultSet rs2 = psd.executeQuery();
+											while(rs2.next()) {
+												CTThuoc tt = new CTThuoc();
+												tt.setMaThuoc(rs2.getInt("maThuoc"));
+												int maT = rs2.getInt("maThuoc");
+												tt.setTenThuoc(rs2.getString("tenThuoc"));
+												String tenT = rs2.getString("tenThuoc");
+												System.out.println(maT + "ma Thuoc");
+												System.out.println(tenT);
+//												k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+												tt.setSlTonKho(rs2.getInt("soLuongCon"));
+												int slTonKho = rs2.getInt("soLuongCon");
+												tt.setDonViTinh(rs2.getString("donViTinh"));
+												tt.setGiaBan(rs2.getFloat("giaBan"));
+												float giaBan = rs2.getFloat("giaBan");
+												if(slTonKho == 0) {
+													Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm của thuốc '"+tenT+"' trong kho không đủ", ButtonType.OK);
+											  		alert.setTitle("Thông báo");
+											  		alert.setHeaderText(null);
+											  		alert.show();
+												}
+												if(slDonThuoc > slTonKho) {
+													Alert alert = new Alert(AlertType.ERROR, "Thêm thất bại, số lượng sản phẩm của thuốc '"+tenT+"' trong kho không đủ", ButtonType.OK);
+											  		alert.setTitle("Thông báo");
+											  		alert.setHeaderText(null);
+											  		alert.show();
+												}
+												else {
+													System.out.println(slDonThuoc);
+													System.out.println(slTonKho);
+													float tong = ct1.getDonGia() * ct1.getSoLuong();
+													CTHoaDon ct = new CTHoaDon();
+													ct.setMaCTHD(i1++);
+													ct.setMaThuoc(ct1.getMaThuoc());
+													ct.setTenThuoc(ct1.getTenThuoc());
+													System.out.println(ct1.getTenThuoc());
+													ct.setDonViTinh(tt.getDonViTinh());
+													ct.setDonGia(ct1.getDonGia());
+													ct.setSoLuong(ct1.getSoLuong());
+													ct.setTongGiaBan(tong);
+													cthoaDonList.add(ct);
+													table.setItems(cthoaDonList);
+
+														float thanhTien1 = 0;
+														for(int i = 0; i<table.getItems().size();i++) {
+															float tong1  = tongGiaBan.getCellData(i); 
+															System.out.println("tong tien: " + tong1);
+															
+															thanhTien1 = thanhTien1 + tong1;
+															System.out.println("thanh tien: " + thanhTien1);
+															lblThanhTien.setText(String.format("%.0f",thanhTien1)+"");
+															txtTienNhan.setText(String.format("%.0f",thanhTien1)+"");
+														}
+													
+												}
+											}
 										}
-										String tongGiaBan = "select sum(thanhTien) as tong from CTHoaDon where maHD ='"+maHD+"'";
-										ps = con.prepareStatement(tongGiaBan);
-										rs = ps.executeQuery();
-										while(rs.next()) {
-											float tong = rs.getFloat("tong");
-											String tongS = String.valueOf(tong);
-											lblThanhTien.setText(tongS);
-											txtTienNhan.setText(tongS);
-										}
+									
+//									String s = "select * from CTDonDatThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where maPDT = '"+sqlMaThuoc+"'";
+//									try {
+//										ps = con.prepareStatement(s);
+//										rs = ps.executeQuery();
+////										ObservableList<CTHoaDon> cthoaDonList = FXCollections.observableArrayList();
+//										int i = 1;
+//										while(rs.next()) {
+//											CTHoaDon ct = new CTHoaDon();
+//											ct.setMaCTHD(i++);
+//											ct.setMaThuoc(rs.getInt("maThuoc"));
+//											ct.setTenThuoc(rs.getString("tenThuoc"));
+//											ct.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+//											ct.setDonViTinh(rs.getString("donViTinh"));
+//											ct.setDonGia(rs.getFloat("donGia"));
+//											ct.setSoLuong(rs.getInt("soLuong"));
+//											ct.setTongGiaBan(rs.getFloat("thanhTien"));
+//											cthoaDonList.add(ct);
+//											table.setItems(cthoaDonList);
+//											String insert = "insert into CTHoaDon(maHD, maThuoc, soLuong, donGia, thanhTien) values(?,?,?,?,?)";
+//											ps = con.prepareStatement(insert);
+//											ps.setInt(1, maHD);
+//											ps.setInt(2, ct.getMaThuoc());
+//											ps.setInt(3, ct.getSoLuong());
+//											ps.setFloat(4, ct.getDonGia());
+//											float thanhTien = ct.getDonGia() * ct.getSoLuong();
+//											ps.setFloat(5, thanhTien);
+//											ps.execute();		
+//											String update = "update DonDatThuoc set trangThai = N'Đã thanh toán' where maPDT='"+sqlMaThuoc+"'";
+//											ps = con.prepareStatement(update);
+//											ps.execute();
+//										}
+//										String tongGiaBan = "select sum(thanhTien) as tong from CTHoaDon where maHD ='"+maHD+"'";
+//										ps = con.prepareStatement(tongGiaBan);
+//										rs = ps.executeQuery();
+//										while(rs.next()) {
+//											float tong = rs.getFloat("tong");
+//											String tongS = String.valueOf(tong);
+//											lblThanhTien.setText(tongS);
+//											txtTienNhan.setText(tongS);
+//										}
 									} catch (SQLException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
+									
 									stage.close();
 								}
 							});
@@ -1078,11 +1153,21 @@ public class ThemHoaDonKhongTheoDonController implements Initializable{
 //			CTHoaDon ct = table.getSelectionModel().getSelectedItem();
 //			cthoaDonList.remove(ct);
 			table.setItems(cthoaDonList);
+			float thanhTien1 = 0;
+			for(int i = 0; i<table.getItems().size();i++) {
+				float tong1  = tongGiaBan.getCellData(i); 
+				System.out.println("tong tien: " + tong1);
+				
+				thanhTien1 = thanhTien1 + tong1;
+				System.out.println("thanh tien: " + thanhTien1);
+				lblThanhTien.setText(String.format("%.0f",thanhTien1)+"");
+				txtTienNhan.setText(String.format("%.0f",thanhTien1)+"");
+			}
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setHeaderText(null);
 			alert.setContentText("Thuốc đã được xoá");
 			alert.showAndWait();
-	
+			
 		}
 	 public void taoHD() throws SQLException {
 		 NhanVien dnc = DangNhapController.getNV();

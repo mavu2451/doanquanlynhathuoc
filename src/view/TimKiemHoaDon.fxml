@@ -295,11 +295,10 @@
                      <children>
                         <TableView fx:id="table" editable="true" layoutY="-3.0" prefHeight="619.0" prefWidth="1552.0">
                           <columns>
-                              <TableColumn fx:id="maHD" prefWidth="96.0" text="Mã hoá đơn" />
-                              <TableColumn fx:id="ngayLapHD" prefWidth="292.0" text="Ngày lập hoá đơn" />
-                              <TableColumn fx:id="tenNV" prefWidth="212.0" text="Nhân viên lập hoá đơn" />
-                              <TableColumn fx:id="tenKH" prefWidth="320.0" text="Khách hàng" />
-                              <TableColumn fx:id="tongTien" prefWidth="631.0" text="Tổng" />
+                              <TableColumn fx:id="maHD" prefWidth="211.0" text="Mã hoá đơn" />
+                              <TableColumn fx:id="ngayLapHD" prefWidth="522.0" text="Ngày lập hoá đơn" />
+                              <TableColumn fx:id="tenNV" prefWidth="341.0" text="Nhân viên lập hoá đơn" />
+                              <TableColumn fx:id="tenKH" prefWidth="477.0" text="Khách hàng" />
                           </columns>
                         </TableView>
                      </children>

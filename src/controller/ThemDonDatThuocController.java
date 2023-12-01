@@ -950,15 +950,15 @@ public class ThemDonDatThuocController implements Initializable{
 			 cthdList.add(cthd);
 			 table.setItems(cthdList);
 		 }
-		 String tongTien = "select sum(thanhTien) as tt from CTDonDatThuoc where maPDT ='"+maPDT+"'";
-		 ps = con.prepareStatement(tongTien);
-		 rs = ps.executeQuery();
-		 
-		 while(rs.next()) {
-			 float tong = rs.getFloat("tt");
-			 lblThanhTien.setText(tong + "");
-//			 tienThoi();
-		 }
+//		 String tongTien = "select sum(thanhTien) as tt from CTDonDatThuoc where maPDT ='"+maPDT+"'";
+//		 ps = con.prepareStatement(tongTien);
+//		 rs = ps.executeQuery();
+//		 
+//		 while(rs.next()) {
+//			 float tong = rs.getFloat("tt");
+//			 lblThanhTien.setText(tong + "");
+////			 tienThoi();
+//		 }
 	 }
 	 public void taoHD() throws SQLException {
 		 NhanVien dnc = DangNhapController.getNV();
@@ -967,7 +967,7 @@ public class ThemDonDatThuocController implements Initializable{
 		 int maKH = getTTKhachHang();
 		 if(hd == 0) {
 			 hd += 1;
-			 String taohd = "insert into DonDatThuoc(maNV, ngayLapDon, maKH, trangThai) values(?,?,?,N'Phiếu tạm')";
+			 String taohd = "insert into DonDatThuoc(maNV, ngayLapDon, maKH) values(?,?,?)";
 			 System.out.println(taohd);
 			 try {
 				ps = con.prepareStatement(taohd);
@@ -993,7 +993,16 @@ public class ThemDonDatThuocController implements Initializable{
 			alert.setHeaderText(null);
 			alert.setContentText("Thuốc đã được xoá");
 			alert.showAndWait();
-	
+			float thanhTien1 = 0;
+			for(int i = 0; i<table.getItems().size();i++) {
+				float tong1  = tongGiaBan.getCellData(i); 
+				System.out.println("tong tien: " + tong1);
+				
+				thanhTien1 = thanhTien1 + tong1;
+				System.out.println("thanh tien: " + thanhTien1);
+				lblThanhTien.setText(String.format("%.0f",thanhTien1)+"");
+				txtTienNhan.setText(String.format("%.0f",thanhTien1)+"");
+			}
 		}
 	@FXML
 	public void thanhToan(ActionEvent e) throws SQLException, IOException {

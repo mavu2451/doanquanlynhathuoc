@@ -75,7 +75,7 @@ public class ThuocTrongKhoController implements Initializable{
 	private TableColumn<Thuoc, Float> giaNhap;
 	@FXML
 	private TableColumn<Thuoc, Float> giaBan;
-
+	int i = 1;
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 	@Override
@@ -136,7 +136,7 @@ public class ThuocTrongKhoController implements Initializable{
 			root.setBottom(h2);
 			
 			String sql;
-			int i = 1;
+
 			try {
 				sql = "select * from CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc where soLuongCon > 0 and ct.maThuoc = '"+maThuoc()+"'order by hanSuDung";
 				try {
@@ -186,7 +186,41 @@ public class ThuocTrongKhoController implements Initializable{
 			  		alert.setTitle("Thông báo");
 			  		alert.setHeaderText(null);
 			  		alert.show();
-			  		tableView.setItems(Tlist);
+			  		tableView.getItems().clear();
+			  		String sql1 = "select * from CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc where soLuongCon > 0 and ct.maThuoc = '"+maThuoc()+"'order by hanSuDung";
+			  		ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						CTThuoc t = new CTThuoc();
+						t.setMaCT(i++);
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						String tenT = rs.getString("tenThuoc");
+						t.setHanSuDung(rs.getDate("hanSuDung"));
+						t.setSlTonKho(rs.getInt("soLuongCon"));
+						t.setDonViTinh(rs.getString("donViTinh"));
+//						t.setSoLo(rs.getString("soLo"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						Tlist.add(t);
+						tableView.setItems(Tlist);
+					}
+					stage.close();
+					table.getItems().clear();
+					String sql2 = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as slTonkho, sum(th.giaNhap) as giaNhap, sum(th.giaBan) as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan order by t.maThuoc";
+					ps = con.prepareStatement(sql2);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Thuoc k = new Thuoc();
+						k.setMaThuoc(rs.getInt("maThuoc"));
+						k.setTenThuoc(rs.getString("tenThuoc"));
+						k.setSoLuong(rs.getInt("slTonKho"));
+						k.setDvt(rs.getString("donViTinh"));
+						k.setGiaNhap(rs.getFloat("giaNhap"));
+						k.setGiaBan(rs.getFloat("giaBan"));
+						k.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						thuocList.add(k);
+						table.setItems(thuocList);
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

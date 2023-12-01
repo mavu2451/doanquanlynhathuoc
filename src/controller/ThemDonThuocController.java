@@ -851,6 +851,7 @@ public class ThemDonThuocController implements Initializable{
 					alert.setHeaderText(null);
 					alert.setContentText("Thuốc đã được xoá");
 					alert.showAndWait();
+					
 				}
 	  	 public void getCTDonThuocKhamBenh() throws SQLException {
 	  		 int maDT = getMaDonThuoc();
