@@ -126,15 +126,15 @@ public class DangNhapController implements Initializable{
 	//Dang nhap
 	public static NhanVien getNV() {
 		NhanVien nv = new NhanVien();
-//		try {
-			nv.setMaNV(2);
-			nv.setHoTen("test1"); //xoa cai nay neu can dang nhap
-//			nv.setHoTen(rs.getString("tenNV"));
-//			nv.setMaNV(rs.getInt("maNV"));
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+//			nv.setMaNV(2);
+//			nv.setHoTen("test1"); //xoa cai nay neu can dang nhap
+			nv.setHoTen(rs.getString("tenNV"));
+			nv.setMaNV(rs.getInt("maNV"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return nv;
 	}
 	@FXML

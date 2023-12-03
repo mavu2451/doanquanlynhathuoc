@@ -560,6 +560,8 @@ public class TimKiemDonThuocController implements Initializable{
 		try {
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
+			list.clear();
+			table.setItems(list);
 			while(rs.next()) {
 
 				DonThuocKhamBenh t = new DonThuocKhamBenh();

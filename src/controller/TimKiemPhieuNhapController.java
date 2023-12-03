@@ -116,8 +116,7 @@ public class TimKiemPhieuNhapController implements Initializable{
 			ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 			BorderPane root = new BorderPane();
 			ScrollPane scroll = new ScrollPane();
-			TextField txtTimKiem = new TextField();
-			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
+
 			Button chon = new Button("Đã nhập hàng");
 			HBox h1 = new HBox(2);
 			HBox h2 = new HBox(1);
@@ -157,7 +156,6 @@ public class TimKiemPhieuNhapController implements Initializable{
 			tableView.getColumns().add(trangThai);
 			root.setCenter(scroll);
 			scroll.setContent(tableView);
-			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
 			h2.getChildren().addAll( chon);
 			root.setTop(h1);
 			root.setBottom(h2);
@@ -329,7 +327,7 @@ public class TimKiemPhieuNhapController implements Initializable{
 			}
 			else {
 			table.getItems().clear();
-			String sql = "select * from PhieuNhap pn left join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where maPN like N'%"+maPN+"%' and tenNCC like N'%"+tenNCC+"%' and tenNV like N'%"+tenNV+"%' and ngayNhap like '%"+d+"%'";
+			String sql = "select distinct(ct.maPN) as maPN,tenNV,ngayNhap, tenNCC, ct.trangThai from PhieuNhap pn left join CTPhieuNhap ct on ct.maPN = pn.maPN inner join NhanVien nv on nv.maNV = pn.maNV inner join NhaCungCap ncc on ncc.maNCC = pn.maNCC where pn.maPN like N'%"+maPN+"%' and tenNCC like N'%"+tenNCC+"%' and tenNV like N'%"+tenNV+"%' and ngayNhap like '%"+d+"%'";
 			try {
 				ps = con.prepareStatement(sql);
 				rs = ps.executeQuery();

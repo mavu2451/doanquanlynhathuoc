@@ -180,15 +180,6 @@ public class ThemHoaDonTheoDonNVController implements Initializable{
 		LocalDate ldNgayNhap = dpNgayNhap.getValue();
 		Date dNgayNhap = Date.valueOf(ldNgayNhap);
 		btnThemDonThuoc.setOnAction(arg -> {
-			lan++;
-			if(lan ==2) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Thông báo");
-				alert.setContentText("Đơn thuốc đã được chọn");
-				alert.setHeaderText(null);
-				alert.showAndWait();
-			}
-			else {
 			 int maKH;
 				try {
 					maKH = getTTKhachHang();
@@ -361,7 +352,7 @@ public class ThemHoaDonTheoDonNVController implements Initializable{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				}});
+				});
 
 		btnThemKH.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -943,9 +934,6 @@ public class ThemHoaDonTheoDonNVController implements Initializable{
 					t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
-					t1.addCell(new Cell().add(new Paragraph("Bác sĩ kê đơn: " + dt.getBacSiKeDon()).setFont(pflight)).setBorder(Border.NO_BORDER));
-					t1.addCell(new Cell().add(new Paragraph("Chẩn đoán: " + dt.getChanDoan()).setFont(pflight)).setBorder(Border.NO_BORDER));
-					t1.addCell(new Cell().add(new Paragraph("Lời dặn: " + dt.getLoiDan()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					
 //					d.add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf));
 //					d.add(new Paragraph("HOÁ ĐƠN BÁN HÀNG").setFont(pflight));

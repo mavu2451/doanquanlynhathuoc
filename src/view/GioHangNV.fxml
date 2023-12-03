@@ -10,9 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -25,7 +23,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemDonDatThuocNVController">
-      <left>
+     <left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="756.0" prefWidth="226.0" spacing="5.0" styleClass="tab">
@@ -102,14 +100,13 @@
                         </ImageView>
                         <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Đơn đặt thuốc" />
+                             <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Đơn đặt thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemGioHang" text="Tìm kiếm đơn đặt thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
                               <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemDonThuoc" text="Tìm kiếm đơn thuốc" />
-  
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -184,7 +181,7 @@
                      </padding>
                   </HBox>
                   <HBox fx:id="hbTrangChu17" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
-                     <children>
+                    <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/icons/graph.png" />
@@ -283,17 +280,17 @@
                   </DropShadow>
                </effect>
             </Rectangle>
-            <Label layoutX="68.0" layoutY="190.0" text="Khách hàng" />
-            <Label layoutX="91.0" layoutY="254.0" text="Giới tính" />
-            <Label layoutX="82.0" layoutY="307.0" text="Điện thoại" />
-            <Label layoutX="99.0" layoutY="358.0" text="Email" />
-            <TextArea layoutX="161.0" layoutY="417.0" prefHeight="282.0" prefWidth="409.0" />
-            <TextField fx:id="txtSdt" editable="false" layoutX="165.0" layoutY="303.0" prefHeight="25.0" prefWidth="408.0" />
+            <Label layoutX="68.0" layoutY="236.0" text="Khách hàng" />
+            <Label layoutX="87.0" layoutY="333.0" text="Giới tính" />
+            <Label layoutX="79.0" layoutY="456.0" text="Điện thoại" />
+            <Label layoutX="97.0" layoutY="555.0" text="Email" />
+            <TextField fx:id="txtSdt" editable="false" layoutX="162.0" layoutY="452.0" prefHeight="25.0" prefWidth="408.0" />
             <ScrollPane layoutX="726.0" layoutY="71.0" prefHeight="813.0" prefWidth="894.0">
                <content>
                   <TableView fx:id="table" prefHeight="801.0" prefWidth="894.0">
                     <columns>
                       <TableColumn fx:id="maPDT" prefWidth="75.0" text="STT" />
+                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã thuốc" />
                         <TableColumn fx:id="tenThuoc" prefWidth="143.0" text="Tên thuốc" />
                         <TableColumn fx:id="donViTinh" prefWidth="135.0" text="Đơn vị tính" />
                         <TableColumn fx:id="donGia" prefWidth="217.0" text="Đơn giá" />
@@ -311,8 +308,8 @@
                </font>
             </Label>
             <DatePicker fx:id="dpNgayNhap" layoutX="167.0" layoutY="135.0" prefHeight="25.0" prefWidth="405.0" />
-            <TextField fx:id="txtGioiTinh" editable="false" layoutX="167.0" layoutY="250.0" prefHeight="25.0" prefWidth="403.0" />
-            <TextField fx:id="txtEmail" editable="false" layoutX="161.0" layoutY="354.0" prefHeight="25.0" prefWidth="412.0" />
+            <TextField fx:id="txtGioiTinh" editable="false" layoutX="163.0" layoutY="329.0" prefHeight="25.0" prefWidth="403.0" />
+            <TextField fx:id="txtEmail" editable="false" layoutX="159.0" layoutY="551.0" prefHeight="25.0" prefWidth="412.0" />
             <Label layoutX="379.0" layoutY="729.0" text="THÀNH TIỀN:">
                <font>
                   <Font size="16.0" />
@@ -323,16 +320,16 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="417.0" text="Thông tin lưu ý" />
-            <Button fx:id="btnThemPhieu" layoutX="369.0" layoutY="776.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="214.0" text="Lập phiếu đặt thuốc" />
+            <Button fx:id="btnThemPhieu" layoutX="370.0" layoutY="776.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="214.0" text="Lập phiếu đặt thuốc" />
             <Button fx:id="btnThemTenThuoc" layoutX="726.0" layoutY="38.0" mnemonicParsing="false" text="Thêm thuốc" />
-            <TextField fx:id="txtTenKH" layoutX="167.0" layoutY="186.0" prefHeight="25.0" prefWidth="399.0" />
-            <Button fx:id="btnThemKH" layoutX="545.0" layoutY="186.0" mnemonicParsing="false" text="+" />
+            <TextField fx:id="txtTenKH" layoutX="167.0" layoutY="232.0" prefHeight="25.0" prefWidth="399.0" />
+            <Button fx:id="btnThemKH" layoutX="545.0" layoutY="232.0" mnemonicParsing="false" text="+" />
             <Label layoutX="293.0" layoutY="33.0" text="ĐẶT THUỐC">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
+            <Button layoutX="165.0" layoutY="776.0" mnemonicParsing="false" onAction="#remove" prefHeight="54.0" prefWidth="125.0" text="Xoá" />
          </children>
       </AnchorPane>
    </center>
