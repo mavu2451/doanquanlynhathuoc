@@ -32,10 +32,10 @@ public class DonDatThuoc {
 	public void setTenNV(String tenNV) {
 		this.tenNV = tenNV;
 	}
-	public String gettenKH() {
+	public String getTenKH() {
 		return tenKH;
 	}
-	public void settenKH(String tenKH) {
+	public void setTenKH(String tenKH) {
 		this.tenKH = tenKH;
 	}
 	public Date getNgayLapDon() {

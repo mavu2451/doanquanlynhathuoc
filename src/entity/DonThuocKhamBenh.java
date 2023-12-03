@@ -7,17 +7,21 @@ public class DonThuocKhamBenh {
 	private int maKH;
 	private String tenKH;
 	private String bacSiKeDon;
+	private int maNV;
+	private String tenNV;
 	private Date ngayNhap;
 	private String chanDoan;
 	private String loiDan;
 	private String thongTin;
-	public DonThuocKhamBenh(int maDonThuoc, int maKH, String tenKH, String bacSiKeDon, Date ngayNhap, String chanDoan,
-			String loiDan, String thongTin) {
+	public DonThuocKhamBenh(int maDonThuoc, int maKH, String tenKH, String bacSiKeDon, int maNV, String tenNV,
+			Date ngayNhap, String chanDoan, String loiDan, String thongTin) {
 		super();
 		this.maDonThuoc = maDonThuoc;
 		this.maKH = maKH;
 		this.tenKH = tenKH;
 		this.bacSiKeDon = bacSiKeDon;
+		this.maNV = maNV;
+		this.tenNV = tenNV;
 		this.ngayNhap = ngayNhap;
 		this.chanDoan = chanDoan;
 		this.loiDan = loiDan;
@@ -51,6 +55,18 @@ public class DonThuocKhamBenh {
 	public void setBacSiKeDon(String bacSiKeDon) {
 		this.bacSiKeDon = bacSiKeDon;
 	}
+	public int getMaNV() {
+		return maNV;
+	}
+	public void setMaNV(int maNV) {
+		this.maNV = maNV;
+	}
+	public String getTenNV() {
+		return tenNV;
+	}
+	public void setTenNV(String tenNV) {
+		this.tenNV = tenNV;
+	}
 	public Date getNgayNhap() {
 		return ngayNhap;
 	}
@@ -75,5 +91,5 @@ public class DonThuocKhamBenh {
 	public void setThongTin(String thongTin) {
 		this.thongTin = thongTin;
 	}
-
+	
 }

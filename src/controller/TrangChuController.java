@@ -240,6 +240,15 @@ public class TrangChuController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
+     public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
+
      public void themKhachHang(ActionEvent e) throws IOException {
      	Stage stage = (Stage) mb.getScene().getWindow();
      	FXMLLoader loader = new FXMLLoader();
@@ -441,4 +450,5 @@ public void thongTinCT(ActionEvent e) throws IOException {
 	stage.setScene(scene);
 	stage.show();
 }
+
 }

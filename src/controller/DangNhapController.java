@@ -127,7 +127,7 @@ public class DangNhapController implements Initializable{
 	public static NhanVien getNV() {
 		NhanVien nv = new NhanVien();
 //		try {
-			nv.setMaNV(1);
+			nv.setMaNV(2);
 			nv.setHoTen("test1"); //xoa cai nay neu can dang nhap
 //			nv.setHoTen(rs.getString("tenNV"));
 //			nv.setMaNV(rs.getInt("maNV"));

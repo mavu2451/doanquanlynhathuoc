@@ -97,11 +97,13 @@
                         </ImageView>
                         <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Giỏ hàng" />
+                             <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Đơn đặt thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemGioHang" text="Tìm kiếm đơn đặt thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
                               <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemDonThuoc" text="Tìm kiếm đơn thuốc" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -279,8 +281,8 @@
             </Label>
             <MenuButton fx:id="taiKhoan" layoutX="1177.0" layoutY="18.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="177.0" style="-fx-background-color: transparent;">
               <items>
-                <MenuItem mnemonicParsing="false" text="Thông tin cá nhân" />
-                <MenuItem mnemonicParsing="false" text="Đăng xuất" />
+                <MenuItem mnemonicParsing="false" onAction="#thongTinCT" text="Thông tin cá nhân" />
+                <MenuItem mnemonicParsing="false" onAction="#logOut" text="Đăng xuất" />
               </items>
             </MenuButton>
          </children></AnchorPane>
@@ -294,10 +296,10 @@
                      <children>
                         <TableView fx:id="table" editable="true" prefHeight="628.0" prefWidth="1564.0">
                           <columns>
-                              <TableColumn fx:id="dvt" prefWidth="186.0" text="Mã đơn thuốc" />
-                              <TableColumn fx:id="giaNhap" prefWidth="268.0" text="Ngày lập đơn thuốc" />
-                              <TableColumn fx:id="cachDung" prefWidth="466.0" text="Khách hàng" />
-                              <TableColumn fx:id="trangThai" prefWidth="630.0" text="Bác sĩ kê đơn" />
+                              <TableColumn fx:id="maDT" prefWidth="186.0" text="Mã đơn thuốc" />
+                              <TableColumn fx:id="ngayNhap" prefWidth="268.0" text="Ngày lập đơn thuốc" />
+                              <TableColumn fx:id="tenKH" prefWidth="466.0" text="Khách hàng" />
+                              <TableColumn fx:id="tenNV" prefWidth="630.0" text="Nhân viên nhập" />
                           </columns>
                         </TableView>
                      </children>
@@ -309,28 +311,28 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Button layoutX="1490.0" layoutY="117.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="170.0" text="Tìm kiếm" />
-            <TextField fx:id="txtTimKiem" layoutX="202.0" layoutY="110.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm mã đơn thuốc..." />
+            <Button fx:id="btnTimKiem" layoutX="1490.0" layoutY="117.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="170.0" text="Tìm kiếm" />
+            <TextField fx:id="txtMaDT" layoutX="202.0" layoutY="110.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm mã đơn thuốc..." />
             <Label layoutX="103.0" layoutY="113.0" text="Mã đơn thuốc">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
             <Button layoutX="1148.0" layoutY="824.0" mnemonicParsing="false" onAction="#reload" prefHeight="64.0" prefWidth="179.0" text="Tải trang" />
-            <Button layoutX="1376.0" layoutY="824.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="207.0" text="Xem thông tin chi tiết" />
+            <Button fx:id="btnXemCT" layoutX="1376.0" layoutY="824.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="207.0" text="Xem thông tin chi tiết" />
             <Label layoutX="118.0" layoutY="150.0" text="Khách hàng">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="txtTimKiem1" layoutX="209.0" layoutY="146.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm" />
+            <TextField fx:id="txtNV" layoutX="209.0" layoutY="146.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm" />
             <Label layoutX="835.0" layoutY="114.0" text="Khách hàng">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="txtTimKiem11" layoutX="926.0" layoutY="110.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm mã đơn thuốc..." />
-            <DatePicker layoutX="919.0" layoutY="147.0" prefHeight="27.0" prefWidth="399.0" />
+            <TextField fx:id="txtKH" layoutX="926.0" layoutY="110.0" prefHeight="27.0" prefWidth="389.0" promptText="Tìm kiếm mã đơn thuốc..." />
+            <DatePicker fx:id="dpNgayNhap" layoutX="919.0" layoutY="147.0" prefHeight="27.0" prefWidth="399.0" />
             <Label layoutX="835.0" layoutY="150.0" text="Ngày nhập">
                <font>
                   <Font size="14.0" />

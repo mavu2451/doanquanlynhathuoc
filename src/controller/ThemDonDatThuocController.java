@@ -42,6 +42,7 @@ import entity.CTThuoc;
 import entity.DonDatThuoc;
 import entity.NhanVien;
 import entity.PhieuNhap;
+import entity.Thuoc;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -128,6 +129,20 @@ public class ThemDonDatThuocController implements Initializable{
 //		getAllPN();
 //		reload();
 		NhanVien dnc = DangNhapController.getNV();
+		String sqlxc = "select * from NhanVien";
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				//Loi
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dpNgayNhap.setValue(LocalDate.now());
 		lblThanhTien.setText("0 đồng");
 		try {
@@ -252,7 +267,52 @@ public class ThemDonDatThuocController implements Initializable{
 				h2.getChildren().addAll(chonSL, soLuong, chon);
 				root.setTop(h1);
 				root.setBottom(h2);
-
+				txtTimKiem.setOnKeyReleased(args->{
+					if(txtTimKiem.getText().equals("")) {
+						Tlist.clear();
+						String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and thuocKeDon = N'Thuốc không kê đơn' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
+						try {
+							ps = con.prepareStatement(sql);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								CTThuoc t = new CTThuoc();
+								t.setMaThuoc(rs.getInt("maThuoc"));
+								t.setTenThuoc(rs.getString("tenThuoc"));
+								String tenT = rs.getString("tenThuoc");
+//								k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setSlTonKho(rs.getInt("soLuongCon"));
+								t.setDonViTinh(rs.getString("donViTinh"));
+								t.setGiaBan(rs.getFloat("giaBan"));
+								Tlist.add(t);
+								tableView.setItems(Tlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+					else {
+						Tlist.clear();
+						String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and thuocKeDon = N'Thuốc không kê đơn' and tenThuoc like N'%"+txtTimKiem.getText()+"%' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
+						try {
+							ps = con.prepareStatement(sql);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								CTThuoc t = new CTThuoc();
+								t.setMaThuoc(rs.getInt("maThuoc"));
+								t.setTenThuoc(rs.getString("tenThuoc"));
+								String tenT = rs.getString("tenThuoc");
+//								k.setTenLoaiThuoc(rs.getString("tenLoaiThuoc"));
+								t.setSlTonKho(rs.getInt("soLuongCon"));
+								t.setDonViTinh(rs.getString("donViTinh"));
+								t.setGiaBan(rs.getFloat("giaBan"));
+								Tlist.add(t);
+								tableView.setItems(Tlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+				});
 				String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and thuocKeDon = N'Thuốc không kê đơn' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 				try {
 					taoHD();
@@ -471,6 +531,8 @@ public class ThemDonDatThuocController implements Initializable{
 				stage.setResizable(false);
 				stage.show();
 				}
+				
+				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -518,11 +580,57 @@ public class ThemDonDatThuocController implements Initializable{
 					tableView.getColumns().add(diaChi);
 					root.setCenter(scroll);
 					scroll.setContent(tableView);
-					h1.getChildren().addAll(lblTimKiem, txtTimKiem);
+//					h1.getChildren().addAll(lblTimKiem, txtTimKiem);
 				
 					h2.getChildren().addAll(chon);
 					root.setTop(h1);
 					root.setBottom(h2);
+					String sql1 = "select * from KhachHang";
+					txtTimKiem.setOnKeyReleased(e->{
+						if(txtTimKiem.getText().equals("")) {
+							Khlist.clear();
+							try {
+								ps = con.prepareStatement(sql1);
+								rs = ps.executeQuery();
+								while(rs.next()) {
+									KhachHang kh = new KhachHang();
+									kh.setMaKH(rs.getInt("maKH"));
+									kh.setHoTen(rs.getString("tenKH"));
+									kh.setGioiTinh(rs.getString("gioiTinh"));
+									kh.setNgaySinh(rs.getDate("ngaySinh"));
+									kh.setSdt(rs.getString("sdt"));
+									kh.setEmail(rs.getString("email"));
+									kh.setDiaChi(rs.getString("diaChi"));
+									Khlist.add(kh);
+									tableView.setItems(Khlist);
+								}
+							}catch (Exception e1) {
+								// TODO: handle exception
+							}
+						}
+						else {
+							Khlist.clear();
+							String sql2 = "select * from KhachHang where tenKH like '%"+txtTimKiem.getText()+"%'";
+							try {
+								ps = con.prepareStatement(sql2);
+								rs = ps.executeQuery();
+								while(rs.next()) {
+									KhachHang kh = new KhachHang();
+									kh.setMaKH(rs.getInt("maKH"));
+									kh.setHoTen(rs.getString("tenKH"));
+									kh.setGioiTinh(rs.getString("gioiTinh"));
+									kh.setNgaySinh(rs.getDate("ngaySinh"));
+									kh.setSdt(rs.getString("sdt"));
+									kh.setEmail(rs.getString("email"));
+									kh.setDiaChi(rs.getString("diaChi"));
+									Khlist.add(kh);
+									tableView.setItems(Khlist);
+								}
+							}catch (Exception e1) {
+								// TODO: handle exception
+							}
+						}
+					});
 					String sql = "select * from KhachHang";
 					try {
 						ps = con.prepareStatement(sql);
@@ -580,6 +688,9 @@ public class ThemDonDatThuocController implements Initializable{
 		System.out.println("test thu");
 	}
 	//Start Navbar
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -842,6 +953,26 @@ public class ThemDonDatThuocController implements Initializable{
 	            Scene scene = new Scene(sampleParent);
 	            stage.setScene(scene);
 	    	}
+	     public void thongTinCT(ActionEvent e) throws IOException {
+	    		Stage stage = new Stage();
+	    		FXMLLoader loader = new FXMLLoader();
+	    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+	    		Parent parent = loader.load();
+	    		Scene scene = new Scene(parent);
+	    		ThongTinChiTietNVController c = loader.getController();
+	    		NhanVien dnc = DangNhapController.getNV();
+	    		c.getMaNV(dnc);
+	    		stage.setScene(scene);
+	    		stage.show();
+	    	}
+	    	public void timKiemGioHang(ActionEvent e) throws IOException {
+	    	 	Stage stage = (Stage) mb.getScene().getWindow();
+	    	 	FXMLLoader loader = new FXMLLoader();
+	    	     loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+	    	     Parent sampleParent = loader.load();
+	    	     Scene scene = new Scene(sampleParent);
+	    	     stage.setScene(scene);
+	    		}
 	       public void timKiemDonThuoc(ActionEvent e) throws IOException {
 	        	Stage stage = (Stage) mb.getScene().getWindow();
 	        	FXMLLoader loader = new FXMLLoader();

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 import database.KetNoiDatabase;
+import entity.NhanVien;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -157,6 +158,26 @@ public class ThemLoaiThuocNVController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
+     public void timKiemGioHang(ActionEvent e) throws IOException {
+      	Stage stage = (Stage) mb.getScene().getWindow();
+      	FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+          Parent sampleParent = loader.load();
+          Scene scene = new Scene(sampleParent);
+          stage.setScene(scene);
+  	}
      public void themKhachHang(ActionEvent e) throws IOException {
      	Stage stage = (Stage) mb.getScene().getWindow();
      	FXMLLoader loader = new FXMLLoader();

@@ -24,7 +24,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThemDonThuocNVController">
-       <left>
+<left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="756.0" prefWidth="226.0" spacing="5.0" styleClass="tab">
@@ -101,11 +101,13 @@
                         </ImageView>
                         <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Giỏ hàng" />
+                             <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Đơn đặt thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemGioHang" text="Tìm kiếm đơn đặt thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
                               <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemDonThuoc" text="Tìm kiếm đơn thuốc" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -252,8 +254,8 @@
             </Label>
             <MenuButton fx:id="taiKhoan" layoutX="1177.0" layoutY="18.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="177.0" style="-fx-background-color: transparent;">
               <items>
-                <MenuItem mnemonicParsing="false" text="Thông tin cá nhân" />
-                <MenuItem mnemonicParsing="false" text="Đăng xuất" />
+                <MenuItem mnemonicParsing="false" onAction="#thongTinCT" text="Thông tin cá nhân" />
+                <MenuItem mnemonicParsing="false" onAction="#logOut" text="Đăng xuất" />
               </items>
             </MenuButton>
          </children></AnchorPane>
@@ -291,17 +293,17 @@
             <TextArea fx:id="txtThongTin" layoutX="172.0" layoutY="475.0" prefHeight="207.0" prefWidth="409.0" />
             <TextField fx:id="txtTenKH" editable="false" layoutX="172.0" layoutY="138.0" prefHeight="25.0" prefWidth="410.0" />
             <TextField fx:id="txtSdt" editable="false" layoutX="172.0" layoutY="185.0" prefHeight="25.0" prefWidth="410.0" />
-            <Button fx:id="btnTaoDonThuoc" layoutX="235.0" layoutY="743.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="122.0" text="Tạo đơn thuốc" />
+            <Button fx:id="btnTaoDonThuoc" layoutX="170.0" layoutY="743.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="122.0" text="Tạo đơn thuốc" />
             <ScrollPane layoutX="726.0" layoutY="71.0" prefHeight="831.0" prefWidth="925.0">
                <content>
                   <TableView fx:id="table" prefHeight="826.0" prefWidth="928.0">
                     <columns>
-                        <TableColumn fx:id="maThuoc" prefWidth="100.0" text="Mã thuốc" />
-                        <TableColumn fx:id="tenThuoc" prefWidth="162.0" text="Tên thuốc" />
-                        <TableColumn fx:id="tenLoaiThuoc" prefWidth="141.0" text="Loại thuốc" />
-                        <TableColumn fx:id="donViTinh" prefWidth="178.0" text="Đơn vị tính" />
-                        <TableColumn fx:id="soLuong" prefWidth="78.0" text="Số lượng" />
-                        <TableColumn fx:id="cachDung" prefWidth="252.0" text="Cách dùng" />
+                        <TableColumn fx:id="maCT" prefWidth="100.0" text="STT" />
+                        <TableColumn fx:id="maThuoc" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Mã thuốc" />
+                        <TableColumn fx:id="tenThuoc" prefWidth="298.0" text="Tên thuốc" />
+                        <TableColumn fx:id="tenLoaiThuoc" prefWidth="162.0" text="Loại thuốc" />
+                        <TableColumn fx:id="donViTinh" prefWidth="209.0" text="Đơn vị tính" />
+                        <TableColumn fx:id="soLuong" prefWidth="144.0" text="Số lượng" />
                     </columns>
                   </TableView>
                </content>
@@ -325,7 +327,8 @@
             <Label layoutX="65.0" layoutY="328.0" prefHeight="17.0" prefWidth="71.0" text="Bác sĩ kê đơn" />
             <TextField fx:id="txtBacSiKeDon" layoutX="173.0" layoutY="324.0" prefHeight="25.0" prefWidth="408.0" />
             <Button fx:id="btnThemKH" layoutX="558.0" layoutY="138.0" mnemonicParsing="false" text="+" />
-            <Button layoutX="414.0" layoutY="745.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="114.0" text="Xoá trắng" />
+            <Button layoutX="465.0" layoutY="746.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="114.0" text="Xoá trắng" />
+            <Button layoutX="314.0" layoutY="746.0" mnemonicParsing="false" onAction="#remove" prefHeight="66.0" prefWidth="122.0" text="Xoá" />
          </children>
       </AnchorPane>
    </center>

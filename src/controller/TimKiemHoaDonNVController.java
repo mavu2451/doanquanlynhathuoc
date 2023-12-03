@@ -87,17 +87,21 @@ public class TimKiemHoaDonNVController implements Initializable{
 		reload();
 		getHoaDon();
 		cell();
+		String sqlxc = "select * from NhanVien";
 		NhanVien dnc = DangNhapController.getNV();
-//		try {
-//			while(rs.next()) {
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
 				lblName.setText("Xin chào, " + dnc.getHoTen());
-				System.out.println(dnc.getMaNV() + "Xem thuoc");
+				//Loi
+				System.out.println(dnc.getMaNV());
 				System.out.println(dnc.getHoTen());
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 				btnTimKiem.setOnAction(a -> {
 					String maHD = txtMaHD.getText().toString();
 					String tenKH = txtKhachHang.getText().toString();
@@ -127,7 +131,7 @@ public class TimKiemHoaDonNVController implements Initializable{
 				    		  pn.setTenNV(rs.getString("tenNV"));
 				    		  pn.setTenKH(rs.getString("tenKH"));
 				    		  pn.setNgayLapHD(rs.getDate("ngayLapHD"));
-				    		  pn.setTongTien(rs.getFloat("tongTien"));
+//				    		  pn.setTongTien(rs.getFloat("tongTien"));
 				    		  list.add(pn);
 				    		  table.setItems(list);
 				    	  
@@ -196,7 +200,8 @@ public class TimKiemHoaDonNVController implements Initializable{
 							ct.setTenThuoc(rs.getString("tenThuoc"));
 							ct.setSoLuong(rs.getInt("soLuong"));
 							ct.setDonGia(rs.getFloat("donGia"));
-							ct.setTongGiaBan(rs.getFloat("thanhTien"));
+							float tong = ct.getDonGia() * ct.getSoLuong();
+							ct.setTongGiaBan(tong);
 							ct.setThuocKeDon(rs.getString("thuocKeDon"));
 							ctList.add(ct);
 							tableView.setItems(ctList);
@@ -225,6 +230,7 @@ public class TimKiemHoaDonNVController implements Initializable{
 ////        stage.show();
 //	}
 	//Start Navbar
+	
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -380,6 +386,26 @@ public class TimKiemHoaDonNVController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
+     public void timKiemGioHang(ActionEvent e) throws IOException {
+      	Stage stage = (Stage) mb.getScene().getWindow();
+      	FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+          Parent sampleParent = loader.load();
+          Scene scene = new Scene(sampleParent);
+          stage.setScene(scene);
+  	}
      public void themKhachHang(ActionEvent e) throws IOException {
      	Stage stage = (Stage) mb.getScene().getWindow();
      	FXMLLoader loader = new FXMLLoader();
@@ -454,7 +480,6 @@ public class TimKiemHoaDonNVController implements Initializable{
 		ngayLapHD.setCellValueFactory(new PropertyValueFactory<HoaDon, Date>("ngayLapHD"));
 		tongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, Float>("tongTien"));
 	}
-
 	@FXML
 	public ObservableList<HoaDon> getHoaDon(){
 		cbbTKD.setItems(FXCollections.observableArrayList("Tất cả", "Hoá đơn theo đơn", "Hoá đơn không theo đơn"));
@@ -471,7 +496,6 @@ public class TimKiemHoaDonNVController implements Initializable{
 				t.setTenNV(rs.getString("tenNV"));
 				t.setTenKH(rs.getString("tenKH"));
 				t.setNgayLapHD(rs.getDate("ngayLapHD"));
-				t.setTongTien(rs.getFloat("tongTien"));
 				list.add(t);
 				table.setItems(list);
 			}
@@ -494,7 +518,7 @@ public class TimKiemHoaDonNVController implements Initializable{
 					t.setTenNV(rs.getString("tenNV"));
 					t.setTenKH(rs.getString("tenKH"));
 					t.setNgayLapHD(rs.getDate("ngayLapHD"));
-					t.setTongTien(rs.getFloat("tongTien"));
+//					t.setTongTien(rs.getFloat("tongTien"));
 					list.add(t);
 					table.setItems(list);
 					
@@ -517,7 +541,7 @@ public class TimKiemHoaDonNVController implements Initializable{
 						t.setTenNV(rs.getString("tenNV"));
 						t.setTenKH(rs.getString("tenKH"));
 						t.setNgayLapHD(rs.getDate("ngayLapHD"));
-						t.setTongTien(rs.getFloat("tongTien"));
+//						t.setTongTien(rs.getFloat("tongTien"));
 						list.add(t);
 						table.setItems(list);
 						
@@ -540,7 +564,7 @@ public class TimKiemHoaDonNVController implements Initializable{
 						t.setTenNV(rs.getString("tenNV"));
 						t.setTenKH(rs.getString("tenKH"));
 						t.setNgayLapHD(rs.getDate("ngayLapHD"));
-						t.setTongTien(rs.getFloat("tongTien"));
+//						t.setTongTien(rs.getFloat("tongTien"));
 						list.add(t);
 						table.setItems(list);
 						
@@ -559,5 +583,4 @@ public class TimKiemHoaDonNVController implements Initializable{
 		cell();
 		table.setItems(list);
 	}
-
 }

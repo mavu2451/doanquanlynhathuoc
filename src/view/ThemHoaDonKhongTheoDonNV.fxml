@@ -101,11 +101,13 @@
                         </ImageView>
                         <MenuButton fx:id="mb2" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Hoá đơn" textFill="WHITE">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Giỏ hàng" />
+                              <MenuItem mnemonicParsing="false" onAction="#gioHang" text="Đơn đặt thuốc" />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemGioHang" text="Tìm kiếm đơn đặt thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKeDon" text="Lập hoá đơn theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#lapHoaDonKhongKeDon" text="Lập hoá đơn không theo đơn thuốc" />
                               <MenuItem mnemonicParsing="false" onAction="#timKiemHoaDon" text="Tìm kiếm hoá đơn" />
                               <MenuItem mnemonicParsing="false" onAction="#themDonThuoc" text="Tạo đơn thuốc " />
+                              <MenuItem mnemonicParsing="false" onAction="#timKiemDonThuoc" text="Tìm kiếm đơn thuốc" />
                            </items>
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -252,8 +254,8 @@
             </Label>
             <MenuButton fx:id="taiKhoan" layoutX="1177.0" layoutY="18.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="177.0" style="-fx-background-color: transparent;">
               <items>
-                <MenuItem mnemonicParsing="false" text="Thông tin cá nhân" />
-                <MenuItem mnemonicParsing="false" text="Đăng xuất" />
+                <MenuItem mnemonicParsing="false" onAction="#thongTinCT" text="Thông tin cá nhân" />
+                <MenuItem mnemonicParsing="false" onAction="#logOut" text="Đăng xuất" />
               </items>
             </MenuButton>
          </children></AnchorPane>
@@ -288,7 +290,7 @@
             <Label layoutX="81.0" layoutY="203.0" text="Giới tính" />
             <Label layoutX="77.0" layoutY="261.0" text="Điện thoại" />
             <Label layoutX="106.0" layoutY="324.0" text="Email" />
-            <TextArea layoutX="155.0" layoutY="384.0" prefHeight="185.0" prefWidth="349.0" />
+            <TextArea fx:id="taGhiChu" layoutX="155.0" layoutY="384.0" prefHeight="185.0" prefWidth="349.0" />
             <TextField fx:id="txtTenKH" editable="false" layoutX="159.0" layoutY="147.0" prefHeight="27.0" prefWidth="347.0" />
             <TextField fx:id="txtSdt" editable="false" layoutX="154.0" layoutY="256.0" prefHeight="27.0" prefWidth="352.0" />
             <Button layoutX="172.0" layoutY="729.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="46.0" prefWidth="89.0" text="Thêm" />

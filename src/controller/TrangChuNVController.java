@@ -186,6 +186,26 @@ public class TrangChuNVController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
+     public void timKiemGioHang(ActionEvent e) throws IOException {
+      	Stage stage = (Stage) mb.getScene().getWindow();
+      	FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+          Parent sampleParent = loader.load();
+          Scene scene = new Scene(sampleParent);
+          stage.setScene(scene);
+  	}
      public void themKhachHang(ActionEvent e) throws IOException {
      	Stage stage = (Stage) mb.getScene().getWindow();
      	FXMLLoader loader = new FXMLLoader();
@@ -243,14 +263,17 @@ public class TrangChuNVController implements Initializable{
 
     
 	//End Navbar
+      
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 		cell();
 		String sql = "select * from NhanVien";
+		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement(sql);
-			rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 			NhanVien dnc = DangNhapController.getNV();
 
 				lblName.setText("Xin chào, " + dnc.getHoTen());
@@ -262,109 +285,110 @@ public class TrangChuNVController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String ncc = "select ncc.tenNCC, isNull(sum(ct.tongGiaNhap),0) as tongGiaNhap from PhieuNhap pn left join NhaCungCap ncc on ncc.maNCC = pn.maNCC inner join CTPhieuNhap ct on ct.maPN = pn.maPN group by tenNCC order by tongGiaNhap desc";
-		try {
-			ps = con.prepareStatement(ncc);
-			rs = ps.executeQuery();
-			int i = 1;
-			while(rs.next()) {
-				NhaCungCap n = new NhaCungCap();
-				n.setMaNCC(i++);
-				n.setTenNCC(rs.getString("tenNCC"));	
-				n.setTongGiaNhap(rs.getFloat("tongGiaNhap"));
-				list.add(n);
-				table.setItems(list);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	
+	String ncc = "select ncc.tenNCC, isNull(sum(ct.tongGiaNhap),0) as tongGiaNhap from PhieuNhap pn left join NhaCungCap ncc on ncc.maNCC = pn.maNCC inner join CTPhieuNhap ct on ct.maPN = pn.maPN group by tenNCC order by tongGiaNhap desc";
+	try {
+		ps = con.prepareStatement(ncc);
+		rs = ps.executeQuery();
+		int i = 1;
+		while(rs.next()) {
+			NhaCungCap n = new NhaCungCap();
+			n.setMaNCC(i++);
+			n.setTenNCC(rs.getString("tenNCC"));	
+			n.setTongGiaNhap(rs.getFloat("tongGiaNhap"));
+			list.add(n);
+			table.setItems(list);
 		}
-		String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
-		try {
-			ps = con.prepareStatement(hh);
-			rs = ps.executeQuery();
-			while(rs.next())
-				lblThuocSapHetHang.setText(rs.getInt("tong") + "");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
+	try {
+		ps = con.prepareStatement(hh);
+		rs = ps.executeQuery();
+		while(rs.next())
+			lblThuocSapHetHang.setText(rs.getInt("tong") + "");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String hethan = " SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0";
+	try {
+		ps = con.prepareStatement(hethan);
+		rs = ps.executeQuery();
+		while(rs.next())
+			lblThuocSapHetHan.setText(rs.getInt("tong") + "");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String kh = "select count(maKH) as kh from KhachHang";
+	try {
+		ps = con.prepareStatement(kh);
+		rs = ps.executeQuery();
+		while(rs.next())
+			lblKhachHang.setText(rs.getInt("kh") + "");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	LocalDate d = LocalDate.now();
+	String dt = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where month(ngayLapHD) = '"+d.getMonthValue()+"'";
+	try {
+		ps = con.prepareStatement(dt);
+		rs = ps.executeQuery();
+		while(rs.next())
+			lblDTThang.setText(String.format("%.0f", rs.getFloat("tongTien")) + "");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String dtngay = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d.minusDays(2)+"'";
+	try {
+		ps = con.prepareStatement(dtngay);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+			XYChart.Series series = new XYChart.Series();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
+			series.getData().add(new XYChart.Data(formatter.format(d.minusDays(2)), rs.getFloat("tongTien")));
+			series.setName("Doanh thu ngày "+formatter.format(d.minusDays(2))+" là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
+			barchart.getData().add(series);
 		}
-		String hethan = " SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0";
-		try {
-			ps = con.prepareStatement(hethan);
-			rs = ps.executeQuery();
-			while(rs.next())
-				lblThuocSapHetHan.setText(rs.getInt("tong") + "");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String dtngay1 = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d.minusDays(1)+"'";
+	try {
+		ps = con.prepareStatement(dtngay1);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+			XYChart.Series series = new XYChart.Series();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
+			series.getData().add(new XYChart.Data(formatter.format(d.minusDays(1)), rs.getFloat("tongTien")));
+			series.setName("Doanh thu ngày "+formatter.format(d.minusDays(1))+" là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
+			barchart.getData().add(series);
 		}
-		String kh = "select count(maKH) as kh from KhachHang";
-		try {
-			ps = con.prepareStatement(kh);
-			rs = ps.executeQuery();
-			while(rs.next())
-				lblKhachHang.setText(rs.getInt("kh") + "");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String dtngay2 = "select sum(donGia * soLuong) as tongTien from hoaDon hd left join CTHoaDon ct on ct.maHD = hd.maHD where ngayLapHD ='"+d+"'";
+	try {
+		ps = con.prepareStatement(dtngay2);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+			XYChart.Series series = new XYChart.Series();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
+			series.getData().add(new XYChart.Data(formatter.format(d), rs.getFloat("tongTien")));
+			series.setName("Doanh thu ngày hôm nay là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
+			barchart.getData().add(series);
 		}
-		LocalDate d = LocalDate.now();
-		String dt = "select sum(tongTien) as tongTien from hoaDon where month(ngayLapHD) = '"+d.getMonthValue()+"'";
-		try {
-			ps = con.prepareStatement(dt);
-			rs = ps.executeQuery();
-			while(rs.next())
-				lblDTThang.setText(String.format("%.0f", rs.getFloat("tongTien")) + "");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String dtngay = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d.minusDays(2)+"'";
-		try {
-			ps = con.prepareStatement(dtngay);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				XYChart.Series series = new XYChart.Series();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
-				series.getData().add(new XYChart.Data(formatter.format(d.minusDays(2)), rs.getFloat("tongTien")));
-				series.setName("Doanh thu ngày "+formatter.format(d.minusDays(2))+" là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
-				barchart.getData().add(series);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String dtngay1 = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d.minusDays(1)+"'";
-		try {
-			ps = con.prepareStatement(dtngay1);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				XYChart.Series series = new XYChart.Series();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
-				series.getData().add(new XYChart.Data(formatter.format(d.minusDays(1)), rs.getFloat("tongTien")));
-				series.setName("Doanh thu ngày "+formatter.format(d.minusDays(1))+" là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
-				barchart.getData().add(series);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String dtngay2 = "select sum(tongTien) as tongTien from hoaDon where ngayLapHD ='"+d+"'";
-		try {
-			ps = con.prepareStatement(dtngay2);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				XYChart.Series series = new XYChart.Series();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY"); 
-				series.getData().add(new XYChart.Data(formatter.format(d), rs.getFloat("tongTien")));
-				series.setName("Doanh thu ngày hôm nay là : " + String.format("%.0f", rs.getFloat("tongTien"))  + " đồng");
-				barchart.getData().add(series);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 
 	public void cell() {

@@ -68,7 +68,7 @@ public class ThemNCCNVController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private Label lblMaNCC;
+	private Label lblMaNCC, lblName;
 	@FXML
 	private TextField txtTenNCC, txtSDT, txtEmail, txtTimKiem;
 	@FXML
@@ -105,6 +105,21 @@ public class ThemNCCNVController implements Initializable{
 //			edit();
 			cell();
 			searchByName();
+			String sqlxc = "select * from NhanVien";
+			NhanVien dnc = DangNhapController.getNV();
+			try {
+				ps = con.prepareStatement(sqlxc);
+				rs = ps.executeQuery();
+
+					lblName.setText("Xin chào, " + dnc.getHoTen());
+					//Loi
+					System.out.println(dnc.getMaNV());
+					System.out.println(dnc.getHoTen());
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 //			setCell();
 ////			cbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ", "Khác"));
 //			cbGioiTinh.getItems().addAll(gt);
@@ -172,7 +187,14 @@ public class ThemNCCNVController implements Initializable{
         stage.setScene(scene);
        
 	}
-
+    public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 	public void nhapThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -308,6 +330,18 @@ public class ThemNCCNVController implements Initializable{
           Scene scene = new Scene(sampleParent);
           stage.setScene(scene);
   	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
 
      public void themDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();

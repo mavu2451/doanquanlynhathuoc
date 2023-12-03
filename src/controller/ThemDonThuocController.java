@@ -124,6 +124,20 @@ public class ThemDonThuocController implements Initializable{
 //		reload();
 		cell();
 		NhanVien dnc = DangNhapController.getNV();
+		String sqlxc = "select * from NhanVien";
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				//Loi
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dpNgayNhap.setValue(LocalDate.now());
 //		try {
 //			while(rs.next()) {
@@ -529,6 +543,9 @@ public class ThemDonThuocController implements Initializable{
 			});
 	}
 	//Start Navbar
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -563,6 +580,26 @@ public class ThemDonThuocController implements Initializable{
 		}
 
 	}
+	public void thongTinCT(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+		Parent parent = loader.load();
+		Scene scene = new Scene(parent);
+		ThongTinChiTietNVController c = loader.getController();
+		NhanVien dnc = DangNhapController.getNV();
+		c.getMaNV(dnc);
+		stage.setScene(scene);
+		stage.show();
+	}
+	public void timKiemGioHang(ActionEvent e) throws IOException {
+	 	Stage stage = (Stage) mb.getScene().getWindow();
+	 	FXMLLoader loader = new FXMLLoader();
+	     loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+	     Parent sampleParent = loader.load();
+	     Scene scene = new Scene(sampleParent);
+	     stage.setScene(scene);
+		}
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -811,7 +848,7 @@ public class ThemDonThuocController implements Initializable{
 
 	//End Navbar
 	      public int getTTKhachHang() throws SQLException{
-	  		String getKH1 = "select * from KhachHang where tenKH = N'"+txtTenKH.getText()+"' and gioiTinh = N'"+txtGioiTinh.getText()+"'";
+	  		String getKH1 = "select * from KhachHang where tenKH = N'"+txtTenKH.getText()+"' and gioiTinh = N'"+txtGioiTinh.getText()+"' and sdt = '"+txtSdt.getText()+"'";
 	  		ps = con.prepareStatement(getKH1);
 	  		rs = ps.executeQuery();
 	  		int maKH = 0;
@@ -881,12 +918,13 @@ public class ThemDonThuocController implements Initializable{
 	  		 int maKH = getTTKhachHang();
 	  		 if(hd == 0) {
 	  			 hd += 1;
-	  			 String taodt = "insert into DonThuocKhamBenh(maKH, ngayNhap) values(?,?)";
+	  			 String taodt = "insert into DonThuocKhamBenh(maKH, ngayNhap, maNV) values(?,?,?)";
 	  			 System.out.println(taodt);
 	  			 try {
 	  				ps = con.prepareStatement(taodt);
 	  				 ps.setInt(1, maKH);
 	  				 ps.setDate(2, dNgayNhap);
+	  				 ps.setInt(3, dnc.getMaNV());
 	  				 ps.execute();
 	  			} catch (SQLException e) {
 	  				// TODO Auto-generated catch block

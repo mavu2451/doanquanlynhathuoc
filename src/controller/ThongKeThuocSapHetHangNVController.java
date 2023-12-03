@@ -73,6 +73,7 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	//Start Navbar
+	
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -91,7 +92,14 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
         stage.setScene(scene);
        
 	}
-
+    public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 	public void nhapThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -227,6 +235,18 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
           Scene scene = new Scene(sampleParent);
           stage.setScene(scene);
   	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
 
      public void themDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
@@ -283,12 +303,11 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 		thuocSapHetHang();
 		// TODO Auto-generated method stub
 		cell();
-		String sql = "select * from NhanVien";
-		PreparedStatement ps;
+		String sqlxc = "select * from NhanVien";
+		NhanVien dnc = DangNhapController.getNV();
 		try {
-			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			NhanVien dnc = DangNhapController.getNV();
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
 
 				lblName.setText("Xin chào, " + dnc.getHoTen());
 				//Loi

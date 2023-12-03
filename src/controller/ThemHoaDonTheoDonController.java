@@ -99,7 +99,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	PreparedStatement ps;
 	static ResultSet rs;
 	@FXML
-	Label lblName, lblThanhTien, lblTienThoi, lblMaDonThuoc;
+	Label lblName, lblThanhTien, lblTienThoi, lblMaDonThuoc, lblNV;
 	@FXML
 	TableView<CTHoaDon> table;
 	@FXML
@@ -126,7 +126,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	private TableColumn<CTHoaDon, Integer> soLuong;
 	@FXML
 	private TableColumn<CTHoaDon, Float> tongGiaBan;
-
+	int lan = 0;
 	int hd = 0;
 	int i1 = 1;
 	private ObservableList<PhieuNhap> list = FXCollections.observableArrayList();
@@ -141,7 +141,21 @@ public class ThemHoaDonTheoDonController implements Initializable{
 //		try {
 //			while(rs.next()) {
 //				lblName.setText("Xin chào, " + dnc.getHoTen());
-		
+		String sqlxc = "select * from NhanVien";
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				lblNV.setText(dnc.getHoTen());
+				//Loi
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		try {
 			cell();
 ////			int mahd = getMaHD();
@@ -166,6 +180,15 @@ public class ThemHoaDonTheoDonController implements Initializable{
 		LocalDate ldNgayNhap = dpNgayNhap.getValue();
 		Date dNgayNhap = Date.valueOf(ldNgayNhap);
 		btnThemDonThuoc.setOnAction(arg -> {
+			lan++;
+			if(lan ==2) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Thông báo");
+				alert.setContentText("Đơn thuốc đã được chọn");
+				alert.setHeaderText(null);
+				alert.showAndWait();
+			}
+			else {
 			 int maKH;
 				try {
 					maKH = getTTKhachHang();
@@ -181,8 +204,8 @@ public class ThemHoaDonTheoDonController implements Initializable{
 
 					ScrollPane scroll = new ScrollPane(tableView);
 					BorderPane root = new BorderPane(scroll);
-					TextField txtTimKiem = new TextField();
-					Label lblTimKiem = new Label("Tìm kiếm đơn thuốc");
+//					TextField txtTimKiem = new TextField();
+//					Label lblTimKiem = new Label("Tìm kiếm đơn thuốc");
 					Button chon = new Button("Chọn sản phẩm");
 
 					HBox h1 = new HBox(3);
@@ -216,7 +239,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 //					tableView.getColumns().add(hanSuDung);
 					root.setCenter(scroll);
 					scroll.setContent(tableView);
-					h1.getChildren().addAll( lblTimKiem, txtTimKiem);
+//					h1.getChildren().addAll( lblTimKiem, txtTimKiem);
 					h2.getChildren().addAll( chon);
 					root.setTop(h1);
 					root.setBottom(h2);
@@ -337,6 +360,7 @@ public class ThemHoaDonTheoDonController implements Initializable{
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
 				}});
 
 		btnThemKH.setOnAction(new EventHandler<ActionEvent>() {
@@ -385,6 +409,52 @@ public class ThemHoaDonTheoDonController implements Initializable{
 				h2.getChildren().addAll(chon);
 				root.setTop(h1);
 				root.setBottom(h2);
+				String sql1 = "select * from KhachHang";
+				txtTimKiem.setOnKeyReleased(e->{
+					if(txtTimKiem.getText().equals("")) {
+						Khlist.clear();
+						try {
+							ps = con.prepareStatement(sql1);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								KhachHang kh = new KhachHang();
+								kh.setMaKH(rs.getInt("maKH"));
+								kh.setHoTen(rs.getString("tenKH"));
+								kh.setGioiTinh(rs.getString("gioiTinh"));
+								kh.setNgaySinh(rs.getDate("ngaySinh"));
+								kh.setSdt(rs.getString("sdt"));
+								kh.setEmail(rs.getString("email"));
+								kh.setDiaChi(rs.getString("diaChi"));
+								Khlist.add(kh);
+								tableView.setItems(Khlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+					else {
+						Khlist.clear();
+						String sql2 = "select * from KhachHang where tenKH like '%"+txtTimKiem.getText()+"%'";
+						try {
+							ps = con.prepareStatement(sql2);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								KhachHang kh = new KhachHang();
+								kh.setMaKH(rs.getInt("maKH"));
+								kh.setHoTen(rs.getString("tenKH"));
+								kh.setGioiTinh(rs.getString("gioiTinh"));
+								kh.setNgaySinh(rs.getDate("ngaySinh"));
+								kh.setSdt(rs.getString("sdt"));
+								kh.setEmail(rs.getString("email"));
+								kh.setDiaChi(rs.getString("diaChi"));
+								Khlist.add(kh);
+								tableView.setItems(Khlist);
+							}
+						}catch (Exception e1) {
+							// TODO: handle exception
+						}
+					}
+				});
 				String sql = "select * from KhachHang";
 				try {
 					ps = con.prepareStatement(sql);
@@ -431,6 +501,9 @@ public class ThemHoaDonTheoDonController implements Initializable{
 		
 	}
 	//Start Navbar
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -627,6 +700,26 @@ public class ThemHoaDonTheoDonController implements Initializable{
 	        Scene scene = new Scene(sampleParent);
 	        stage.setScene(scene);
 		}
+	  public void thongTinCT(ActionEvent e) throws IOException {
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+			Parent parent = loader.load();
+			Scene scene = new Scene(parent);
+			ThongTinChiTietNVController c = loader.getController();
+			NhanVien dnc = DangNhapController.getNV();
+			c.getMaNV(dnc);
+			stage.setScene(scene);
+			stage.show();
+		}
+		public void timKiemGioHang(ActionEvent e) throws IOException {
+		 	Stage stage = (Stage) mb.getScene().getWindow();
+		 	FXMLLoader loader = new FXMLLoader();
+		     loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+		     Parent sampleParent = loader.load();
+		     Scene scene = new Scene(sampleParent);
+		     stage.setScene(scene);
+			}
 	     public void themKhachHang(ActionEvent e) throws IOException {
 	     	Stage stage = (Stage) mb.getScene().getWindow();
 	     	FXMLLoader loader = new FXMLLoader();
@@ -748,20 +841,20 @@ public class ThemHoaDonTheoDonController implements Initializable{
 //				 cthd.setSoLo(rs.getString("soLo"));
 				 cthd.setDonGia(rs.getFloat("donGia"));
 				 cthd.setSoLuong(rs.getInt("soLuong"));
-				 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
+//				 cthd.setTongGiaBan(rs.getFloat("thanhTien"));
 				 cthdList.add(cthd);
 				 table.setItems(cthdList);
 //				 System.out.println(maThuoc.getCellData(1));
 			 }
-			 String tongTien = "select sum(thanhTien) as tt from CTHoaDon where maHD ='"+maHD+"'";
-			 ps = con.prepareStatement(tongTien);
-			 rs = ps.executeQuery();
-			 
-			 while(rs.next()) {
-				 float tong = rs.getFloat("tt");
-				 lblThanhTien.setText(tong + "");
-				 tienThoi();
-			 }
+//			 String tongTien = "select sum(thanhTien) as tt from CTHoaDon where maHD ='"+maHD+"'";
+//			 ps = con.prepareStatement(tongTien);
+//			 rs = ps.executeQuery();
+//			 
+//			 while(rs.next()) {
+//				 float tong = rs.getFloat("tt");
+//				 lblThanhTien.setText(tong + "");
+//				 tienThoi();
+//			 }
 			 cell();
 		 }
 	 	 public void taoHD() throws SQLException {

@@ -113,6 +113,7 @@ public class CTPhieuNhapController implements Initializable{
 	//new CTPhieuNhap(1,1,"test","test","test","test",10000,20000,2,new Date(100000),new Date(200000),"test","test",20000,40000)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
 		dpNgayNhap.setValue(LocalDate.now());
 		cbbTrangThai.getItems().addAll(trangThaiList);
 		cbbTrangThai.getSelectionModel().selectFirst();
@@ -131,7 +132,7 @@ public class CTPhieuNhapController implements Initializable{
 			float quydoi = Float.parseFloat(txtGiaBan.getText().toString());
 		}
 		lblMaPN.setText("0");
-
+		
 		// TODO Auto-generated method stub
 		reload();
 		cell();
@@ -196,7 +197,58 @@ public class CTPhieuNhapController implements Initializable{
 			root.setTop(h1);
 			root.setBottom(h2);
 			tableView.setPrefWidth(700);
-			
+			txtTimKiem.setOnKeyReleased(e->{
+				if(txtTimKiem.getText().equals("")) {
+					thuocList.clear();
+					String sql = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc where trangThai = N'Đang kinh doanh'";
+					try {
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							Thuoc th = new Thuoc();
+							th.setMaThuoc(rs.getInt("maThuoc"));
+							th.setTenThuoc(rs.getString("tenThuoc"));
+							th.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+							th.setDvt(rs.getString("donViTinh"));
+							th.setNsx(rs.getString("nuocSanXuat"));
+							th.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+							th.setCachDung(rs.getString("cachDung"));
+							th.setGiaNhap(rs.getFloat("giaNhap"));
+							th.setGiaBan(rs.getFloat("giaBan"));
+							th.setTrangThai(rs.getString("trangThai"));
+							thuocList.add(th);
+							tableView.setItems(thuocList);
+						}
+					}catch (Exception e1) {
+						// TODO: handle exception
+					}
+				}
+				else {
+					thuocList.clear();
+					String sql = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc where tenThuoc like '%"+txtTimKiem.getText()+"%' and trangThai = N'Đang kinh doanh'";
+					try {
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							Thuoc th = new Thuoc();
+							th.setMaThuoc(rs.getInt("maThuoc"));
+							th.setTenThuoc(rs.getString("tenThuoc"));
+							th.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+							th.setDvt(rs.getString("donViTinh"));
+							th.setNsx(rs.getString("nuocSanXuat"));
+							th.setQuyCachDongGoi(rs.getString("quyCachDongGoi"));
+							th.setCachDung(rs.getString("cachDung"));
+							th.setGiaNhap(rs.getFloat("giaNhap"));
+							th.setGiaBan(rs.getFloat("giaBan"));
+							th.setTrangThai(rs.getString("trangThai"));
+							thuocList.add(th);
+							tableView.setItems(thuocList);
+						}
+					}catch (Exception e1) {
+						// TODO: handle exception
+					}
+				}
+			});
 			String thuoc = "select * from Thuoc t left join LoaiThuoc lt on t.maLoaiThuoc = lt.maLoaiThuoc where trangThai = N'Đang kinh doanh'";
 
 			try {
@@ -238,6 +290,7 @@ public class CTPhieuNhapController implements Initializable{
 									txtGiaNhap.setText(String.valueOf(rs.getFloat("giaNhap")));
 									txtGiaBan.setText(String.valueOf(rs.getFloat("giaBan")));
 									stage.close();
+									
 								}
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
@@ -284,6 +337,9 @@ public class CTPhieuNhapController implements Initializable{
 //		return text;
 //	}
 	//Start Navbar
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -300,7 +356,7 @@ public class CTPhieuNhapController implements Initializable{
 			// TODO: handle exception
 			e2.printStackTrace();
 		}
-
+		
 	}	public void timNhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -318,6 +374,26 @@ public class CTPhieuNhapController implements Initializable{
 		}
 
 	}
+	public void thongTinCT(ActionEvent e) throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+		Parent parent = loader.load();
+		Scene scene = new Scene(parent);
+		ThongTinChiTietNVController c = loader.getController();
+		NhanVien dnc = DangNhapController.getNV();
+		c.getMaNV(dnc);
+		stage.setScene(scene);
+		stage.show();
+	}
+    public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -874,6 +950,7 @@ public class CTPhieuNhapController implements Initializable{
 	float tgn = 0;
 	float tgb = 0;
 		public void insert(ActionEvent e) {
+
 			float gn = Float.parseFloat(txtGiaNhap.getText());
 			float gb = Float.parseFloat(txtGiaBan.getText());
 			int sl = Integer.parseInt(txtSoLuong.getText());
@@ -891,6 +968,7 @@ public class CTPhieuNhapController implements Initializable{
 			ct.setTongGiaNhap(gn * sl);
 			ct.setTongGiaBan(gb * sl);
 			ct.setTrangThai(cbbTrangThai.getValue());
+			if(!list.contains(ct)) {
 			lblGiaNhapQuyDoi.setText(String.valueOf(gn * sl));
 			lblGiaBanQuyDoi.setText(String.valueOf(gb* sl)); 
 			tgn = tgn + (gn* sl);
@@ -899,7 +977,13 @@ public class CTPhieuNhapController implements Initializable{
 			lblTongGiaBan.setText(String.valueOf(tgb));
 			list.add(ct);
 			table.setItems(list);
-
+			}else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setContentText("Thuốc đã nhập không được nhập lại");
+				alert.showAndWait();
+				table.setItems(list);
+			}
 		}
 		public void remove(ActionEvent e) {
 			int select = table.getSelectionModel().getSelectedIndex();

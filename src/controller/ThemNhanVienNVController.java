@@ -84,7 +84,7 @@ public class ThemNhanVienNVController implements Initializable{
 	@FXML
 	private ComboBox<String> cbTrangThai;
 	@FXML
-	private Label lblMaNV;
+	private Label lblMaNV, lblName;
 	@FXML
 	private DatePicker dpNgaySinh = new DatePicker();
 	@FXML
@@ -112,6 +112,21 @@ public class ThemNhanVienNVController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		dpNgaySinh.setValue(LocalDate.now());
+		String sqlxc = "select * from NhanVien";
+		NhanVien dnc = DangNhapController.getNV();
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				//Loi
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LocalDate ld = dpNgaySinh.getValue();
 		Date date = Date.valueOf(ld);
 			reload();
@@ -192,7 +207,14 @@ public class ThemNhanVienNVController implements Initializable{
         stage.setScene(scene);
        
 	}
-
+    public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 	public void nhapThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -328,6 +350,18 @@ public class ThemNhanVienNVController implements Initializable{
           Scene scene = new Scene(sampleParent);
           stage.setScene(scene);
   	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
 
      public void themDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();

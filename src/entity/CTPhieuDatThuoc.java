@@ -15,12 +15,13 @@ public class CTPhieuDatThuoc {
 	private String donViTinh;
 	private float donGia;
 	private int soLuong;
+	private String thuocKeDon;
 //	private String soLo;
 	private Date hanSuDung;
 	private String cachDung;
 	private float tongGiaBan;
 	public CTPhieuDatThuoc(int maPDT, int maThuoc, String tenThuoc, String tenLoaiThuoc, String donViTinh, float donGia,
-			int soLuong,  Date hanSuDung, String cachDung, float tongGiaBan) {
+			int soLuong,  Date hanSuDung, String cachDung, float tongGiaBan, String thuocKeDon) {
 		super();
 		this.maThuoc = maThuoc;
 		this.maPDT = maPDT;
@@ -29,6 +30,7 @@ public class CTPhieuDatThuoc {
 		this.donViTinh = donViTinh;
 		this.donGia = donGia;
 		this.soLuong = soLuong;
+		this.thuocKeDon = thuocKeDon;
 //		this.soLo = soLo;
 
 		this.hanSuDung = hanSuDung;
@@ -110,6 +112,13 @@ public class CTPhieuDatThuoc {
 	@Override
 	public int hashCode() {
 		return Objects.hash(maThuoc);
+	}
+	
+	public String getThuocKeDon() {
+		return thuocKeDon;
+	}
+	public void setThuocKeDon(String thuocKeDon) {
+		this.thuocKeDon = thuocKeDon;
 	}
 	@Override
 	public boolean equals(Object obj) {

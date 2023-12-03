@@ -37,6 +37,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitMenuButton;
@@ -71,6 +72,8 @@ public class TimKiemNCCController implements Initializable{
 	@FXML
 	private AnchorPane ap;
 	@FXML
+	private Label lblName;
+	@FXML
 	TableView<NhaCungCap> table;
 	@FXML
 	private TableColumn<NhaCungCap, Integer> maNCC;
@@ -94,6 +97,21 @@ public class TimKiemNCCController implements Initializable{
 			} catch (SQLException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
+			}
+			String sqlxc = "select * from NhanVien";
+			NhanVien dnc = DangNhapController.getNV();
+			try {
+				ps = con.prepareStatement(sqlxc);
+				rs = ps.executeQuery();
+
+					lblName.setText("Xin chào, " + dnc.getHoTen());
+					//Loi
+					System.out.println(dnc.getMaNV());
+					System.out.println(dnc.getHoTen());
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 //			edit();
 //			searchByName();
@@ -181,6 +199,9 @@ public class TimKiemNCCController implements Initializable{
 
 	}
 	//Start Navbar
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
 	public void nhanVien(ActionEvent e) throws IOException {
 		try {
 			Stage stage = (Stage) mb.getScene().getWindow();
@@ -377,6 +398,26 @@ public class TimKiemNCCController implements Initializable{
 	        Scene scene = new Scene(sampleParent);
 	        stage.setScene(scene);
 		}
+	  public void thongTinCT(ActionEvent e) throws IOException {
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+			Parent parent = loader.load();
+			Scene scene = new Scene(parent);
+			ThongTinChiTietNVController c = loader.getController();
+			NhanVien dnc = DangNhapController.getNV();
+			c.getMaNV(dnc);
+			stage.setScene(scene);
+			stage.show();
+		}
+		public void timKiemGioHang(ActionEvent e) throws IOException {
+		 	Stage stage = (Stage) mb.getScene().getWindow();
+		 	FXMLLoader loader = new FXMLLoader();
+		     loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuoc.fxml"));
+		     Parent sampleParent = loader.load();
+		     Scene scene = new Scene(sampleParent);
+		     stage.setScene(scene);
+			}
 	     public void themKhachHang(ActionEvent e) throws IOException {
 	     	Stage stage = (Stage) mb.getScene().getWindow();
 	     	FXMLLoader loader = new FXMLLoader();
