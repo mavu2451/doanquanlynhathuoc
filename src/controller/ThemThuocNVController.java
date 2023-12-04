@@ -395,6 +395,7 @@ public class ThemThuocNVController implements Initializable{
 //		String tlt = cbbLoaiThuoc.getSelectionModel().getSelectedItem().toString();
 		int mlt = getLT();
 //		int mncc = cbbNCC.getSelectionModel().getSelectedIndex() + 1;
+		gn = Float.parseFloat(txtGiaNhap.getText());
 		gb = Float.parseFloat(txtGiaBan.getText());
 		System.out.println(mlt);
 		try {

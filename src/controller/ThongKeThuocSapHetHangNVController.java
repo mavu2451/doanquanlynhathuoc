@@ -66,6 +66,7 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 	private TableColumn<CTThuoc, String> loaiThuoc;
 	@FXML
 	private TableColumn<CTThuoc, Integer> slTon;
+
 	@FXML
 	private TableColumn<CTThuoc, Date> hanSuDung;
 	
@@ -73,7 +74,20 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 	PreparedStatement ps;
 	ResultSet rs;
 	//Start Navbar
-	
+    public void logOut(ActionEvent e){
+  	  System.exit(0);
+    }
+	public void getKH(ActionEvent e) throws SQLException, IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/XemThongTinThuoc.fxml"));
+		Parent sampleParent = loader.load();
+		XemThongTinThuocController xc = loader.getController();
+		xc.getAllThuocTonKho();
+		Stage stage = new Stage();
+        Scene scene = new Scene(sampleParent);
+        stage.setScene(scene);
+        stage.show();
+	}
+	//Start Navbar
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -264,13 +278,26 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 	           Scene scene = new Scene(sampleParent);
 	           stage.setScene(scene);
 	   	}
-      public void logOut(ActionEvent e){
-    	  System.exit(0);
-      }
+
 
 	//End Navbar
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		String sqlxc = "select * from NhanVien";
+		NhanVien dnc = DangNhapController.getNV();
+		try {
+			ps = con.prepareStatement(sqlxc);
+			rs = ps.executeQuery();
+
+				lblName.setText("Xin chào, " + dnc.getHoTen());
+				//Loi
+				System.out.println(dnc.getMaNV());
+				System.out.println(dnc.getHoTen());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		reload();
 		btnTimKiem.setOnAction(arg->{
 			list.clear();
@@ -303,21 +330,7 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 		thuocSapHetHang();
 		// TODO Auto-generated method stub
 		cell();
-		String sqlxc = "select * from NhanVien";
-		NhanVien dnc = DangNhapController.getNV();
-		try {
-			ps = con.prepareStatement(sqlxc);
-			rs = ps.executeQuery();
 
-				lblName.setText("Xin chào, " + dnc.getHoTen());
-				//Loi
-				System.out.println(dnc.getMaNV());
-				System.out.println(dnc.getHoTen());
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) > 0";
 		try {
 			ps = con.prepareStatement(hh);
@@ -338,10 +351,11 @@ public class ThongKeThuocSapHetHangNVController implements Initializable{
 		 loaiThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenLoaiThuoc"));
 		 donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
 		 slTon.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("slTonKho"));
+
 		 hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc,Date>("hanSuDung"));
 	}
 	public ObservableList<CTThuoc> thuocSapHetHang() {
-		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) >0 ";
+		String sql1 = "  SELECT * FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) > 0";
 			try {
 		PreparedStatement ps1 = con.prepareStatement(sql1);
 			rs = ps1.executeQuery();

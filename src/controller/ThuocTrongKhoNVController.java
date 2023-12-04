@@ -38,6 +38,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class ThuocTrongKhoNVController implements Initializable{
@@ -74,7 +75,7 @@ public class ThuocTrongKhoNVController implements Initializable{
 	private TableColumn<Thuoc, Float> giaNhap;
 	@FXML
 	private TableColumn<Thuoc, Float> giaBan;
-
+	int i = 1;
 	@FXML
 	ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 	@Override
@@ -113,8 +114,14 @@ public class ThuocTrongKhoNVController implements Initializable{
 			BorderPane root = new BorderPane();
 			ScrollPane scroll = new ScrollPane();
 			Stage stage = new Stage();
+			TextField txtXoa = new TextField();
+			txtXoa.setPromptText("Nhập số lượng xoá");
+			Button chon = new Button("Xoá");
+			HBox h2 = new HBox(2);
 			TableView tableView = new TableView<CTThuoc>();
-			TableColumn maThuoc = new TableColumn<CTThuoc, Integer>("STT");
+			TableColumn maCT = new TableColumn<CTThuoc, Integer>("STT");
+			maCT.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("maCT"));
+			TableColumn maThuoc = new TableColumn<CTThuoc, Integer>("Mã thuốc");
 			maThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("maThuoc"));
 			TableColumn tenThuoc = new TableColumn<CTThuoc, String>("Tên thuốc");
 			tenThuoc.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("tenThuoc"));
@@ -122,26 +129,29 @@ public class ThuocTrongKhoNVController implements Initializable{
 			donViTinh.setCellValueFactory(new PropertyValueFactory<CTThuoc, String>("donViTinh"));
 			TableColumn slTonKho = new TableColumn<CTThuoc, Integer>("Số lượng hiện có");
 			slTonKho.setCellValueFactory(new PropertyValueFactory<CTThuoc, Integer>("slTonKho"));
-			TableColumn giaNhap = new TableColumn<CTThuoc, Float>("Giá bán");
-			giaNhap.setCellValueFactory(new PropertyValueFactory<CTThuoc, Float>("giaNhap"));
 			TableColumn giaBan = new TableColumn<CTThuoc, Float>("Giá bán");
 			giaBan.setCellValueFactory(new PropertyValueFactory<CTThuoc, Float>("giaBan"));
 			TableColumn hanSuDung = new TableColumn<CTThuoc, Float>("Hạn sử dụng");
 			hanSuDung.setCellValueFactory(new PropertyValueFactory<CTThuoc, Float>("hanSuDung"));
+			tableView.getColumns().add(maCT);
 			tableView.getColumns().add(maThuoc);
+			maThuoc.setPrefWidth(0);
+			maThuoc.setMinWidth(0);
+			maThuoc.setMaxWidth(0);
 			tableView.getColumns().add(tenThuoc);
 			tableView.getColumns().add(donViTinh);
 			tableView.getColumns().add(slTonKho);
-			tableView.getColumns().add(giaNhap);
 			tableView.getColumns().add(giaBan);
 			tableView.getColumns().add(hanSuDung);
 //					tableView.getColumns().add(soLo);
 //					tableView.getColumns().add(hanSuDung);
 			root.setCenter(scroll);
 			scroll.setContent(tableView);
-
+			h2.getChildren().addAll(txtXoa, chon);
+			root.setBottom(h2);
+			
 			String sql;
-			int i = 1;
+
 			try {
 				sql = "select * from CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc where soLuongCon > 0 and ct.maThuoc = '"+maThuoc()+"'order by hanSuDung";
 				try {
@@ -149,7 +159,8 @@ public class ThuocTrongKhoNVController implements Initializable{
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						CTThuoc t = new CTThuoc();
-						t.setMaThuoc(i++);
+						t.setMaCT(i++);
+						t.setMaThuoc(rs.getInt("maThuoc"));
 						t.setTenThuoc(rs.getString("tenThuoc"));
 						String tenT = rs.getString("tenThuoc");
 						t.setHanSuDung(rs.getDate("hanSuDung"));
@@ -168,8 +179,70 @@ public class ThuocTrongKhoNVController implements Initializable{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-					
-			Scene scene = new Scene(root,570,300);
+			chon.setOnAction(args->{
+				if(tableView.getSelectionModel().getSelectedIndex() <= -1) {
+					Alert alert = new Alert(AlertType.ERROR, "Bạn chưa chọn thuốc", ButtonType.OK);
+			  		alert.setTitle("Thông báo");
+			  		alert.setHeaderText(null);
+			  		alert.show();
+				}
+				else {
+				int slxoa = Integer.parseInt(txtXoa.getText());
+				int index = tableView.getSelectionModel().getSelectedIndex();
+				int maT = Integer.parseInt(maThuoc.getCellData(index).toString());
+				int sltonkho = Integer.parseInt(slTonKho.getCellData(index).toString());
+				int conlai = sltonkho - slxoa;
+				Date hsd = Date.valueOf(hanSuDung.getCellData(index).toString());
+				String update = "update CTThuoc set soLuongCon = '"+conlai+"' where maThuoc = '"+maT+"' and hanSuDung = '"+hsd+"'";
+				try {
+					ps = con.prepareStatement(update);
+					ps.execute();
+					Alert alert = new Alert(AlertType.INFORMATION, "Thuốc đã được cập nhật thành công", ButtonType.OK);
+			  		alert.setTitle("Thông báo");
+			  		alert.setHeaderText(null);
+			  		alert.show();
+			  		tableView.getItems().clear();
+			  		String sql1 = "select * from CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc where soLuongCon > 0 and ct.maThuoc = '"+maThuoc()+"'order by hanSuDung";
+			  		ps = con.prepareStatement(sql1);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						CTThuoc t = new CTThuoc();
+						t.setMaCT(i++);
+						t.setMaThuoc(rs.getInt("maThuoc"));
+						t.setTenThuoc(rs.getString("tenThuoc"));
+						String tenT = rs.getString("tenThuoc");
+						t.setHanSuDung(rs.getDate("hanSuDung"));
+						t.setSlTonKho(rs.getInt("soLuongCon"));
+						t.setDonViTinh(rs.getString("donViTinh"));
+//						t.setSoLo(rs.getString("soLo"));
+						t.setGiaBan(rs.getFloat("giaBan"));
+						Tlist.add(t);
+						tableView.setItems(Tlist);
+					}
+					stage.close();
+					table.getItems().clear();
+					String sql2 = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as slTonkho, sum(th.giaNhap) as giaNhap, sum(th.giaBan) as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan order by t.maThuoc";
+					ps = con.prepareStatement(sql2);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Thuoc k = new Thuoc();
+						k.setMaThuoc(rs.getInt("maThuoc"));
+						k.setTenThuoc(rs.getString("tenThuoc"));
+						k.setSoLuong(rs.getInt("slTonKho"));
+						k.setDvt(rs.getString("donViTinh"));
+						k.setGiaNhap(rs.getFloat("giaNhap"));
+						k.setGiaBan(rs.getFloat("giaBan"));
+						k.setLoaiThuoc(rs.getString("tenLoaiThuoc"));
+						thuocList.add(k);
+						table.setItems(thuocList);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+			});		
+			Scene scene = new Scene(root,500,300);
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.show();
@@ -184,7 +257,7 @@ public class ThuocTrongKhoNVController implements Initializable{
 
 	}
 	//Start Navbar
-	
+
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();

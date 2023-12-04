@@ -123,12 +123,13 @@ public class ThemDonDatThuocController implements Initializable{
 	URL arg0;
 	int i = 1;
 	ResourceBundle arg1;
+	NhanVien dnc = DangNhapController.getNV();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 //		getAllPN();
 //		reload();
-		NhanVien dnc = DangNhapController.getNV();
+
 		String sqlxc = "select * from NhanVien";
 		try {
 			ps = con.prepareStatement(sqlxc);
@@ -580,7 +581,7 @@ public class ThemDonDatThuocController implements Initializable{
 					tableView.getColumns().add(diaChi);
 					root.setCenter(scroll);
 					scroll.setContent(tableView);
-//					h1.getChildren().addAll(lblTimKiem, txtTimKiem);
+					h1.getChildren().addAll(lblTimKiem, txtTimKiem);
 				
 					h2.getChildren().addAll(chon);
 					root.setTop(h1);
@@ -1213,12 +1214,14 @@ public class ThemDonDatThuocController implements Initializable{
 		t.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 		t.addCell(new Cell().add(new Paragraph("MÃ PHIẾU ĐẶT THUỐC: " + maPDT).setFont(pflight)).setBorder(Border.NO_BORDER));
 		Table divide = new Table(full);
+		Table divide2= new Table(full);
+		divide.addCell(new Cell().add(new Paragraph("Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh").setFont(pflight)).setBorder(Border.NO_BORDER));
 		Border g = new SolidBorder(1f/2f);
-		divide.setBorder(g);
+		divide2.setBorder(g);
 		Table t1 = new Table(full);
 		t1.addCell(new Cell().add(new Paragraph("PHIẾU ĐẶT THUỐC").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
 		t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
-		t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+		t1.addCell(new Cell().add(new Paragraph("Họ tên khách hàng: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 		t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
@@ -1250,8 +1253,10 @@ public class ThemDonDatThuocController implements Initializable{
 		Table t5 = new Table(half2);
 		t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 		t4.addCell(new Cell().add(new Paragraph("Người lập phiếu").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+		t4.addCell(new Cell().add(new Paragraph("\n\n\n\n\n" + dnc.getHoTen()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 		d.add(t);
 		d.add(divide);
+		d.add(divide2);
 		d.add(t1);
 		d.add(t2);
 		d.add(t3);

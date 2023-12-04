@@ -113,7 +113,7 @@ public class ThemDonThuocController implements Initializable{
 	private TableColumn<CTDonThuocKhamBenh, String> donViTinh;
 	@FXML
 	private TableColumn<CTDonThuocKhamBenh, Integer> soLuong;
-
+	NhanVien dnc = DangNhapController.getNV();
 	int i= 1;
 	int hd = 0;
 	private ObservableList<CTDonThuocKhamBenh> list = FXCollections.observableArrayList();
@@ -123,7 +123,7 @@ public class ThemDonThuocController implements Initializable{
 //		getAllPN();
 //		reload();
 		cell();
-		NhanVien dnc = DangNhapController.getNV();
+
 		String sqlxc = "select * from NhanVien";
 		try {
 			ps = con.prepareStatement(sqlxc);
@@ -618,6 +618,7 @@ public class ThemDonThuocController implements Initializable{
         stage.setScene(scene);
        
 	}
+	
 	public void thongKeThuocSapHetHang(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -965,15 +966,19 @@ public class ThemDonThuocController implements Initializable{
 				Document d = new Document(pd);
 				Table t = new Table(twocolwidth);
 				t.addCell(new Cell().add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf)).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 //				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
-				t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
+				
 				Table divide = new Table(full);
+				divide.addCell(new Cell().add(new Paragraph("Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh").setFont(pflight)).setBorder(Border.NO_BORDER));
+				Table divide2 = new Table(full);
 				Border g = new SolidBorder(1f/2f);
-				divide.setBorder(g);
+				divide2.setBorder(g);
 				Table t1 = new Table(full);
 				t1.addCell(new Cell().add(new Paragraph("ĐƠN THUỐC").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
-				t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
-				t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Ngày lập đơn thuốc: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
+				t1.addCell(new Cell().add(new Paragraph("Họ tên khách hàng: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 				t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 				t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 				t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
@@ -1006,8 +1011,10 @@ public class ThemDonThuocController implements Initializable{
 				t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 				t4.addCell(new Cell().add(new Paragraph("Đi mua thuốc kê đơn cần mang theo phiếu này!").setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
 				t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + txtThongTin.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("\n" + dnc.getHoTen()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 				d.add(t);
 				d.add(divide);
+				d.add(divide2);
 				d.add(t1);
 				d.add(t2);
 				d.add(t3);

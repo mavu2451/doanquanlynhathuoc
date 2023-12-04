@@ -303,7 +303,7 @@ public class TrangChuNVController implements Initializable{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	String hh = "    SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' ";
+	String hh = "SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and dinhMucSL>= soLuongCon and trangThai = N'Đang kinh doanh' and datediff(day,GETDATE(),hanSuDung) > 0";
 	try {
 		ps = con.prepareStatement(hh);
 		rs = ps.executeQuery();
@@ -313,7 +313,7 @@ public class TrangChuNVController implements Initializable{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	String hethan = " SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0";
+	String hethan = " SELECT count(*) as tong FROM CTThuoc ct left join Thuoc t on t.maThuoc = ct.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc WHERE soLuongCon > 0 and datediff(day,GETDATE(),hanSuDung) > 0 and datediff(day,GETDATE(),hanSuDung) < 30";
 	try {
 		ps = con.prepareStatement(hethan);
 		rs = ps.executeQuery();

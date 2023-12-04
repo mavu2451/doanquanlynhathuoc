@@ -243,7 +243,7 @@ public class ThemHoaDonKhongTheoDonNVController implements Initializable{
 						stage.setResizable(false);
 						stage.show();
 						
-						String sql = "select d.maPDT, d.ngayLapDon, nv.tenNV, sum(donGia * soLuong) as tongTien from DonDatThuoc d left join NhanVien nv on nv.maNV = d.maNV inner join KhachHang kh on kh.maKH = d.maKH inner join CTDonDatThuoc ct on ct.maPDT = d.maPDT where d.maKH = '"+maKH+"' group by d.maPDT, nv.tenNV, d.ngayLapDon, kh.tenKH ";
+						String sql = "select d.maPDT, d.ngayLapDon, nv.tenNV, sum(donGia * soLuong) as tongTien from DonDatThuoc d left join NhanVien nv on nv.maNV = d.maNV inner join KhachHang kh on kh.maKH = d.maKH inner join CTDonDatThuoc ct on ct.maPDT = d.maPDT where d.maKH = '"+maKH+"' group by d.maPDT, nv.tenNV, d.ngayLapDon, kh.tenKH order by d.maPDT ";
 						ps = con.prepareStatement(sql);
 						rs = ps.executeQuery();
 						while(rs.next()) {
@@ -1273,8 +1273,10 @@ public class ThemHoaDonKhongTheoDonNVController implements Initializable{
 		t.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
 		t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
 		Table divide = new Table(full);
+		divide.addCell(new Cell().add(new Paragraph("Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh").setFont(pflight)).setBorder(Border.NO_BORDER));
+		Table divide2 = new Table(full);
 		Border g = new SolidBorder(1f/2f);
-		divide.setBorder(g);
+		divide2.setBorder(g);
 		Table t1 = new Table(full);
 		t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KHÔNG KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
 		t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
@@ -1316,8 +1318,11 @@ public class ThemHoaDonKhongTheoDonNVController implements Initializable{
 		Table t5 = new Table(half2);
 		t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 		t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
+		t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + taGhiChu.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+		t4.addCell(new Cell().add(new Paragraph("\n" + dnc.getHoTen()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 		d.add(t);
 		d.add(divide);
+		d.add(divide2);
 		d.add(t1);
 		d.add(t2);
 		d.add(t3);
@@ -1339,7 +1344,7 @@ public class ThemHoaDonKhongTheoDonNVController implements Initializable{
 //			String tongS = String.valueOf(tong);
 //			lblThanhTien.setText(tongS);
 
-			float tienThoi = Float.parseFloat(lblThanhTien.getText()) - Float.parseFloat(txtTienNhan.getText());
+			float tienThoi = Float.parseFloat(txtTienNhan.getText()) - Float.parseFloat(lblThanhTien.getText());;
 			lblTienThoi.setText(String.valueOf(tienThoi));
 			if(tienThoi < 0) {
 				Alert alert = new Alert(AlertType.ERROR);

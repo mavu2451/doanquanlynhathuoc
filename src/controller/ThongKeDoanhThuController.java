@@ -532,6 +532,7 @@ public class ThongKeDoanhThuController implements Initializable{
 				rs = ps.executeQuery();
 				while(rs.next())
 					lblTongNam.setText(String.format("%.0f", rs.getFloat("tongTien")) + " ĐỒNG");
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -544,6 +545,7 @@ public class ThongKeDoanhThuController implements Initializable{
 				rs = ps.executeQuery();
 				while(rs.next())
 					lblTongNam1.setText(String.format("%.0f", rs.getFloat("tongTien")) + " ĐỒNG");
+				cbbNam.getSelectionModel().selectFirst();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

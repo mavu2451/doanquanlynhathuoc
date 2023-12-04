@@ -24,7 +24,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThongKeThuocSapHetHanNVController">
-  <left>
+ <left>
       <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" styleClass="tab" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="756.0" prefWidth="226.0" spacing="5.0" styleClass="tab">
@@ -293,7 +293,7 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="table" layoutX="100.0" layoutY="278.0" prefHeight="546.0" prefWidth="1519.0">
+                  <TableView fx:id="table" layoutX="100.0" layoutY="278.0" prefHeight="548.0" prefWidth="1519.0">
                     <columns>
                       <TableColumn fx:id="maThuoc" prefWidth="95.0" text="STT" />
                       <TableColumn fx:id="tenThuoc" prefWidth="248.0" text="Tên thuốc" />
@@ -314,7 +314,7 @@
                      </font>
                   </Label>
                   <ComboBox fx:id="cbbThuocSapHet" layoutX="1406.0" layoutY="243.0" prefHeight="27.0" prefWidth="213.0" />
-                  <Label layoutX="100.0" layoutY="209.0" text="Đơn vị tính:">
+                  <Label layoutX="100.0" layoutY="218.0" text="Đơn vị tính:">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -324,21 +324,21 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtDonViTinh" layoutX="191.0" layoutY="205.0" prefHeight="27.0" prefWidth="427.0" />
-                  <Label layoutX="665.0" layoutY="155.0" text="Loại thuốc:">
+                  <TextField fx:id="txtDonViTinh" layoutX="191.0" layoutY="214.0" prefHeight="27.0" prefWidth="427.0" />
+                  <Label layoutX="675.0" layoutY="155.0" text="Loại thuốc:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtLoaiThuoc" layoutX="764.0" layoutY="152.0" prefHeight="27.0" prefWidth="397.0" />
-                  <Label layoutX="650.0" layoutY="207.0" text="Hạn sử dụng:">
+                  <TextField fx:id="txtLoaiThuoc" layoutX="765.0" layoutY="153.0" prefHeight="27.0" prefWidth="393.0" />
+                  <Label layoutX="659.0" layoutY="215.0" text="Hạn sử dụng:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnTimKiem" layoutX="1182.0" layoutY="158.0" mnemonicParsing="false" prefHeight="82.0" prefWidth="127.0" text="Tìm kiếm" />
-                  <DatePicker fx:id="dpHanSuDung" layoutX="765.0" layoutY="209.0" prefHeight="27.0" prefWidth="400.0" />
-                  <Button layoutX="1492.0" layoutY="842.0" mnemonicParsing="false" onAction="#reload" prefHeight="51.0" prefWidth="123.0" text="Tải trang" />
+                  <Button fx:id="btnTimKiem" layoutX="1185.0" layoutY="154.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="130.0" text="Tìm kiếm" />
+                  <DatePicker fx:id="dpHanSuDung" layoutX="760.0" layoutY="214.0" prefHeight="27.0" prefWidth="400.0" />
+                  <Button layoutX="1489.0" layoutY="842.0" mnemonicParsing="false" onAction="#reload" prefHeight="45.0" prefWidth="130.0" text="Tải trang" />
                </children>
             </AnchorPane>
          </content>

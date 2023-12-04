@@ -75,7 +75,7 @@ public class ThemNhanVienNVController implements Initializable{
 	private PasswordField txtMatKhau;
 	
 	private String[] gt = {"Nam","Nữ","Khác"};
-	private String[] vt = {"Nhân viên", "Quản lý"};
+	private String[] vt = {"Nhân viên", "Người quản lý"};
 	private String[] tt = {"Đang làm việc", "Nghỉ việc"};
 	@FXML
 	private ComboBox<String> cbGioiTinh;

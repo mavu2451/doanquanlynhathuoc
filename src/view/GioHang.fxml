@@ -150,6 +150,36 @@
                         <Insets left="10.0" />
                      </padding>
                   </HBox>
+                   <HBox fx:id="hbTrangChu15" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/icons/employee.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <MenuButton fx:id="mb4" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" popupSide="RIGHT" prefHeight="44.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Nhân viên" textFill="WHITE">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#nhanVien" text="Thêm nhân viên" />
+                              <MenuItem mnemonicParsing="false" onAction="#timNhanVien" text="Tìm kiếm nhân viên" />
+                           </items>
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
                   <HBox fx:id="hbTrangChu16" prefHeight="38.0" prefWidth="206.0" spacing="5.0">
                      <children>
                         <ImageView fitHeight="30.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">

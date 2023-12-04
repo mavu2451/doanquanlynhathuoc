@@ -12,7 +12,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -341,7 +340,7 @@
                               <TableColumn fx:id="sdt" prefWidth="111.0" text="Số điện thoại" />
                               <TableColumn fx:id="email" prefWidth="152.0" text="Email" />
                               <TableColumn fx:id="trangThai" prefWidth="121.0" text="Trạng thái" />
-                              <TableColumn fx:id="diaChi" prefWidth="287.0" text="Địa chỉ" />
+                              <TableColumn fx:id="diaChi" prefWidth="346.0" text="Địa chỉ" />
                           </columns>
                         </TableView>
                      </children>

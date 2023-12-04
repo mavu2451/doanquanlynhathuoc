@@ -67,7 +67,7 @@ public class KhachHangNVController implements Initializable{
 	@FXML
 	private MenuButton mb;
 	@FXML
-	private Label lblMaKH;
+	private Label lblMaKH, lblName;
 	@FXML
 	private TextField txtHoTen, txtSDT, txtEmail, txtTimKiem;
 	@FXML
@@ -110,6 +110,21 @@ public class KhachHangNVController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 			reload();
+			String sqlxc = "select * from NhanVien";
+			NhanVien dnc = DangNhapController.getNV();
+			try {
+				ps = con.prepareStatement(sqlxc);
+				rs = ps.executeQuery();
+
+					lblName.setText("Xin chào, " + dnc.getHoTen());
+					//Loi
+					System.out.println(dnc.getMaNV());
+					System.out.println(dnc.getHoTen());
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			dpNgaySinh.setValue(LocalDate.now());
 			LocalDate ldNgayNhap = dpNgaySinh.getValue();
 			Date dNgayNhap = Date.valueOf(ldNgayNhap);

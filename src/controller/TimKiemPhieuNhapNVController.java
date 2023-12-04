@@ -116,8 +116,7 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 			ObservableList<Thuoc> thuocList = FXCollections.observableArrayList();
 			BorderPane root = new BorderPane();
 			ScrollPane scroll = new ScrollPane();
-			TextField txtTimKiem = new TextField();
-			Label lblTimKiem = new Label("Tìm kiếm tên thuốc");
+
 			Button chon = new Button("Đã nhập hàng");
 			HBox h1 = new HBox(2);
 			HBox h2 = new HBox(1);
@@ -157,7 +156,6 @@ public class TimKiemPhieuNhapNVController implements Initializable{
 			tableView.getColumns().add(trangThai);
 			root.setCenter(scroll);
 			scroll.setContent(tableView);
-			h1.getChildren().addAll( lblTimKiem, txtTimKiem);
 			h2.getChildren().addAll( chon);
 			root.setTop(h1);
 			root.setBottom(h2);

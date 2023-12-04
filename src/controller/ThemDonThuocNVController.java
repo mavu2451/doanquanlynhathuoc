@@ -94,6 +94,7 @@ public class ThemDonThuocNVController implements Initializable{
 	private TextField txtNCC;
 	@FXML
 	private DatePicker dpNgayNhap;
+	NhanVien dnc = DangNhapController.getNV();
 	Connection con = KetNoiDatabase.getConnection();
 	PreparedStatement ps;
 	static ResultSet rs;
@@ -858,10 +859,13 @@ public class ThemDonThuocNVController implements Initializable{
 				Table t = new Table(twocolwidth);
 				t.addCell(new Cell().add(new Paragraph("NHÀ THUỐC THỊNH VƯỢNG").setFont(pf)).setBorder(Border.NO_BORDER));
 //				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + dt.getMaDonThuoc()).setFont(pf)).setBorder(Border.NO_BORDER));
-				t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+				t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
 				Table divide = new Table(full);
+				divide.addCell(new Cell().add(new Paragraph("Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh").setFont(pflight)).setBorder(Border.NO_BORDER));
+				Table divide2 = new Table(full);
 				Border g = new SolidBorder(1f/2f);
-				divide.setBorder(g);
+				divide2.setBorder(g);
 				Table t1 = new Table(full);
 				t1.addCell(new Cell().add(new Paragraph("ĐƠN THUỐC").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
 				t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
@@ -898,8 +902,10 @@ public class ThemDonThuocNVController implements Initializable{
 				t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 				t4.addCell(new Cell().add(new Paragraph("Đi mua thuốc kê đơn cần mang theo phiếu này!").setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
 				t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + txtThongTin.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+				t4.addCell(new Cell().add(new Paragraph("\n" + dnc.getHoTen()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 				d.add(t);
 				d.add(divide);
+				d.add(divide2);
 				d.add(t1);
 				d.add(t2);
 				d.add(t3);

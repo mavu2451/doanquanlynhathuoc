@@ -136,7 +136,7 @@ public class ThemThuocController implements Initializable{
 		txtGiaNhap.setOnKeyReleased(arg-> {
 			Float t = Float.parseFloat(txtGiaNhap.getText());
 
-			txtGiaBan.setText((String.format("%.0f", t + (t*10/100))));
+			txtGiaBan.setText((String.format("%.0f", t + (t*20/100))));
 		});
 		// TODO Auto-generated method stub
 		cbb();

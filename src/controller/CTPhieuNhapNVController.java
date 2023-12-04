@@ -757,15 +757,22 @@ public class CTPhieuNhapNVController implements Initializable{
 			ct.setTongGiaNhap(gn * sl);
 			ct.setTongGiaBan(gb * sl);
 			ct.setTrangThai(cbbTrangThai.getValue());
-			lblGiaNhapQuyDoi.setText(String.valueOf(gn * sl));
-			lblGiaBanQuyDoi.setText(String.valueOf(gb* sl)); 
-			tgn = tgn + (gn* sl);
-			tgb = tgb + (gb* sl);
-			lblTongGiaNhap.setText(String.valueOf(tgn));
-			lblTongGiaBan.setText(String.valueOf(tgb));
-			list.add(ct);
-			table.setItems(list);
-
+			if(!list.contains(ct)) {
+				lblGiaNhapQuyDoi.setText(String.valueOf(gn * sl));
+				lblGiaBanQuyDoi.setText(String.valueOf(gb* sl)); 
+				tgn = tgn + (gn* sl);
+				tgb = tgb + (gb* sl);
+				lblTongGiaNhap.setText(String.valueOf(tgn));
+				lblTongGiaBan.setText(String.valueOf(tgb));
+				list.add(ct);
+				table.setItems(list);
+				}else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText("Thuốc đã nhập không được nhập lại");
+					alert.showAndWait();
+					table.setItems(list);
+				}
 		}
 		public void remove(ActionEvent e) {
 			int select = table.getSelectionModel().getSelectedIndex();

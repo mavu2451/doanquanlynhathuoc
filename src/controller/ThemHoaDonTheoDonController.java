@@ -856,13 +856,14 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			 int maKH = getTTKhachHang();
 			 if(hd == 0) {
 				 hd += 1;
-				 String taohd = "insert into HoaDon(maNV, ngayLapHD, maKH) values(?,?,?)";
+				 String taohd = "insert into HoaDon(maNV, ngayLapHD, maKH, maDonThuoc) values(?,?,?,?)";
 				 System.out.println(taohd);
 				 try {
 					ps = con.prepareStatement(taohd);
 					 ps.setInt(1, dnc.getMaNV());
 					 ps.setDate(2, dNgayNhap);
 					 ps.setFloat(3, maKH);
+					 ps.setInt(4, Integer.parseInt(lblMaDonThuoc.getText()));
 					 ps.execute();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -919,6 +920,16 @@ public class ThemHoaDonTheoDonController implements Initializable{
 			    		  int sl = Integer.parseInt(soLuong.getCellData(i).toString());
 			    		  System.out.println(sl);
 			    		  ObservableList<CTThuoc> Tlist = FXCollections.observableArrayList();
+			    			
+							String hd1 = "insert into CTHoaDon(maHD,maThuoc,soLuong,donGia) values (?,?,?,?)";
+							ps = con.prepareStatement(hd1);
+							ps.setInt(1, maHD);
+							ps.setInt(2, Integer.parseInt(sqlMaThuoc));
+							ps.setInt(3, sl);
+							ps.setFloat(4, Float.parseFloat(donGia.getCellData(i).toString()));
+//							float thanhTien = Float.parseFloat(sqlGiaBan) * sl;
+//							ps.setFloat(5, thanhTien);
+							ps.execute();
 			    		  String sql = "select t.maThuoc, t.tenThuoc, lt.tenLoaiThuoc, donViTinh,sum(th.soLuongCon) as soLuongCon, t.giaNhap, t.giaBan as giaBan, min(hanSuDung) as hanSuDung from Thuoc t left join CTThuoc th on t.maThuoc = th.maThuoc inner join LoaiThuoc lt on lt.maLoaiThuoc = t.maLoaiThuoc where th.soLuongCon > 0 and t.maThuoc = '"+sqlMaThuoc+"' group by t.maThuoc, tenThuoc, lt.tenLoaiThuoc, donViTinh, t.giaNhap, t.giaBan";
 							try {
 								ps = con.prepareStatement(sql);
@@ -1033,12 +1044,14 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					t.addCell(new Cell().add(new Paragraph("MÃ ĐƠN THUỐC: " + lblMaDonThuoc.getText()).setFont(pf)).setBorder(Border.NO_BORDER));
 					t.addCell(new Cell().add(new Paragraph("MÃ HOÁ ĐƠN: " + maHD).setFont(pflight)).setBorder(Border.NO_BORDER));
 					Table divide = new Table(full);
+					divide.addCell(new Cell().add(new Paragraph("Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh").setFont(pflight)).setBorder(Border.NO_BORDER));
+					Table divide2 = new Table(full);
 					Border g = new SolidBorder(1f/2f);
-					divide.setBorder(g);
+					divide2.setBorder(g);
 					Table t1 = new Table(full);
 					t1.addCell(new Cell().add(new Paragraph("HOÁ ĐƠN THUỐC KÊ ĐƠN").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(24));
 					t1.addCell(new Cell().add(new Paragraph("Ngày lập hoá đơn: " + dNgayNhap).setFont(pf)).setBorder(Border.NO_BORDER));
-					t1.addCell(new Cell().add(new Paragraph("Họ tên: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
+					t1.addCell(new Cell().add(new Paragraph("Họ tên khách hàng: " + txtTenKH.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					t1.addCell(new Cell().add(new Paragraph("Giới tính: " + txtGioiTinh.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					t1.addCell(new Cell().add(new Paragraph("Số điện thoại: " + txtSdt.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
 					t1.addCell(new Cell().add(new Paragraph("Email: " + txtEmail.getText()).setFont(pflight)).setBorder(Border.NO_BORDER));
@@ -1081,8 +1094,10 @@ public class ThemHoaDonTheoDonController implements Initializable{
 					t4.addCell(new Cell().add(new Paragraph("          Ngày " + ldNgayNhap.getDayOfMonth() + " tháng " + ldNgayNhap.getMonthValue() + " năm " + ldNgayNhap.getYear()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 					t4.addCell(new Cell().add(new Paragraph("Người bán").setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 					t4.addCell(new Cell().add(new Paragraph("Ghi chú: \n" + txtGhiChu.getText()).setFont(pflight)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.LEFT).setMarginRight(100f));
+					t4.addCell(new Cell().add(new Paragraph("\n" + dnc.getHoTen()).setFont(pf)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100f));
 					d.add(t);
 					d.add(divide);
+					d.add(divide2);
 					d.add(t1);
 					d.add(t2);
 					d.add(t3);

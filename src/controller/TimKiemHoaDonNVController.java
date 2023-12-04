@@ -230,42 +230,6 @@ public class TimKiemHoaDonNVController implements Initializable{
 ////        stage.show();
 //	}
 	//Start Navbar
-	
-	public void nhanVien(ActionEvent e) throws IOException {
-		try {
-			Stage stage = (Stage) mb.getScene().getWindow();
-			FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("/view/ThemNhanVien.fxml"));
-	        Parent sampleParent = loader.load();
-//	        NhanVienController nv = loader.getController();
-	        Scene scene = new Scene(sampleParent);
-	        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
-	        stage.setScene(scene);
-
-			
-		} catch (Exception e2) {
-			// TODO: handle exception
-			e2.printStackTrace();
-		}
-
-	}	public void timNhanVien(ActionEvent e) throws IOException {
-		try {
-			Stage stage = (Stage) mb.getScene().getWindow();
-			FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("/view/TimKiemNhanVien.fxml"));
-	        Parent sampleParent = loader.load();
-//	        NhanVienController nv = loader.getController();
-	        Scene scene = new Scene(sampleParent);
-	        scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
-	        stage.setScene(scene);
-			
-		} catch (Exception e2) {
-			// TODO: handle exception
-			e2.printStackTrace();
-		}
-
-	}
-
 	public void trangChu(ActionEvent e) throws IOException {
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -284,7 +248,14 @@ public class TimKiemHoaDonNVController implements Initializable{
         stage.setScene(scene);
        
 	}
-
+    public void timKiemGioHang(ActionEvent e) throws IOException {
+     	Stage stage = (Stage) mb.getScene().getWindow();
+     	FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
+         Parent sampleParent = loader.load();
+         Scene scene = new Scene(sampleParent);
+         stage.setScene(scene);
+ 	}
 	public void nhapThuoc(ActionEvent e) throws IOException {
 		Stage stage = (Stage) mb.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader();
@@ -386,26 +357,6 @@ public class TimKiemHoaDonNVController implements Initializable{
         Scene scene = new Scene(sampleParent);
         stage.setScene(scene);
 	}
-     public void thongTinCT(ActionEvent e) throws IOException {
-    		Stage stage = new Stage();
-    		FXMLLoader loader = new FXMLLoader();
-    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
-    		Parent parent = loader.load();
-    		Scene scene = new Scene(parent);
-    		ThongTinChiTietNVController c = loader.getController();
-    		NhanVien dnc = DangNhapController.getNV();
-    		c.getMaNV(dnc);
-    		stage.setScene(scene);
-    		stage.show();
-    	}
-     public void timKiemGioHang(ActionEvent e) throws IOException {
-      	Stage stage = (Stage) mb.getScene().getWindow();
-      	FXMLLoader loader = new FXMLLoader();
-          loader.setLocation(getClass().getResource("/view/TimKiemDonDatThuocNV.fxml"));
-          Parent sampleParent = loader.load();
-          Scene scene = new Scene(sampleParent);
-          stage.setScene(scene);
-  	}
      public void themKhachHang(ActionEvent e) throws IOException {
      	Stage stage = (Stage) mb.getScene().getWindow();
      	FXMLLoader loader = new FXMLLoader();
@@ -440,6 +391,18 @@ public class TimKiemHoaDonNVController implements Initializable{
           Scene scene = new Scene(sampleParent);
           stage.setScene(scene);
   	}
+     public void thongTinCT(ActionEvent e) throws IOException {
+    		Stage stage = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("/view/ThongTinChiTietNV.fxml"));
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		ThongTinChiTietNVController c = loader.getController();
+    		NhanVien dnc = DangNhapController.getNV();
+    		c.getMaNV(dnc);
+    		stage.setScene(scene);
+    		stage.show();
+    	}
 
      public void themDonThuoc(ActionEvent e) throws IOException {
 	       	Stage stage = (Stage) mb.getScene().getWindow();
@@ -461,6 +424,7 @@ public class TimKiemHoaDonNVController implements Initializable{
     	  System.exit(0);
       }
 
+
 	//End Navbar
 	
 	public void boLocThuoc(ActionEvent e) throws IOException {
@@ -478,8 +442,9 @@ public class TimKiemHoaDonNVController implements Initializable{
 		tenNV.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("tenNV"));
 		tenKH.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("tenKH"));
 		ngayLapHD.setCellValueFactory(new PropertyValueFactory<HoaDon, Date>("ngayLapHD"));
-		tongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, Float>("tongTien"));
+//		tongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, Float>("tongTien"));
 	}
+
 	@FXML
 	public ObservableList<HoaDon> getHoaDon(){
 		cbbTKD.setItems(FXCollections.observableArrayList("Tất cả", "Hoá đơn theo đơn", "Hoá đơn không theo đơn"));
@@ -583,4 +548,5 @@ public class TimKiemHoaDonNVController implements Initializable{
 		cell();
 		table.setItems(list);
 	}
+
 }
